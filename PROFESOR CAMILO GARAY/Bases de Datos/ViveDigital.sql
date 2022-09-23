@@ -1,4 +1,4 @@
-DROP DATABASE vivedigital;
+DROP DATABASE viveDigital;
 
 create database viveDigital;
 show databases;
@@ -21,13 +21,13 @@ CREATE TABLE MATERIAL_BIBLIOGRAFICO(
     fechaPublicacion DATE NOT NULL, 
     descripcion VARCHAR(100), 
 	PRIMARY KEY(idMaterial), 
-    FOREIGN KEY(area) REFERENCES AREA(idArea), 
-	FOREIGN KEY(editorial) REFERENCES EDITORIAL(idEditorial),
-	FOREIGN KEY(tipoMaterial) REFERENCES TIPO_MATERIAL(idTipoMaterial));
+    FOREIGN KEY(area) REFERENCES AREA(idArea) ON UPDATE CASCADE ON DELETE CASCADE, 
+	FOREIGN KEY(editorial) REFERENCES EDITORIAL(idEditorial) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY(tipoMaterial) REFERENCES TIPO_MATERIAL(idTipoMaterial) ON UPDATE CASCADE ON DELETE CASCADE);
     
 CREATE TABLE AUTOR_MATERIAL(id INT AUTO_INCREMENT NOT NULL, autor INT NOT NULL, material INT NOT NULL, 
 PRIMARY KEY(id), FOREIGN KEY(autor) REFERENCES AUTOR(idAutor),
-FOREIGN KEY(material) REFERENCES MATERIAL_BIBLIOGRAFICO(idMaterial));
+FOREIGN KEY(material) REFERENCES MATERIAL_BIBLIOGRAFICO(idMaterial)ON UPDATE CASCADE ON DELETE CASCADE);
 
 CREATE TABLE USUARIO(tipoDcto VARCHAR(2) NOT NULL, documento VARCHAR(20) NOT NULL, nombre VARCHAR(50) NOT NULL,
  apellido VARCHAR(50), fechaNacimiento DATE NOT NULL, escolaridad VARCHAR(11), telefono VARCHAR(20),
@@ -43,8 +43,8 @@ CREATE TABLE PRESTAMO(
 	fechaPrestamo DATE, 
 	estado VARCHAR(20) default "Activo", 
 	PRIMARY KEY(idPrestamo),
-	FOREIGN KEY(UsuarioTipoDcto,UsuarioDocumento) REFERENCES USUARIO(tipoDcto,documento),
-	FOREIGN KEY(idMaterialBibliografico) REFERENCES MATERIAL_BIBLIOGRAFICO(idMaterial));
+	FOREIGN KEY(UsuarioTipoDcto,UsuarioDocumento) REFERENCES USUARIO(tipoDcto,documento) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY(idMaterialBibliografico) REFERENCES MATERIAL_BIBLIOGRAFICO(idMaterial) ON UPDATE CASCADE ON DELETE CASCADE);
     
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 # INSERCION DE DATOS 
@@ -101,9 +101,83 @@ insert into PRESTAMO() values(null,"CC","123456",8,'2022-09-15',"Activo"),(null,
 (null,"CC","987654",3,'2020-12-31',"Inactivo"),(null,"CC","123789",8,'2022-09-05',"Activo"),(null,"CC","741963",6,'2022-09-04',"Activo"),(null,"TI","753951",14,'2022-09-03',"Activo"),(null,"CC","493716",2,'2020-12-11',"Inactivo"),
 (null,"CC","493765",11,'2022-09-09',"Activo"),(null,"CC","891274",19,'2021-11-30',"Inactivo"),(null,"CC","335697",7,'2022-09-10',"Activo"),(null,"CC","791346",5,'2022-09-11',"Activo"),(null,"TI","203694",12,'2022-09-12',"Activo");
 
-#Usuario BUcaramanga
-#Contraseña 123
-#N. documento 123456
-#niños -15, jovenes +16 y +25 adultos
-#prestamo activos o incactivos
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+# CONSULTAS
+describe USUARIO;
+# Los usuarios están relacionados con el documento de identidad, la ciudad donde habitan y la clasificación del tipo de usuario respecto a la biblioteca.
+SELECT documento, ciudad, escolaridad FROM USUARIO;
+
+
+# El nombre del material bibliográfico, la fecha de publicación y el tipo de material bibliográfico.
+SELECT MB.nombre, MB.fechaPublicacion, MB.tipoMaterial, TM.descripcion FROM MATERIAL_BIBLIOGRAFICO AS MB
+JOIN TIPO_MATERIAL AS TM ON MB.tipoMaterial = TM.idTipoMaterial;
+
+# Todos los usuarios que viven en la ciudad de Bucaramanga.
+SELECT * FROM USUARIO WHERE ciudad="Bucaramanga";
+
+# Todas las revistas de la biblioteca.
+SELECT * FROM MATERIAL_BIBLIOGRAFICO AS MB JOIN TIPO_MATERIAL AS TM ON MB.tipoMaterial = TM.idTipoMaterial WHERE TM.descripcion="Revista";
+
+# Listar todos los datos de cada una de las tablas de la base de datos de la biblioteca.
+SELECT P.*, MB.*, A.*,E.*,TM.*, U.*, AU.* , AM.*
+FROM USUARIO AS U
+INNER JOIN PRESTAMO AS P ON P.UsuarioDocumento = U.documento 
+INNER JOIN MATERIAL_BIBLIOGRAFICO AS MB ON P.idMaterialBibliografico = MB.idMaterial
+INNER JOIN AREA AS A ON A.idArea = MB.area
+INNER JOIN EDITORIAL AS E ON E.idEditorial = MB.editorial
+INNER JOIN TIPO_MATERIAL AS TM ON TM.idTipoMaterial = MB.tipoMaterial
+INNER JOIN AUTOR_MATERIAL AS AM ON AM.material = MB.idmaterial
+INNER JOIN AUTOR AS AU ON AU.idAutor = AM.autor;
+
+# Cambiar la contraseña 123 por el nombre del aprendiz tabla usuario a la fila con número de documento 123456. 
+UPDATE USUARIO SET contrasena = USUARIO.nombre WHERE documento = "123456";
+SELECT * FROM USUARIO WHERE documento = "123456";
+
+# Eliminar el registro libro 13 de la tabla materialbibliografico.
+DELETE FROM MATERIAL_BIBLIOGRAFICO WHERE idMaterial = 13;
+
+# ¿Cuál es el tipo de material bibliográfico más consultado por los niños y/o jóvenes menores a 21 años?
+DESCRIBE TIPO_MATERIAL;
+DESCRIBE MATERIAL_BIBLIOGRAFICO;
+SELECT count(*) AS Numero_prestamos,TM.idTipoMaterial, TM.descripcion FROM TIPO_MATERIAL AS TM 
+INNER JOIN MATERIAL_BIBLIOGRAFICO AS MB ON TM.idTipoMaterial = MB.tipoMaterial
+INNER JOIN PRESTAMO AS P ON P.idPrestamo = MB.idMaterial
+INNER JOIN USUARIO AS U ON U.documento = P.UsuarioDocumento
+WHERE TIMESTAMPDIFF(YEAR,U.fechaNacimiento,CURDATE())<=21 group by TM.idTipoMaterial order by COUNT(*) DESC LIMIT 1;
+
+# ¿Cuál es el último libro digital consultado por todos los usuarios que tienen más de 8 años y menos de 18 años? Debe asociarse el nombre del usuario, la edad, el nombre del material bibliográfico y la fecha de consulta del material.
+select U.nombre, TIMESTAMPDIFF(YEAR,U.fechaNacimiento,CURDATE()) AS edad, P.fechaPrestamo, MB.nombre 
+FROM TIPO_MATERIAL AS TM 
+INNER JOIN MATERIAL_BIBLIOGRAFICO AS MB ON TM.idTipoMaterial = MB.tipoMaterial
+INNER JOIN PRESTAMO AS P ON P.idPrestamo = MB.idMaterial
+INNER JOIN USUARIO AS U ON U.documento = P.UsuarioDocumento
+WHERE TIMESTAMPDIFF(YEAR,U.fechaNacimiento,CURDATE())<18 and TIMESTAMPDIFF(YEAR,U.fechaNacimiento,CURDATE())>8 
+ORDER BY P.fechaPrestamo DESC LIMIT 1;
+
+# ¿A qué parte del país pertenecen los usuarios que han ejecutado mayor número de consultas en la biblioteca?
+SELECT COUNT(*) AS numero_consultas, U.ciudad
+FROM TIPO_MATERIAL AS TM 
+INNER JOIN MATERIAL_BIBLIOGRAFICO AS MB ON TM.idTipoMaterial = MB.tipoMaterial
+INNER JOIN PRESTAMO AS P ON P.idPrestamo = MB.idMaterial
+INNER JOIN USUARIO AS U ON U.documento = P.UsuarioDocumento
+GROUP BY U.ciudad ORDER BY COUNT(*) DESC LIMIT 1;
+
+# Cuantos materiales bibliográficos tiene cada autor, debe asociarse el nombre y apellido en una sola columna, el nombre de la ciudad y la cantidad de materiales. 
+SELECT CONCAT(A.nombre," ",A.apellido) AS nombre_completo, A.ciudad, COUNT(MB.idMaterial) AS numero_materiales
+FROM AUTOR_MATERIAL AS AM
+INNER JOIN MATERIAL_BIBLIOGRAFICO AS MB ON AM.material = MB.idMaterial
+INNER JOIN AUTOR AS A ON A.idAutor = AM.autor 
+group by CONCAT(A.nombre," ",A.apellido);
+
+# Mostrar todos los prestamos activos, debe asociarse el tipo de documento, documento, nombre y apellidos, escolaridad del usuario, Nombre del material bibliográfico, 
+# fecha publicación, nombre tipo material, nombre del área y nombre de la editorial.
+SELECT U.tipoDcto, U.documento, CONCAT(U.nombre," ",U.apellido) AS nombre_completo, U.escolaridad, 
+MB.nombre ,MB.fechaPublicacion, TM.descripcion ,A.descripcion, E.nombre, P.estado
+FROM USUARIO AS U
+INNER JOIN PRESTAMO AS P ON P.UsuarioDocumento = U.documento 
+INNER JOIN MATERIAL_BIBLIOGRAFICO AS MB ON P.idMaterialBibliografico = MB.idMaterial
+INNER JOIN AREA AS A ON A.idArea = MB.area
+INNER JOIN EDITORIAL AS E ON E.idEditorial = MB.editorial
+INNER JOIN TIPO_MATERIAL AS TM ON TM.idTipoMaterial = MB.tipoMaterial
+WHERE estado="Activo";
 

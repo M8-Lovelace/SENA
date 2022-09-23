@@ -1,0 +1,351 @@
+* {
+  font-size: 62.5%;
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+}
+.container {
+  background-color: rgb(181, 196, 196);
+  width: 100%;
+  height: 100%;
+}
+
+.navegacion {
+  font-size: 4rem;
+  background-image: url(./image/fondo.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: auto;
+  width: 100%;
+}
+
+.menu {
+  display: flex;
+  font-size: 3.5rem;
+  height: auto;
+  color: white;
+  width: 100%;
+}
+
+.logo {
+  width: 30%;
+  margin: 1rem 2rem 0 0.5rem;
+}
+.logo a {
+  color: white;
+  font-size: 2rem;
+  text-decoration: none;
+}
+.logo a:hover {
+  color: rgb(90, 90, 197);
+}
+.lista {
+  display: flex;
+  list-style: none;
+  margin: 0 40rem 0 10rem;
+  width: 40%;
+}
+.lista a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+}
+.lista a:hover {
+  color: rgb(90, 90, 197);
+}
+
+.lista .lapiz {
+  margin: 15px;
+}
+.lista #lapiz {
+  display: flex;
+  height: auto;
+}
+
+.lista .lapiz img {
+  width: 20px;
+  height: 20px;
+  background-size: cover;
+}
+.lista p {
+  margin: 1.5rem 1.5rem 0 0;
+  font-size: 1.5rem;
+}
+
+.lista .campana {
+  margin: 1.5rem;
+}
+.lista #campana {
+  display: flex;
+}
+
+.lista .campana img {
+  width: 2rem;
+  height: 2rem;
+  background-size: cover;
+}
+
+.lista .usuario {
+  margin: 1.5rem;
+}
+.lista #usuario {
+  display: flex;
+}
+
+.lista .usuario img {
+  width: 2rem;
+  height: 2rem;
+  background-size: cover;
+}
+.redes {
+  display: flex;
+  position: right;
+  width: 30%;
+}
+
+.facebook {
+  margin: 1.5rem 0 1.5rem;
+}
+.facebook img {
+  width: 2rem;
+  height: 2rem;
+}
+
+.twitter {
+  margin: 1.5rem;
+}
+
+.twitter img {
+  width: 2rem;
+  height: 2rem;
+}
+.arriba {
+  width: auto;
+  height: 17rem;
+}
+.arriba p {
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 10rem 2rem 0 2rem;
+  color: white;
+  font-weight: bold;
+}
+
+.section {
+  width: 95%;
+  height: auto;
+  margin: auto;
+  background-color: rgb(253, 215, 250);
+  font-size: 3.5rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+.jardin {
+  width: 49%;
+  height: auto;
+  margin: 15px 5px;
+  position: relative;
+}
+.image1 {
+  background-image: url(./image/jardin.jpeg);
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  position: relative;
+}
+.otros1 {
+  position: absolute;
+  top: 23.5rem;
+  left: 0.5rem;
+}
+.fecha1 {
+  font-size: 1.5rem;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+.titulo1 {
+  color: white;
+  font-weight: bold;
+  font-size: 2rem;
+}
+.texto1 {
+  font-size: 1.2rem;
+}
+.leer1 {
+  background-color: rgb(181, 196, 196);
+  font-size: 2rem;
+  margin: 15px;
+  width: 120px;
+  height: 30px;
+}
+.leer1 a {
+  margin: 25px;
+  text-decoration: none;
+  color: black;
+}
+.leer1 a:hover {
+  color: rgb(90, 90, 197);
+}
+
+.girasoles {
+  width: 49%;
+  height: auto;
+  margin: 15px 5px;
+  position: relative;
+}
+.image2 {
+  background-image: url(./image/girasol.jpg);
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  position: relative;
+}
+.otros2 {
+  position: absolute;
+  top: 23.5rem;
+  left: 0.5rem;
+}
+.fecha2 {
+  font-size: 1.5rem;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+.titulo2 {
+  color: white;
+  font-weight: bold;
+  font-size: 2rem;
+}
+.texto2 {
+  font-size: 1.2rem;
+}
+.leer2 {
+  background-color: rgb(181, 196, 196);
+  font-size: 2rem;
+  margin: 15px;
+  width: 120px;
+  height: 30px;
+}
+.leer2 a {
+  margin: 25px;
+  text-decoration: none;
+  color: black;
+}
+.leer2 a:hover {
+  color: rgb(90, 90, 197);
+}
+
+.marino {
+  width: 49%;
+  height: auto;
+  margin: 15px 5px;
+  position: relative;
+}
+.image3 {
+  background-image: url(./image/marino.jpg);
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  position: relative;
+}
+.otros3 {
+  position: absolute;
+  top: 23.5rem;
+  left: 0.5rem;
+}
+.fecha3 {
+  font-size: 1.5rem;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+.titulo3 {
+  color: white;
+  font-weight: bold;
+  font-size: 2rem;
+}
+.texto3 {
+  font-size: 1.2rem;
+}
+.leer3 {
+  background-color: rgb(181, 196, 196);
+  font-size: 2rem;
+  margin: 15px;
+  width: 120px;
+  height: 30px;
+}
+.leer3 a {
+  margin: 25px;
+  text-decoration: none;
+  color: black;
+}
+.leer3 a:hover {
+  color: rgb(90, 90, 197);
+}
+
+.chino {
+  width: 49%;
+  height: auto;
+  margin: 15px 5px;
+  position: relative;
+}
+.image4 {
+  background-image: url(./image/chino.jpg);
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  position: relative;
+}
+.otros4 {
+  position: absolute;
+  top: 23.5rem;
+  left: 0.5rem;
+}
+.fecha4 {
+  font-size: 1.5rem;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+.titulo4 {
+  color: white;
+  font-weight: bold;
+  font-size: 2rem;
+}
+.texto4 {
+  font-size: 1.2rem;
+}
+.leer4 {
+  background-color: rgb(181, 196, 196);
+  font-size: 2rem;
+  margin: 15px;
+  width: 120px;
+  height: 30px;
+}
+.leer4 a {
+  margin: 25px;
+  text-decoration: none;
+  color: black;
+}
+.leer4 a:hover {
+  color: rgb(90, 90, 197);
+}
+hr {
+  background-color: rgb(181, 196, 196);
+  height: 10px;
+}
+.creditos {
+  font-size: 3rem;
+  background-color: rgb(253, 215, 250);
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+.creditostexto {
+  background-color: rgb(216, 83, 205);
+  width: 350px;
+  height: 25px;
+  text-align: center;
+  margin: 0 auto;
+}

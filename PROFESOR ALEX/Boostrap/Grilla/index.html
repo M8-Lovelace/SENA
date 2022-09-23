@@ -5,28 +5,60 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="./style.css" type="text/css">
   <title>Laura Susano</title>
-  <style>
-    .row{
-      height: 657px;
-    }
-  </style>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row bg-success">
-      <div class="col bg-warning m-1">
+  <!-- Sistema de columnas, bandera hacia la derecha -->
+  <!-- <div class="container-fluid">
+    <div class="row bg-success vh-100">
+      <div class="col-6 bg-warning m-1">
         Columna 1
       </div>
-      <div class="col bg-primary mb-1 mt-1">
+      <div class="col-3 bg-primary mb-1 mt-1">
         Columna 2
       </div>
       <div class="col bg-danger m-1">
         Columna 3
       </div>
     </div>
+  </div> -->
+
+  <!-- Sistema de filas, bandera hacia abajo-->
+  <!-- <div class="container-fluid">
+    <div class="row bg-warning">Columna 1</div>
+    <div class="row bg-primary">Columna 1</div>
+    <div class="row bg-danger">Columna 1</div>
+    </div>
+  </div>
+  <style>
+    .row{
+      height: 33.33vh;
+      border: solid 2px black;
+    }
+  </style> -->
+
+  <!-- Una fila, con dos columnas y dentro de la segunda se crean dos filas -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col borde bg-warning">Columna</div>
+      <div class="col">
+        <div class="row borde bg-primary">Fila</div>
+        <div class="row borde bg-success">Fila</div>
+      </div>
+    </div>
   </div>
 
+  <style>
+    .row{
+      height: 50vh;
+    }
+    .borde{
+      border: red solid 2px;
+      padding: 10px;
+    }
+  </style> 
+
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
 </body>
 </html>
