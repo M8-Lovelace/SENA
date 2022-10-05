@@ -1,0 +1,329 @@
+/* ---------------------------------------------- EJERCICIO 1 ----------------------------------------------------------------- */
+
+/* CREACION DE TABLAS*/
+create table clientes(
+	cedula varchar(15) primary key,
+	nombres varchar(45),
+	capital decimal(12,2),
+	fecha_nac date);
+	
+create table cuentas(
+	numero varchar(25) primary key,
+	tipo_cuenta varchar(1),
+	fecha_apertura date,
+	clientes_cedula varchar(15),
+	constraint fkcuentas1 foreign key(clientes_cedula)
+	references clientes(cedula));
+	
+create table sucursal(
+	codigo int primary key,
+	nombre varchar(45),
+	direccion varchar(45),
+	ciudad varchar(45),
+	telefono varchar(45));
+	
+create table movimientos(
+	idMovimientos int primary key,
+	fecha_movimiento date,
+	valor decimal(12,2),
+	tipo_movimiento varchar(45),
+	sucursal_codigo int,
+	cuentas_numero varchar(25),
+	constraint fkmovientos1 foreign key(sucursal_codigo)
+	references sucursal(codigo),
+	constraint fkmovimientos2 foreign key(cuentas_numero)
+	references cuentas(numero));
+	
+    
+/* INSERCION DE DATOS */
+insert into clientes values
+	("12345","Pepito Perez",1000,'1995-04-14'),
+	("12346","Antonio Perez",5000,'1991-06-17'),
+	("12347","Bartolo Casas",3000,'1985-07-18'),
+	("12348","Marcos Calderon",2000,'2001-09-04'),
+	("12349","Juanito Lopez",4000,'1998-01-09');
+    
+insert into cuentas() values
+	("123421","A",'2020-12-05',"12349"),
+	("123422","C",'2022-02-05',"12348"),
+    ("123423","A",'2021-04-05',"12348"),
+    ("123424","A",'2022-08-03',"12347"),
+    ("123425","C",'2020-06-20',"12346"),
+    ("123426","A",'2021-12-05',"12345");
+    
+insert into sucursal() values
+	(1,"primera","calle 4","San Gil","3165801594"),
+    (2,"segunda","calle 8","San Gil","3168301594"),
+    (3,"tercera","calle 14","Socorro","3145801594"),
+    (4,"cuarta","calle 21","Pinchote","3155801594"),
+    (5,"quinta","calle 7","Villanueva","3185801594");
+    
+insert into movimientos() values 
+	(11,'2021-01-10',200,"Consignacion",5,"123421"),
+    (12,'2022-09-12',800,"Retiro",5,"123421"),
+    (13,'2022-06-10',100,"Consignacion",3,"123422"),
+    (14,'2022-08-16',1100,"Retiro",2,"123424"),
+    (15,'2021-12-11',700,"Consignacion",1,"123425"),
+    (16,'2021-12-16',50,"Retiro",1,"123425");
+
+/* CREACION DE SENTENCIAS */
+/* 1. Seleccionar todos los datos de todas cuentas existentes */    
+select * from cuentas;
+/* 2. Seleccionar todos los datos de los clientes que su fecha de nacimiento sea menor al año 1996 */
+select * from clientes where fecha_nac < '1996-01-01';
+/* 3. Seleccionar todos los datos de los clientes que tengan igual o más de 3000 de capital */
+select * from clientes where capital >= 3000;
+/* 4. Seleccionar los datos de las cuenta y mostrar el numero de movimientos hechos */
+select ct.*, count(m.cuentas_numero) as numero_movimientos from cuentas as ct
+left join movimientos as m on ct.numero = m.cuentas_numero
+group by ct.numero;
+/* 5. Numero de cuentas de cada cliente */
+select c.*, count(ct.numero) as numero_cuentas from cuentas as ct
+left join clientes as c on ct.clientes_cedula = c.cedula
+group by c.cedula;
+
+/* ---------------------------------------------- EJERCICIO 2 ----------------------------------------------------------------- */
+
+/* CREACION DE TABLAS*/
+create table materias(
+	codigoMateria int primary key,
+    nombre varchar(45),
+    intensidad_horaria int
+);
+    
+create table grados(
+	idGrado int primary key,
+    descripcion varchar(45)
+);
+
+create table cursos(
+	codigoCurso int primary key,
+    nombre varchar (45),
+    clasificacion varchar(45),
+    grados_idgrado int,
+    constraint fkcursos1 foreign key (grados_idgrado) 
+    references grados(idGrado)
+);
+
+create table estudiantes(
+	identificacion varchar (15) primary key,
+    nombres varchar(45),
+    apellidos varchar(45),
+    direccion varchar(45),
+    telefono varchar(15),
+    sexo varchar(1),
+    acudiente varchar(60),
+    cursos_codigocurso int,
+    constraint fkestudiantes1 foreign key (cursos_codigocurso)
+    references cursos(codigoCurso)
+);
+
+create table docentes(
+	cedula varchar(15) primary key,
+    nombres varchar(45),
+    apellidos varchar(45),
+    dir varchar(45),
+    area varchar(45),
+    estado_civil varchar(45),
+    horas_tomadas int
+);
+
+create table carga_academica(
+	idcarga_academica int primary key,
+    docentes_cedula varchar(15),
+    cursos_codigoCurso int,
+    materias_codigoMateria int,
+    constraint fkcarga_academica1 foreign key (docentes_cedula)
+    references docentes(cedula),
+    constraint fkcarga_academica2 foreign key (cursos_codigoCurso)
+    references cursos(codigoCurso),
+    constraint fkcarga_academica3 foreign key (materias_codigoMateria)
+    references materias(codigoMateria)
+);
+
+/* INSERCION DE DATOS */
+insert into materias() values
+	(1,"ingles",2),
+    (2,"matematica",3),
+    (3,"historia",1),
+    (4,"ciencias",5),
+    (5,"español",2);
+
+insert into docentes() values
+	("12345","Pepito","Perez","calle 3","matematicas","casado",4),
+	("12346","Antonia","Jimenez","calle 8","fisica","soltero",2),
+    ("12347","Mario","Sanchez","carrera 4","programacion","soltero",6),
+    ("12348","Melissa","Jaimes","calle 7","ingles","casado",5),
+    ("12349","Juanito","Barrera","calle 20","literatura","casado",3);
+    
+insert into grados() values
+	(1,"Primero"),
+    (2,"Segundo"),
+    (3,"Tercero"),
+    (4,"Cuarto"),
+    (5,"Quinto");
+    
+insert into cursos() values
+	(1,"curso1","clasificacion1",2),
+    (2,"curso2","clasificacion1",1),
+    (3,"curso3","clasificacion1",4),
+    (4,"curso4","clasificacion1",3),
+    (5,"curso5","clasificacion1",5),
+    (6,"curso6","clasificacion1",3);
+    
+insert into estudiantes() values
+	("12321","Juan","Jaimes","calle 5","3165801594","m","Fernando Jaimes",2),
+    ("12322","Laura","Susano","calle 2","3187425369","f","Sandra Fernandez",2),
+    ("12323","Jefferson","Suarez","calle 8","3125801594","m","Pepito Suarez",1),
+    ("12324","Andrea","Becerra","carrera 4","3143801594","f","Ximena Becerra",5),
+    ("12325","Antonio","Bautista","calle 21","3165221594","m","Carlos Baurista",3);
+
+insert into carga_academica() values
+	(1,"12345",2,4),
+    (2,"12346",4,2),
+    (3,"12347",3,1),
+    (4,"12348",1,3),
+    (5,"12345",5,5);
+    
+/* CREACION DE SENTENCIAS */
+/* Seleccionar todos los datos de las estudiantes mujeres */
+select * from estudiantes where sexo="f";
+/* Seleccionar los docentes que sean casados */
+select * from docentes where estado_civil="soltero";
+/* Seleccionar todos los datos de la carga academica */
+select * from carga_academica;
+/* Seleccionar los datos de los docentes y el numero de materias asignadas */
+select d.*, count(m.codigoMateria) as numero_materias from docentes as d
+inner join carga_academica as ca on ca.docentes_cedula=d.cedula
+inner join materias as m on m.codigoMateria = ca.materias_codigoMateria
+group by d.cedula;
+/* Seleccionar cuantos grados tiene un curso */
+select c.*,count(g.idgrado) as numero_grados from cursos as c
+inner join grados as g on g.idgrado = c.grados_idgrado
+group by g.idgrado;
+
+
+/* ---------------------------------------------- EJERCICIO 3 ----------------------------------------------------------------- */
+
+/* CREACION DE TABLAS*/
+create table centro_computo(
+	codigo int primary key,
+	responsable varchar(45),
+    direccion varchar(45)
+);
+
+create table personal_tecnico(
+	identificacion varchar (15) primary key,
+    nombres varchar(45),
+    apellidos varchar(45),
+    direccion varchar(45),
+    telefono varchar(15),
+    centro_computoCodigo int,
+    constraint fkpersonal_tecnico1 foreign key (centro_computoCodigo)
+    references centro_computo(codigo)
+);
+
+create table equipos(
+	codigo varchar(25) primary key,
+	marca varchar(45),
+    modelo varchar(45),
+    ram int,
+    disco int
+);
+
+create table soporte_tecnico(
+	idsoporteTecnico int primary key,
+    fecha_recepcion date,
+    fecha_entrega date,
+    diagnostico varchar(450),
+    observacion varchar(450),
+    equipos_codigo varchar(25),
+    personal_tecnicoIdentificacion varchar(15),
+    constraint fksoporte_tecnico1 foreign key (equipos_codigo)
+    references equipos(codigo),
+	constraint fksoporte_tecnico2 foreign key (personal_tecnicoIdentificacion)
+    references personal_tecnico(identificacion)
+);
+
+create table usuario(
+	identificacion varchar (15) primary key,
+    nombres varchar(45),
+    apellidos varchar(45),
+    direccion varchar(45),
+    telefono varchar(15)
+);
+
+create table cuentas(
+	idCuentas int primary key,
+    nombre varchar(45),
+    contrasena varchar(15),
+    fecha_creacion date,
+    fecha_activa date,
+    fecha_inactiva date, 
+    estado varchar(45),
+    equipos_codigo varchar(25),
+    usuarios_identificacion varchar(15),
+    constraint fkcuentas1 foreign key (equipos_codigo) 
+    references equipos(codigo),
+    constraint fkcuentas2 foreign key (usuarios_identificacion)
+    references usuario(identificacion)
+);
+
+/* INSERCION DE DATOS */
+insert into centro_computo() values
+	(1,"responsable1","calle 6"),
+    (2,"responsable2","calle 20"),
+    (3,"responsable3","carrera 1"),
+    (4,"responsable4","carrera 4"),
+    (5,"responsable5","calle 9");
+
+insert into personal_tecnico() values
+	("12321","Juan","Jaimes","calle 5","3165801594",3),
+    ("12322","Laura","Susano","calle 2","3187425369",2),
+    ("12323","Jefferson","Suarez","calle 8","3125801594",1),
+    ("12324","Andrea","Becerra","carrera 4","3143801594",5),
+    ("12325","Antonio","Bautista","calle 21","3165221594",3);
+
+insert into equipos() values
+	("1","samsung","2015","4","500"),
+    ("2","lenovo","2022","12","1000"),
+    ("3","hp","2022","8","500"),
+    ("4","asus","2021","8","1000"),
+    ("5","dell","2022","16","2000");
+    
+insert into soporte_tecnico() values
+	(1,'2022-05-09','2022-05-20',"diagnostico 1","observacion 1","1","12321"),
+    (2,'2022-04-02','2022-04-16',"diagnostico 2","observacion 2","4","12322"),
+    (3,'2022-06-08','2022-06-22',"diagnostico 3","observacion 3","1","12321"),
+    (4,'2022-04-20','2022-04-26',"diagnostico 4","observacion 4","4","12322"),
+    (5,'2022-06-09','2022-06-15',"diagnostico 5","observacion 5","5","12325");
+
+insert into usuario() values
+	("12311","Juan","Suarez","calle 3","3165371594"),
+    ("12312","Pepito","Perez","calle 6","3183825369"),
+    ("12313","Bartolomeo","Sanchez","calle 12","3125721594"),
+    ("12314","Andrea","Melgrejo","carrera 22","3143341594"),
+    ("12315","Antonia","Solano","calle 25","3165265594");
+    
+insert into cuentas() values
+	(1,"cuenta 1","12345",'2022-05-09',null,'2022-06-20',"cancelada","1","12311"),
+    (2,"cuenta 2","12344",'2022-05-17','2022-07-22',null,"activa","1","12311"),
+    (3,"cuenta 3","12343",'2022-02-18','2022-07-29',null,"activa","2","12315"),
+	(4,"cuenta 4","12342",'2022-04-09',null,'2022-07-20',"cancelada","4","12312"),
+    (5,"cuenta 5","12341",'2022-01-12','2022-08-22',null,"activa","5","12313");
+    
+/* CREACION DE SENTENCIAS */
+/* Seleccionar todos los datos del equipos de modelo anterior al 2022 */
+select * from equipos where modelo<2022;
+/* Seleccionar todos los datos de soporte tecnico que fueron entregados despues de abril */
+select * from soporte_tecnico where fecha_entrega>'2022-04-30';
+/* Seleccionar las cuentas que estan activas */
+select * from cuentas where estado="activa";
+/* Seleccionar las cuentas del equipo de equipo de computo marca samsung*/
+select c.*, e.marca from cuentas as c
+inner join equipos as e on c.equipos_codigo = e.codigo
+where e.marca="samsung";
+/* Seleccionar las cuentas del usuario de nombre Juan */
+select c.*, u.nombres as usuario from cuentas as c
+inner join usuario as u on u.identificacion =c.usuarios_identificacion
+where u.nombres="Juan";
