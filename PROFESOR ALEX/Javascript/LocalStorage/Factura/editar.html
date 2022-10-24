@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous" />
+  <title>Factura</title>
+</head>
+
+<body class="d-flex">
+  <div class="w-60">
+    <table class="table table-striped table-hover ms-2 mt-5 text-center table-bordered border-dark" style="width:95%">
+      <thead>
+        <tr class="bg-secondary">
+          <th scope="col">CODIGO</th>
+          <th scope="col">NOMBRE PRODUCTO</th>
+          <th scope="col">CANTIDAD</th>
+          <th scope="col">PRECIO</th>
+          <th scope="col">COSTO</th>
+          <th scope="col">FECHA DE VENCIMIENTO</th>
+          <th scope="col">COSTO TOTAL</th>
+          <th scope="col">PRECIO TOTAL</th>
+          <th scope="col">EDITAR</th>
+        </tr>
+      </thead>
+      <tbody id="insertarTabla">
+      </tbody>
+      <tr class="bg-secondary">
+        <td colspan="6" class="fw-bold">Costo total</td>
+        <td colspan="3" class="fw-bold" id="totalFactura">
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="w-30">
+    <form class="w-80 px-5 mt-5 py-5 bg-light">
+      <div class="mb-3">
+        <label for="codigo" class="form-label">Codigo</label>
+        <input type="text" class="form-control" id="codigo">
+      </div>
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre del Producto</label>
+        <input type="text" class="form-control" id="nombre">
+      </div>
+      <div class="mb-3">
+        <label for="cantidad" class="form-label">Cantidad</label>
+        <input type="text" class="form-control" id="cantidad">
+      </div>
+      <div class="mb-3">
+        <label for="precio" class="form-label">Precio</label>
+        <input type="text" class="form-control" id="precio">
+      </div>
+      <div class="mb-3">
+        <label for="costo" class="form-label">Costo</label>
+        <input type="text" class="form-control" id="costo">
+      </div>
+      <div class="mb-3">
+        <label for="vencimiento" class="form-label">Fecha Vencimiento</label>
+        <input type="date" class="form-control" id="vencimiento">
+      </div>
+      <div id="botones">
+        <button type="button" class="btn btn-primary" onclick="agregar()" id="enviar"
+          style="display: flex;">Enviar</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    // Constantes globales
+    const enviar = document.getElementById('enviar');
+    const botones= document.getElementById('botones');
+    const tabla = document.getElementById("insertarTabla");
+    const total = document.getElementById("totalFactura");
+    const codigo = document.getElementById("codigo");
+    const nombre = document.getElementById("nombre");
+    const cantidad = document.getElementById("cantidad");
+    const precio = document.getElementById("precio");
+    const costo = document.getElementById("costo");
+    const vencimiento = document.getElementById("vencimiento");
+    // Variables globales
+    let productos = []
+    let idEdit = 0;
+
+    // Funciones
+    // Funcion que valida y agrega los datos a la tabla
+    function agregar() {
+      // Validacion de campos vacios
+      if (!codigo.value) {
+        alert("Introduce el codigo del producto");
+      }
+      else if (!nombre.value) {
+        alert("Introduce el nombre del producto");
+      }
+      else if (!cantidad.value) {
+        alert("Introduce la cantidad");
+      }
+      else if (!precio.value) {
+        alert("Introduce el precio del producto");
+      }
+      else if (!costo.value) {
+        alert("Introduce el costo del producto");
+      }
+      else if (!vencimiento.value) {
+        alert("Introduce una fecha de vencimiento");
+      }
+      else {
+        // Verifia que dentro del array creada no haya un codigo igual, si no lo hay lo agregará
+        let mirar = productos.some((element) => element.codigo === codigo.value)
+        if (mirar) {
+          alert("El codigo ya existe");
+        }
+        // Hace las validaciones de que los campos:
+        // 1. El costo del producto no puede ser negativo
+        // 2. El precio no puede ser negativo ni puede ser menor o igual al costo
+        // 3. La fecha no puede ser menor a la fecha de hoy
+        else {
+          if (cantidad.value < 0) {
+            alert("La cantidad no puede ser negativa");
+          }
+          else if (precio.value < 0) {
+            alert("El precio no puede ser negativo");
+          }
+          else if (parseInt(precio.value) == parseInt(costo.value) || parseInt(precio.value) < parseInt(costo.value)) {
+            alert("El precio no puede ser igual o menor al costo");
+          }
+          else if (costo.value < 0) {
+            alert("El costo no puede ser negativo");
+          }
+          else if (vencimiento.value < new Date().toISOString().split("T")[0]) {
+            console.log(newDate().toISOString())
+            alert("La fecha de vencimiento no puede ser menor a la actual");
+          }
+          else {
+            // Agrega los datos al array
+            let producto = {
+              codigo: codigo.value,
+              nombre: nombre.value,
+              cantidad: cantidad.value,
+              precio: precio.value,
+              costo: costo.value,
+              vencimiento: vencimiento.value,
+            };
+            productos.push(producto);
+            // LLama la funcion pintar para ingresar los datos a la tabla si se cumplen las validaciones
+            pintar();
+          }
+        }
+      }
+    }
+
+    function pintar() {
+      // Pinta los datos en la tabla y los crea
+      tabla.innerHTML += `
+        <tr id="fila${productos.length}">
+          <td>${codigo.value}</td>
+          <td>${nombre.value}</td>
+          <td>${cantidad.value}</td>
+          <td>${precio.value}</td>
+          <td>${costo.value}</td>
+          <td>${vencimiento.value}</td>
+          <td>${cantidad.value * costo.value}</td>
+          <td>${cantidad.value * precio.value}</td>
+          <td><button type="button" class="btn btn-primary"" id="editarProducto" onclick="editar()">Editar</button></td>
+        </tr>
+      `;
+      // Limpia los campos del formulario
+      codigo.value = "";
+      nombre.value = "";
+      cantidad.value = "";
+      precio.value = "";
+      costo.value = "";
+      vencimiento.value = "";
+      console.log(productos);
+      totalFactura();
+    }
+
+    function editar() {
+      enviar.style.display = "none";
+      botones.innerHTML = `
+        <button type="button" class="btn btn-primary" onclick="editarTabla()" id="actualizar"
+          style="display: flex;">Actualizar</button>
+      `;
+      // Recorre el array y busca el id del producto a editar
+      let id = productos.length
+      // Crea un array con los datos de la fila que se va a editar
+      let fila = document.getElementById(`fila${id}`);
+      let datos = fila.children;
+      // Llena los campos del formulario con los datos de la fila
+      codigo.value = datos[0].innerHTML;
+      nombre.value = datos[1].innerHTML;
+      cantidad.value = datos[2].innerHTML;
+      precio.value = datos[3].innerHTML;
+      costo.value = datos[4].innerHTML;
+      vencimiento.value = datos[5].innerHTML;
+    }
+    function editarTabla(){
+      // Recorre el array y busca el id del producto a editar
+      let id = productos.length
+      // Crea un array con los datos de la fila que se va a editar
+      let fila = document.getElementById(`fila${id}`);
+      let datos = fila.children;
+      // Llena los campos del formulario con los datos de la fila
+      datos[0].innerHTML = codigo.value;
+      datos[1].innerHTML = nombre.value;
+      datos[2].innerHTML = cantidad.value;
+      datos[3].innerHTML = precio.value;
+      datos[4].innerHTML = costo.value;
+      datos[5].innerHTML = vencimiento.value;
+      datos[6].innerHTML = cantidad.value * costo.value;
+      datos[7].innerHTML = cantidad.value * precio.value;
+      // Edita los datos del array 
+      productos[id-1].codigo = codigo.value;
+      productos[id-1].nombre = nombre.value;
+      productos[id-1].cantidad = cantidad.value;
+      productos[id-1].precio = precio.value;
+      productos[id-1].costo = costo.value;
+      productos[id-1].vencimiento = vencimiento.value;
+      console.log(productos);
+      // Limpia los campos del formulario
+      codigo.value = "";
+      nombre.value = "";
+      cantidad.value = "";
+      precio.value = "";
+      costo.value = "";
+      vencimiento.value = "";
+      // Cambia el boton de editar por el de agregar
+      // enviar.style.display = "block";
+      botones.innerHTML = `
+        <button type="button" class="btn btn-primary" onclick="agregar()" id="enviar"
+          style="display: flex;">Agregar</button>
+      `;
+      totalFactura();
+    }
+
+    function totalFactura() {
+      let totalFacturax = 0;
+      productos.forEach((element) => {
+        totalFacturax += element.cantidad * element.precio;
+        total.innerHTML = `$${totalFacturax}`
+      });
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
