@@ -12,7 +12,7 @@
 
 <body class="d-flex">
   <div class="row">
-    <div class="col-7">
+    <div class="col-7 overflow-auto">
       <table class="table table-bordered ms-2 mt-5 text-center">
         <thead>
           <tr class="bg-dark text-white">
@@ -128,9 +128,9 @@
           else if (costo.value < 0) {
             alert("El costo no puede ser negativo");
           }
-          // 4. La fecha no puede ser menor a la fecha de hoy
-          else if (vencimiento.value < new Date().toISOString().split("T")[0]) {
-            alert("La fecha de vencimiento no puede ser menor a la actual");
+          // 4. La fecha no puede ser menor o igual a la fecha de hoy
+          else if (vencimiento.value <= new Date().toISOString().split("T")[0]) {
+            alert("La fecha de vencimiento no puede ser menor o igual a la actual");
           }
           // Si no hay ningun error, se ejecutará la funcion agregarDatos
           else {
@@ -142,6 +142,7 @@
     
     // Funcion que agrega los datos al array
     function agregarDatos() {
+      enviar.innerHTML = "Enviar";
       let producto = {
         codigo: codigo.value,
         nombre: nombre.value,
@@ -173,8 +174,8 @@
             <td>${element.vencimiento}</td>
             <td>${element.cantidad * element.costo}</td>
             <td>${element.cantidad * element.precio}</td>
-            <td><button type="button" class="btn btn-danger" onclick="editar(${element.codigo})">Editar</button></td>
-            <td><button type="button" class="btn btn-danger" onclick="eliminar(${element.codigo})">Eliminar</button></td>
+            <td><button type="button" class="btn btn-primary" onclick="editar('${element.codigo}')">Editar</button></td>
+            <td><button type="button" class="btn btn-danger" onclick="eliminar('${element.codigo}')">Eliminar</button></td>
           </tr>
         `
         // Suma el total de la factura
@@ -184,6 +185,7 @@
 
     // Funcion que edita un producto del array
     function editar(codigos) {
+      console.log(codigos);
       // Recorre el array y busca el codigo que se le pasa por parametro
       productos.forEach((element) => {
         if (element.codigo == codigos) {
