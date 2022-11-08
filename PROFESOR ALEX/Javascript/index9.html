@@ -41,16 +41,6 @@
             <input type="time" class="form-control" id="hora">
           </div>
           <div class="form-group">
-            <label for="listaTipo">Tipo</label>
-            <select class="form-control" id="listaTipo">
-              <option>Conejo</option>
-              <option>Gato</option>
-              <option>Perro</option>
-              <option>Pollito</option>
-              <option>Vaca</option>
-            </select>
-          </div>
-          <div class="form-group">
             <label for="sintomas">Sintomas</label>
             <textarea class="form-control" id="sintomas" rows="3"></textarea>
           </div>
@@ -62,7 +52,6 @@
       <div class="col-5 pt-4">
         <h5 class="pb-2">Administra tus Citas</h5>
         <div id="cards">
-
         </div>
       </div>
     </div>
@@ -77,14 +66,9 @@
     const fecha = document.getElementById("fecha");
     const hora = document.getElementById("hora");
     const sintomas = document.getElementById("sintomas");
-    const lista = document.getElementById("listaTipo");
 
     // Variables globales
     let citas = []
-    let bandera = false
-    let codigoeditar = 0
-    let num = null
-    let imagen = null
 
     // Funciones
     // Funcion que validar los datos ingresados
@@ -117,71 +101,31 @@
           alert("Nuestro horarios de atención es de 8:00 am a 12:00 am y de 2:00 pm a 7:00 pm");
           return
         }
-        else if (hora.value >= "12:00" && hora.value <= "14:00") {
+        else if(hora.value >= "12:00" && hora.value <= "14:00"){
           alert("Nuestro horarios de atención es de 8:00 am a 12:00 am y de 2:00 pm a 7:00 pm");
           return
         }
         else {
-          if (bandera == true) {
-            alert("Datos actualizados correctamente")
-            agregarDatos()
-          }
-          else {
-            alert("Cita creada correctamente");
-            agregarDatos();
-          }
+          alert("Cita creada correctamente");
+          agregarDatos();
         }
       }
     }
 
     // Funcion que agrega los datos al array
     function agregarDatos() {
-      // Dependiendo de la opcion se le asigna una imagen
-      if(lista.value =="Conejo"){
-        imagen = "./img/conejo.jpg"
-        }
-        else if(lista.value == "Gato"){
-          imagen = "./img/gato.png"
-        }
-        else if(lista.value == "Perro"){
-          imagen = "./img/perro.jpg"
-        }
-        else if(lista.value == "Pollito"){
-          imagen = "./img/pollito.jpg"
-        }
-        else if(lista.value == "Vaca"){
-          imagen = "./img/vaca.jpg"
-        }
-      if (bandera == true) {
-        citas.forEach((index, i) => {
-          if (num == i) {
-            citas[i].nombreMascota = nombreMascota.value
-            citas[i].propietario = propietario.value
-            citas[i].telefono = telefono.value
-            citas[i].fecha = fecha.value
-            citas[i].hora = hora.value
-            citas[i].tipo = lista.value
-            citas[i].foto = imagen
-            citas[i].sintomas = sintomas.value
-          }
-        })
-        bandera = false
+      // Crea un objeto con los datos ingresados
+      const cita = {
+        codigo: citas.length + 1,
+        nombreMascota: nombreMascota.value,
+        propietario: propietario.value,
+        telefono: telefono.value,
+        fecha: fecha.value,
+        hora: hora.value,
+        sintomas: sintomas.value
       }
-      else {
-        // Crea un objeto con los datos ingresados
-        const cita = {
-          nombreMascota: nombreMascota.value,
-          propietario: propietario.value,
-          telefono: telefono.value,
-          fecha: fecha.value,
-          hora: hora.value,
-          tipo: lista.value,
-          foto: imagen,
-          sintomas: sintomas.value
-        }
-        // Agrega el objeto a la lista de citas
-        citas.push(cita);
-      }
+      // Agrega el objeto a la lista de citas
+      citas.push(cita);
       // Limpia los campos
       limpiarCampos();
       // Muestra las citas
@@ -189,26 +133,23 @@
     }
     // Funcion que pintar los datos en la tabla
     function mostrarCitas() {
-
       console.log(citas);
       crear.innerHTML = "Crear Cita";
       // Limpia el div
       cards.innerHTML = "";
       // Recorre el array y agrega los datos en una card
-      citas.forEach((element, i) => {
+      citas.forEach((element) => {
         cards.innerHTML += `
           <div class="card mb-1 border-0">
             <div class="card-body">
-              <img src=${element.foto} style="width:95%">
               <h5 class="card-title fw-bold">${element.nombreMascota}</h5>
               <p class="card-text">Propietario: ${element.propietario}</p>
               <p class="card-text">Telefono: ${element.telefono}</p>
               <p class="card-text">Fecha: ${element.fecha}</p>
               <p class="card-text">Hora: ${element.hora}</p>
-              <p class="card-text">Tipo: ${element.tipo}</p>
               <p class="card-text">Sintomas: ${element.sintomas}</p>
-              <button type="button" class="btn btn-primary" onclick="editarCita(${i})">Editar</button>
-              <button type="button" class="btn btn-danger" onclick="eliminarCita(${i})">Eliminar</button>
+              <button type="button" class="btn btn-danger" onclick="eliminarCita(${element.codigo})">Eliminar</button>
+              <button type="button" class="btn btn-primary" onclick="editarCita(${element.codigo})">Editar</button>
             </div>
           </div>
         `
@@ -216,14 +157,10 @@
     }
 
     // Funcion que edita un producto del array
-    function editarCita(codigos) {
-      console.log(citas);
-      bandera = true
+    function editarCita (codigos) {
       // Recorre el array y busca el codigo que se le pasa por parametro
-      citas.forEach((element, i) => {
-        if (i == codigos) {
-          num = i
-          console.log(i);
+      citas.forEach((element) => {
+        if (element.codigo == codigos) {
           // Limpia los campos
           limpiarCampos();
           // Agrega los datos del array al formulario
@@ -232,8 +169,9 @@
           telefono.value = element.telefono;
           fecha.value = element.fecha;
           hora.value = element.hora;
-          lista.value = element.tipo;
           sintomas.value = element.sintomas;
+          // Elimina el elemento del array
+          citas = citas.filter((element) => element.codigo != codigos);
 
           // Cambia el boton de enviar por el de actualizar
           crear.innerHTML = "Actualizar Cita";
@@ -242,9 +180,9 @@
     }
 
     // Funcion que elimina un producto del array
-    function eliminarCita(cd) {
+    function eliminarCita(codigos) {
       // Filtra el array y elimina el producto que tenga el codigo igual al que se le pasa por parametro
-      citas = citas.filter((element, i) => cd != i);
+      citas = citas.filter((element) => element.codigo != codigos);
       // Agrega los datos a la tabla
       mostrarCitas()
     }

@@ -16,6 +16,9 @@
     <h1 class="col-12 fw-bold py-4 text-dark">ADMINISTRADOR DE PACIENTES DE VETERINARIA</h1>
   </div>
   <div class="bg-light w-50 m-auto">
+    <div class="px-3 pt-1 text-center">
+      <p class=" px-2 text-center" id="alerta"></p>
+    </div>
     <div class="row d-flex">
       <div class="col-6 overflow-auto p-4 ps-5">
         <h4 class="pb-2">Datos del Paciente</h4>
@@ -41,6 +44,16 @@
             <input type="time" class="form-control" id="hora">
           </div>
           <div class="form-group">
+            <label for="listaTipo">Tipo</label>
+            <select class="form-control" id="listaTipo">
+              <option>Conejo</option>
+              <option>Gato</option>
+              <option>Perro</option>
+              <option>Pollito</option>
+              <option>Vaca</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="sintomas">Sintomas</label>
             <textarea class="form-control" id="sintomas" rows="3"></textarea>
           </div>
@@ -58,7 +71,9 @@
     </div>
   </div>
   <script>
+
     // Constantes globales
+    const alerta = document.getElementById('alerta');
     const crear = document.getElementById('crear');
     const cards = document.getElementById('cards');
     const nombreMascota = document.getElementById("nombreMascota");
@@ -67,66 +82,173 @@
     const fecha = document.getElementById("fecha");
     const hora = document.getElementById("hora");
     const sintomas = document.getElementById("sintomas");
+    const lista = document.getElementById("listaTipo");
 
     // Variables globales
     let citas = []
+    let bandera = false
+    let codigoeditar = 0
+    let num = null
+    let imagen = null
 
     // Funciones
     // Funcion que validar los datos ingresados
     function validar() {
       // Validacion de campos vacios
       if (!nombreMascota.value) {
-        alert("Introduce el nombre de la mascota");
+        alerta.innerHTML = "Introduce el nombre de la mascota";
+        setTimeout(() => {
+          alerta.setAttribute('style', 'display:none')
+        }, 3000);
+        alerta.setAttribute('style', 'display:block');
+        alerta.setAttribute('class', 'alert alert-danger');
+        return;
       }
       else if (!propietario.value) {
-        alert("Introduce el nombre del propietario");
+        alerta.innerHTML = "Introduce el nombre del propietario";
+        setTimeout(() => {
+          alerta.setAttribute('style', 'display:none')
+        }, 3000);
+        alerta.setAttribute('style', 'display:block');
+        alerta.setAttribute('class', 'alert alert-danger');
+        return;
       }
       else if (!telefono.value) {
-        alert("Introduce el telefono");
+        alerta.innerHTML = "Introduce el telefono";
+        setTimeout(() => {
+          alerta.setAttribute('style', 'display:none')
+        }, 3000);
+        alerta.setAttribute('style', 'display:block');
+        alerta.setAttribute('class', 'alert alert-danger');
+        return;
       }
       else if (!fecha.value) {
-        alert("Introduce la fecha");
+        alerta.innerHTML = "Introduce la fecha";
+        setTimeout(() => {
+          alerta.setAttribute('style', 'display:none')
+        }, 3000);
+        alerta.setAttribute('style', 'display:block');
+        alerta.setAttribute('class', 'alert alert-danger');
+        return;
       }
       else if (!hora.value) {
-        alert("Introduce la hora");
+        alerta.innerHTML = "Introduce la hora";
+        setTimeout(() => {
+          alerta.setAttribute('style', 'display:none')
+        }, 3000);
+        alerta.setAttribute('style', 'display:block');
+        alerta.setAttribute('class', 'alert alert-danger');
+        return;
       }
       else if (!sintomas.value) {
-        alert("Introduce los sintomas");
+        alerta.innerHTML = "Introduce los sintomas";
+        setTimeout(() => {
+          alerta.setAttribute('style', 'display:none')
+        }, 3000);
+        alerta.setAttribute('style', 'display:block');
+        alerta.setAttribute('class', 'alert alert-danger');
+        return;
       }
       else {
         // Hace las validaciones de que los campos:
         if (fecha.value < new Date().toISOString().split("T")[0]) {
-          alert("La fecha de la cita no puede ser menor o igual a la actual");
+          alerta.innerHTML = "La fecha de la cita no puede ser menor o igual a la actual";
+          setTimeout(() => {
+            alerta.setAttribute('style', 'display:none')
+          }, 3000);
+          alerta.setAttribute('style', 'display:block');
+          alerta.setAttribute('class', 'alert alert-danger');
+          return;
         }
         else if (hora.value < "08:00" || hora.value > "19:00") {
-          alert("Nuestro horarios de atención es de 8:00 am a 12:00 am y de 2:00 pm a 7:00 pm");
-          return
+          alerta.innerHTML = "Nuestro horarios de atención es de 8:00 am a 12:00 am y de 2:00 pm a 7:00 pm";
+          setTimeout(() => {
+            alerta.setAttribute('style', 'display:none')
+          }, 3000);
+          alerta.setAttribute('style', 'display:block');
+          alerta.setAttribute('class', 'alert alert-danger');
+          return;
         }
-        else if(hora.value >= "12:00" && hora.value <= "14:00"){
-          alert("Nuestro horarios de atención es de 8:00 am a 12:00 am y de 2:00 pm a 7:00 pm");
-          return
+        else if (hora.value >= "12:00" && hora.value <= "14:00") {
+          alerta.innerHTML = "Nuestro horarios de atención es de 8:00 am a 12:00 am y de 2:00 pm a 7:00 pm";
+          setTimeout(() => {
+            alerta.setAttribute('style', 'display:none')
+          }, 3000);
+          alerta.setAttribute('style', 'display:block');
+          alerta.setAttribute('class', 'alert alert-danger');
+          return;
         }
         else {
-          alert("Cita creada correctamente");
-          agregarDatos();
+          if (bandera == true) {
+            alerta.innerHTML = "Datos actualizados correctamente";
+            setTimeout(() => {
+              alerta.setAttribute('style', 'display:none')
+            }, 3000);
+            alerta.setAttribute('style', 'display:block');
+            alerta.setAttribute('class', 'alert alert-success');
+            agregarDatos()
+          }
+          else {
+            alerta.innerHTML = "Cita creada correctamente";
+            setTimeout(() => {
+              alerta.setAttribute('style', 'display:none')
+            }, 3000);
+            alerta.setAttribute('style', 'display:block');
+            alerta.setAttribute('class', 'alert alert-success');
+            agregarDatos();
+          }
         }
       }
     }
 
     // Funcion que agrega los datos al array
     function agregarDatos() {
-      // Crea un objeto con los datos ingresados
-      const cita = {
-        codigo: citas.length + 1,
-        nombreMascota: nombreMascota.value,
-        propietario: propietario.value,
-        telefono: telefono.value,
-        fecha: fecha.value,
-        hora: hora.value,
-        sintomas: sintomas.value
+      // Dependiendo de la opcion se le asigna una imagen
+      if (lista.value == "Conejo") {
+        imagen = "./img/conejo.jpg"
       }
-      // Agrega el objeto a la lista de citas
-      citas.push(cita);
+      else if (lista.value == "Gato") {
+        imagen = "./img/gato.png"
+      }
+      else if (lista.value == "Perro") {
+        imagen = "./img/perro.jpg"
+      }
+      else if (lista.value == "Pollito") {
+        imagen = "./img/pollito.jpg"
+      }
+      else if (lista.value == "Vaca") {
+        imagen = "./img/vaca.jpg"
+      }
+      if (bandera == true) {
+        citas.forEach((index, i) => {
+          if (num == i) {
+            citas[i].nombreMascota = nombreMascota.value
+            citas[i].propietario = propietario.value
+            citas[i].telefono = telefono.value
+            citas[i].fecha = fecha.value
+            citas[i].hora = hora.value
+            citas[i].tipo = lista.value
+            citas[i].foto = imagen
+            citas[i].sintomas = sintomas.value
+          }
+        })
+        bandera = false
+      }
+      else {
+        // Crea un objeto con los datos ingresados
+        const cita = {
+          nombreMascota: nombreMascota.value,
+          propietario: propietario.value,
+          telefono: telefono.value,
+          fecha: fecha.value,
+          hora: hora.value,
+          tipo: lista.value,
+          foto: imagen,
+          sintomas: sintomas.value
+        }
+        // Agrega el objeto a la lista de citas
+        citas.push(cita);
+      }
       // Limpia los campos
       limpiarCampos();
       // Muestra las citas
@@ -139,18 +261,20 @@
       // Limpia el div
       cards.innerHTML = "";
       // Recorre el array y agrega los datos en una card
-      citas.forEach((element) => {
+      citas.forEach((element, i) => {
         cards.innerHTML += `
-          <div class="card mb-1 border-0">
-            <div class="card-body">
+          <div class="card mb-1 border-1">
+            <div class="card-body bg-light">
+              <img src=${element.foto} style="width:95%">
               <h5 class="card-title fw-bold">${element.nombreMascota}</h5>
               <p class="card-text">Propietario: ${element.propietario}</p>
               <p class="card-text">Telefono: ${element.telefono}</p>
               <p class="card-text">Fecha: ${element.fecha}</p>
               <p class="card-text">Hora: ${element.hora}</p>
+              <p class="card-text">Tipo: ${element.tipo}</p>
               <p class="card-text">Sintomas: ${element.sintomas}</p>
-              <button type="button" class="btn btn-danger" onclick="eliminarCita(${element.codigo})">Eliminar</button>
-              <button type="button" class="btn btn-primary" onclick="editarCita(${element.codigo})">Editar</button>
+              <button type="button" class="btn btn-primary" onclick="editarCita(${i})">Editar</button>
+              <button type="button" class="btn btn-danger" onclick="eliminarCita(${i})">Eliminar</button>
             </div>
           </div>
         `
@@ -158,10 +282,14 @@
     }
 
     // Funcion que edita un producto del array
-    function editarCita (codigos) {
+    function editarCita(codigos) {
+      console.log(citas);
+      bandera = true
       // Recorre el array y busca el codigo que se le pasa por parametro
-      citas.forEach((element) => {
-        if (element.codigo == codigos) {
+      citas.forEach((element, i) => {
+        if (i == codigos) {
+          num = i
+          console.log(i);
           // Limpia los campos
           limpiarCampos();
           // Agrega los datos del array al formulario
@@ -170,9 +298,8 @@
           telefono.value = element.telefono;
           fecha.value = element.fecha;
           hora.value = element.hora;
+          lista.value = element.tipo;
           sintomas.value = element.sintomas;
-          // Elimina el elemento del array
-          citas = citas.filter((element) => element.codigo != codigos);
 
           // Cambia el boton de enviar por el de actualizar
           crear.innerHTML = "Actualizar Cita";
@@ -181,9 +308,9 @@
     }
 
     // Funcion que elimina un producto del array
-    function eliminarCita(codigos) {
+    function eliminarCita(cd) {
       // Filtra el array y elimina el producto que tenga el codigo igual al que se le pasa por parametro
-      citas = citas.filter((element) => element.codigo != codigos);
+      citas = citas.filter((element, i) => cd != i);
       // Agrega los datos a la tabla
       mostrarCitas()
     }
@@ -195,6 +322,7 @@
       telefono.value = "";
       fecha.value = "";
       hora.value = "";
+      lista.value = "";
       sintomas.value = "";
     }
   </script>
