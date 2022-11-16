@@ -1,0 +1,42 @@
+*{
+  box-sizing: border-box;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+.fondo{
+  background-image: url(./img/hero.jpg);
+  height: 400px;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+input{
+  height: 40px;
+}
+.carrito{
+  width: 60px;
+}
+.carritoImg{
+  width: 40px;
+}
+.carritoDesplegable{
+  background-color: white;
+  padding: 20px;
+  position: absolute;
+  top: 78px;
+  right: 25%;
+  z-index: 1;
+}
+.carritoImg:hover{
+  cursor: pointer;
+}
+
+.icono1{
+  width: 30px;
+  height: 40px;
+}
+
+.card-img-top{
+  height: 180px;
+}
