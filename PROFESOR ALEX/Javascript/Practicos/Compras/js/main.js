@@ -1,73 +1,175 @@
 // Variables globales
-const carrito = document.getElementById('carrito');
-let cursos = []
+const carritoCompras = document.getElementById("carrito");
+const contenedor = document.getElementById("contenedorTarjetas");
+const total = document.getElementById("total");
+const cursos = [
+  {
+    id: 1,
+    imagen: "./img/curso1.jpg",
+    nombre: "HTML5, CSS3, JavaScript",
+    profesor: "Juan Pedro",
+    estrellas: "./img/estrellas.png",
+    precio: 200,
+    rebaja: 15,
+  },
+  {
+    id: 2,
+    imagen: "./img/curso2.jpg",
+    nombre: "Comida vegetariana",
+    profesor: "Juan Pedro",
+    estrellas: "./img/estrellas.png",
+    precio: 200,
+    rebaja: 15,
+  },
+  {
+    id: 3,
+    imagen: "./img/curso3.jpg",
+    nombre: "Guitarra principiantes",
+    profesor: "Juan Pedro",
+    estrellas: "./img/estrellas.png",
+    precio: 200,
+    rebaja: 15,
+  },
+  {
+    id: 4,
+    imagen: "./img/curso4.jpg",
+    nombre: "Cosecha verduras",
+    profesor: "Juan Pedro",
+    estrellas: "./img/estrellas.png",
+    precio: 200,
+    rebaja: 15,
+  },
+  {
+    id: 5,
+    imagen: "./img/curso5.jpg",
+    nombre: "Galletas caseras",
+    profesor: "Juan Pedro",
+    estrellas: "./img/estrellas.png",
+    precio: 200,
+    rebaja: 15,
+  },
+  {
+    id: 6,
+    imagen: "./img/curso6.webp",
+    nombre: "JavaScript moderno",
+    profesor: "Juan Pedro",
+    estrellas: "./img/estrellas.png",
+    precio: 200,
+    rebaja: 15,
+  },
+  {
+    id: 7,
+    imagen: "./img/curso1.jpg",
+    nombre: "Programación básica",
+    profesor: "Juan Pedro",
+    estrellas: "./img/estrellas.png",
+    precio: 200,
+    rebaja: 15,
+  },
+  {
+    id: 8,
+    imagen: "./img/curso2.jpg",
+    nombre: "Recetas comida natural",
+    profesor: "Juan Pedro",
+    estrellas: "./img/estrellas.png",
+    precio: 200,
+    rebaja: 15,
+  },
+  {
+    id: 9,
+    imagen: "./img/curso3.jpg",
+    nombre: "Estudio Musical",
+    profesor: "Juan Pedro",
+    estrellas: "./img/estrellas.png",
+    precio: 200,
+    rebaja: 15,
+  },
+]
+let carrito = []
 
-function agregar(num){
-  if (cursos.length == 0){
-    revisar(num);
+function agregarCarrito(i) {
+  console.log(i)
+  if(carrito.includes(carrito[i])) {
+    carrito.forEach((element) => {
+      if(element.id === carrito[i].id) {
+        element.cantidad++
+      }
+    })
+  }
+  else {
+    const items = {
+      id: cursos[i].id,
+      imagen: cursos[i].imagen,
+      nombre: cursos[i].nombre,
+      rebaja: cursos[i].rebaja,
+      cantidad: 1,
+    }
+    carrito.push(items)
   }
 
+  pintarCarrito()
+  console.log(carrito)
+}
+
+function pintarCarrito() {
+  carritoCompras.innerHTML = ""
+  carrito.forEach((element,i) => {
+    carritoCompras.innerHTML += `
+    <tr>
+      <td><img class="image py-1" src="${element.imagen}"></td>
+      <td>${element.nombre}</td>
+      <td>${element.rebaja}</td>
+      <td>${element.cantidad}</td>
+      <td></td>
+      <td><button class="btn eliminar" onclick= eliminar(${element.id})>x</span></td>
+    </tr>
+    `
+  })
+  totalFactura()
+}
+
+// Funcion que elimina un producto del array
+function eliminar(codigo) {
+  console.log(codigo)
+  // Filtra el array y elimina el producto que tenga el codigo igual al que se le pasa por parametro
+  carrito = carrito.filter((element) => element.id != codigo)
+  totalFactura()
+  // Agrega los datos a la tabla
+  pintarCarrito()
+}
+
+// Funcion que suma el total del carrito
+function totalFactura() {
+  let totalFacturax = 0
+  carrito.forEach((element) => {
+    totalFacturax += element.cantidad * element.rebaja;
+    total.innerHTML = `$${totalFacturax}`
+  })
+  if (totalFacturax == 0) {
+    total.innerHTML = `$0`
+  }
+}
+
+// Pintar tarjetas de cursos
+function pintarTarjetas() {
   cursos.forEach((element, i) => {
-    if(cursos[i].cod == num){
-      // cursos[i].cantidad++;
-      // pintar()
-      return
-    }
-    else{
-      revisar(num);
-    }
+    contenedor.innerHTML += `
+    <div class="card px-0 col-md-5 col-lg-3 col-sm-10 col-xl-3">
+    <img class="card-img-top" src="${element.imagen}" alt="Card image cap">
+    <div class="card-body">
+      <h6 class="card-title"><b>${element.nombre}</b></h6>
+      <p class="card-text">${element.profesor}</p>
+      <img src="${element.estrellas}" class="pb-3"><br>
+      <div class="row mb-3">
+        <p class="m-0 col-8"><del>${element.precio}</del></p><br>
+        <p class="m-0 col fs-4"><b>${element.rebaja}</b></p><br>
+      </div>
+      <a class="btn btn-primary w-100 bg-info border-0 agregar" onclick="agregarCarrito(${i})">AGREGAR AL CARRITO</a>
+    </div>
+  </div>
+    `
   })
 }
 
-
-function revisar(num){
-  console.log(num);
-  if(num==1){
-    const curso = {
-      cod: 1,
-      nombre: "Curso de JavaScript",
-      precio: 15,
-      cantidad: 1
-    }
-    cursos.push(curso);
-    console.log(cursos);
-  }
-
-}
-
-// Agrega el objeto a la lista de citas
-citas.push(cita);
-
-// Limpia los campos
-limpiarCampos();
-// Muestra las citas
-mostrarCitas();
-
-
-
-// Funcion que pintar los datos en la tabla
-function mostrarCitas() {
-console.log(citas);
-crear.innerHTML = "Crear Cita";
-// Limpia el div
-cards.innerHTML = "";
-// Recorre el array y agrega los datos en una card
-citas.forEach((element, i) => {
-cards.innerHTML += `
-  <div class="card mb-1 border-1">
-    <div class="card-body bg-light">
-      <img src=${element.foto} style="width:95%">
-      <h5 class="card-title fw-bold">${element.nombreMascota}</h5>
-      <p class="card-text">Propietario: ${element.propietario}</p>
-      <p class="card-text">Telefono: ${element.telefono}</p>
-      <p class="card-text">Fecha: ${element.fecha}</p>
-      <p class="card-text">Hora: ${element.hora}</p>
-      <p class="card-text">Tipo: ${element.tipo}</p>
-      <p class="card-text">Sintomas: ${element.sintomas}</p>
-      <button type="button" class="btn btn-primary" onclick="editarCita(${i})">Editar</button>
-      <button type="button" class="btn btn-danger" onclick="eliminarCita(${i})">Eliminar</button>
-    </div>
-  </div>
-`
-})
-}
+// Función 
+window.addEventListener("load", pintarTarjetas);
