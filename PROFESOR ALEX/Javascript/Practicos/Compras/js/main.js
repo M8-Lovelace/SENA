@@ -59,7 +59,7 @@ const cursos = [
   },
   {
     id: 7,
-    imagen: "./img/curso1.jpg",
+    imagen: "./img/curso7.jpg",
     nombre: "Programación básica",
     profesor: "Juan Pedro",
     estrellas: "./img/estrellas.png",
@@ -68,7 +68,7 @@ const cursos = [
   },
   {
     id: 8,
-    imagen: "./img/curso2.jpg",
+    imagen: "./img/curso8.jpg",
     nombre: "Recetas comida natural",
     profesor: "Juan Pedro",
     estrellas: "./img/estrellas.png",
@@ -77,7 +77,7 @@ const cursos = [
   },
   {
     id: 9,
-    imagen: "./img/curso3.jpg",
+    imagen: "./img/curso9.jpg",
     nombre: "Estudio Musical",
     profesor: "Juan Pedro",
     estrellas: "./img/estrellas.png",
@@ -89,26 +89,19 @@ let carrito = []
 
 function agregarCarrito(i) {
   console.log(i)
-  if(carrito.includes(carrito[i])) {
-    carrito.forEach((element) => {
-      if(element.id === carrito[i].id) {
-        element.cantidad++
-      }
-    })
+  // Busca el producto en el array
+  const producto = cursos.find((element) => element.id == i)
+  // Busca si el producto ya esta en el carrito
+  const existe = carrito.find((element) => element.id == i)
+  // Si existe aumenta la cantidad
+  if (existe) {
+    existe.cantidad++
+  } else {
+    // Si no existe lo agrega al carrito
+    carrito.push({ ...producto, cantidad: 1 })
   }
-  else {
-    const items = {
-      id: cursos[i].id,
-      imagen: cursos[i].imagen,
-      nombre: cursos[i].nombre,
-      rebaja: cursos[i].rebaja,
-      cantidad: 1,
-    }
-    carrito.push(items)
-  }
-
-  pintarCarrito()
   console.log(carrito)
+  pintarCarrito()
 }
 
 function pintarCarrito() {
@@ -150,6 +143,11 @@ function totalFactura() {
   }
 }
 
+function vaciarCarrito() {
+  carrito = []
+  pintarCarrito()
+}
+
 // Pintar tarjetas de cursos
 function pintarTarjetas() {
   cursos.forEach((element, i) => {
@@ -164,7 +162,7 @@ function pintarTarjetas() {
         <p class="m-0 col-8"><del>${element.precio}</del></p><br>
         <p class="m-0 col fs-4"><b>${element.rebaja}</b></p><br>
       </div>
-      <a class="btn btn-primary w-100 bg-info border-0 agregar" onclick="agregarCarrito(${i})">AGREGAR AL CARRITO</a>
+      <a class="btn btn-primary w-100 bg-info border-0 agregar" onclick="agregarCarrito(${element.id})">AGREGAR AL CARRITO</a>
     </div>
   </div>
     `

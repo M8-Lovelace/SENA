@@ -26,7 +26,7 @@ input{
   position: absolute;
   top: 78px;
   right: 5%;
-  z-index: 1;
+  z-index: 5;
   width: 500px;
 }
 .carritoImg:hover{
@@ -64,6 +64,7 @@ input{
 .buscar{
   padding: 0;
   height: 40px;
+  z-index: 1;
 }
 .lupa{
   width: 30px;
