@@ -153,18 +153,18 @@ function pintarTarjetas() {
   cursos.forEach((element, i) => {
     contenedor.innerHTML += `
     <div class="card px-0 col-md-5 col-lg-3 col-sm-10 col-xl-3">
-    <img class="card-img-top" src="${element.imagen}" alt="Card image cap">
-    <div class="card-body">
-      <h6 class="card-title"><b>${element.nombre}</b></h6>
-      <p class="card-text">${element.profesor}</p>
-      <img src="${element.estrellas}" class="pb-3"><br>
-      <div class="row mb-3">
-        <p class="m-0 col-8"><del>${element.precio}</del></p><br>
-        <p class="m-0 col fs-4"><b>${element.rebaja}</b></p><br>
+      <img class="card-img-top" src="${element.imagen}" alt="Card image cap">
+      <div class="card-body">
+        <h6 class="card-title"><b>${element.nombre}</b></h6>
+        <p class="card-text">${element.profesor}</p>
+        <img src="${element.estrellas}" class="pb-3"><br>
+        <div class="row mb-3">
+          <p class="m-0 col-8"><del>${element.precio}</del></p><br>
+          <p class="m-0 col fs-4"><b>${element.rebaja}</b></p><br>
+        </div>
+        <a class="btn btn-primary w-100 bg-info border-0 agregar" onclick="agregarCarrito(${element.id})">AGREGAR AL CARRITO</a>
       </div>
-      <a class="btn btn-primary w-100 bg-info border-0 agregar" onclick="agregarCarrito(${element.id})">AGREGAR AL CARRITO</a>
     </div>
-  </div>
     `
   })
 }

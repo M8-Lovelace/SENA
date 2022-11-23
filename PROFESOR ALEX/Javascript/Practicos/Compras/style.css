@@ -24,7 +24,7 @@ input{
   background-color: white;
   padding: 20px;
   position: absolute;
-  top: 78px;
+  top: 68px;
   right: 5%;
   z-index: 5;
   width: 500px;
@@ -106,13 +106,20 @@ input{
     display: none;
   }
   .colu{
-    display: none;
-  }
-  .colu-1{
-    margin-left: 100px;
+    width: 25%;
   }
   .card{
     margin: 0 !important;
+  }
+  .textos{
+    display: none;
+  }
+  .iconos{
+    margin-bottom: 20px;
+  }
+  .colus{
+    display: flex;
+    justify-content: center;
   }
 }
 
@@ -126,19 +133,32 @@ input{
   .foot{
     font-size: 12px;
   }
+  .menu{
+    position: relative;
+    width: 100%;
+  }
   .carrito{
-    width: 40px;
-    margin-left: 150px;
+    width: 35px;
+    position: absolute;
+    right: 10%;
   }
   .colu{
-    padding: 0px;
+    display: none;
+  }
+  .colus{
+    display: flex;
+    justify-content: center;
   }
   .card{
-    margin-left: 25px !important;
+    margin-left: 25px;
   }
   .uni{
     margin: 0px;
-    padding-left: 0px !important;
+    padding-left: 0px;
+  }
+  .barra{
+    display: flex;
+    justify-content: center;
   }
 }
 
@@ -147,16 +167,59 @@ input{
     padding: 0px;
   }
   .card{
-    margin-left: 0px !important;
+    margin-left: 0px;
   }
   .card-img-top{
-    height: 150px !important;
+    height: 150px;
+  }
+  .menu{
+    position: relative;
+    width: 100%;
   }
   .carrito{
-    margin-left: 500px;
+    width: 35px;
+    position: absolute;
+    right: 10%;
+  }
+  .barra{
+    display: flex;
+    justify-content: center;
+  }
+  .colu{
+    display: none;
+  }
+  .colus{
+    width: 35%;
+    font-size: 80%;
+    display: flex;
+    justify-content: center;
   }
 }
 
 @media(min-width: 990px){
-
+  .menu{
+    position: relative;
+    width: 100%;
+  }
+  .carrito{
+    width: 35px;
+    position: absolute;
+    right: 10%;
+  }
+  .barra{
+    display: flex;
+    justify-content: center;
+  }
+  .colu{
+    display: none;
+  }
+  .colus{
+    width: 25%;
+    display: flex;
+    justify-content: center;
+  }
+  .card{
+    width: 30%;
+  }
+  
 }
