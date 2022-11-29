@@ -138,6 +138,9 @@ input {
     right: 5px;
     top: 62px;
   }
+  .foot{
+    font-size: 12px;
+  }
 }
 
 @media (min-width: 471px) and (max-width: 767px) {
@@ -148,7 +151,7 @@ input {
     margin-bottom: 20px;
   }
   .foot {
-    font-size: 12px;
+    font-size: 15px;
   }
   .menu {
     position: relative;
@@ -180,6 +183,9 @@ input {
     width: 380px;
     right: 5px;
     top: 62px;
+  }
+  .all{
+    padding: 0 !important;
   }
 }
 
