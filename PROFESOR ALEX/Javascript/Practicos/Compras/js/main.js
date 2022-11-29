@@ -84,29 +84,29 @@ const cursos = [
     precio: 200,
     rebaja: 15,
   },
-]
-let carrito = []
+];
+let carrito = [];
 
 function agregarCarrito(i) {
-  console.log(i)
+  console.log(i);
   // Busca el producto en el array
-  const producto = cursos.find((element) => element.id == i)
+  const producto = cursos.find((element) => element.id == i);
   // Busca si el producto ya esta en el carrito
-  const existe = carrito.find((element) => element.id == i)
+  const existe = carrito.find((element) => element.id == i);
   // Si existe aumenta la cantidad
   if (existe) {
-    existe.cantidad++
+    existe.cantidad++;
   } else {
     // Si no existe lo agrega al carrito
-    carrito.push({ ...producto, cantidad: 1 })
+    carrito.push({ ...producto, cantidad: 1 });
   }
-  console.log(carrito)
-  pintarCarrito()
+  console.log(carrito);
+  pintarCarrito();
 }
 
 function pintarCarrito() {
-  carritoCompras.innerHTML = ""
-  carrito.forEach((element,i) => {
+  carritoCompras.innerHTML = "";
+  carrito.forEach((element, i) => {
     carritoCompras.innerHTML += `
     <tr>
       <td><img class="image py-1" src="${element.imagen}"></td>
@@ -116,36 +116,36 @@ function pintarCarrito() {
       <td></td>
       <td><button class="btn eliminar" onclick= eliminar(${element.id})>x</span></td>
     </tr>
-    `
-  })
-  totalFactura()
+    `;
+  });
+  totalFactura();
 }
 
 // Funcion que elimina un producto del array
 function eliminar(codigo) {
-  console.log(codigo)
+  console.log(codigo);
   // Filtra el array y elimina el producto que tenga el codigo igual al que se le pasa por parametro
-  carrito = carrito.filter((element) => element.id != codigo)
-  totalFactura()
+  carrito = carrito.filter((element) => element.id != codigo);
+  totalFactura();
   // Agrega los datos a la tabla
-  pintarCarrito()
+  pintarCarrito();
 }
 
 // Funcion que suma el total del carrito
 function totalFactura() {
-  let totalFacturax = 0
+  let totalFacturax = 0;
   carrito.forEach((element) => {
     totalFacturax += element.cantidad * element.rebaja;
-    total.innerHTML = `$${totalFacturax}`
-  })
+    total.innerHTML = `$${totalFacturax}`;
+  });
   if (totalFacturax == 0) {
-    total.innerHTML = `$0`
+    total.innerHTML = `$0`;
   }
 }
 
 function vaciarCarrito() {
-  carrito = []
-  pintarCarrito()
+  carrito = [];
+  pintarCarrito();
 }
 
 // Pintar tarjetas de cursos
@@ -165,9 +165,9 @@ function pintarTarjetas() {
         <a class="btn btn-primary w-100 bg-info border-0 agregar" onclick="agregarCarrito(${element.id})">AGREGAR AL CARRITO</a>
       </div>
     </div>
-    `
-  })
+    `;
+  });
 }
 
-// Función 
+// Función
 window.addEventListener("load", pintarTarjetas);

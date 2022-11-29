@@ -1,26 +1,26 @@
-*{
+* {
   box-sizing: border-box;
   position: relative;
   margin: 0;
   padding: 0;
 }
-.fondo{
+.fondo {
   background-image: url(./img/hero.jpg);
   height: 400px;
   width: 100%;
   background-repeat: no-repeat;
   background-size: cover;
 }
-input{
+input {
   height: 40px;
 }
-.carrito{
+.carrito {
   width: 60px;
 }
-.carritoImg{
+.carritoImg {
   width: 40px;
 }
-.carritoDesplegable{
+.carritoDesplegable {
   background-color: white;
   padding: 20px;
   position: absolute;
@@ -29,55 +29,55 @@ input{
   z-index: 5;
   width: 500px;
 }
-.carritoImg:hover{
+.carritoImg:hover {
   cursor: pointer;
 }
 
-.icono1{
+.icono1 {
   width: 30px;
   height: 40px;
 }
 
-.card-img-top{
+.card-img-top {
   height: 180px;
 }
 
-.botonVaciar{
+.botonVaciar {
   border: 1px solid rgb(165, 165, 165);
   margin-top: 5px;
   width: 100%;
   color: rgb(165, 165, 165);
   font-weight: 600;
 }
-.botonVaciar:hover{
+.botonVaciar:hover {
   cursor: pointer;
   background-color: rgb(255, 59, 59);
   color: white;
 }
-.input{
+.input {
   border-radius: 4px 0px 0px 4px;
 }
-.agregar{
+.agregar {
   font-size: 13px;
 }
 
-.buscar{
+.buscar {
   padding: 0;
   height: 40px;
   z-index: 1;
 }
-.lupa{
+.lupa {
   width: 30px;
 }
-.card{
+.card {
   margin: 5px;
 }
 
-.image{
+.image {
   width: 100px;
 }
 
-.eliminar{
+.eliminar {
   color: white;
   font-size: 13px;
   font-weight: 600;
@@ -86,109 +86,130 @@ input{
   padding: 0 5px 2px;
 }
 
-.eliminar:hover{
+.eliminar:hover {
   cursor: pointer;
 }
+.arriba{
+  border-radius: 5px;
+  text-decoration: none;
+  position: fixed;
+  bottom: 20px;
+  right: 22px;
+}
 
-
-@media (max-width:470px){
-  .navbar-brand img{
+@media (min-width: 0px) and (max-width: 470px) {
+  .navbar-brand img {
     width: 160px;
   }
-  .uni{
+  .uni {
     margin-left: 0 !important;
+    padding-left: 0 !important;
   }
-  .carrito{
-    width: 30px;
-    margin-left: 108px !important;
+  .menu {
+    position: relative;
+    width: 100%;
   }
-  .buscar{
+  .carrito {
+    width: 35px;
+    position: absolute;
+    right: 10%;
+  }
+  .buscar {
     display: none;
   }
-  .colu{
+  .colu {
     width: 25%;
   }
-  .card{
+  .card {
     margin: 0 !important;
   }
-  .textos{
+  .textos {
     display: none;
   }
-  .iconos{
+  .iconos {
     margin-bottom: 20px;
   }
-  .colus{
+  .colus {
     display: flex;
     justify-content: center;
   }
+  .carritoDesplegable {
+    width: 350px;
+    right: 5px;
+    top: 62px;
+  }
 }
 
-@media (max-width: 767px) and (min-width: 471px){
-  .textos{
+@media (min-width: 471px) and (max-width: 767px) {
+  .textos {
     display: none;
   }
-  .iconos{
+  .iconos {
     margin-bottom: 20px;
   }
-  .foot{
+  .foot {
     font-size: 12px;
   }
-  .menu{
+  .menu {
     position: relative;
     width: 100%;
   }
-  .carrito{
+  .carrito {
     width: 35px;
     position: absolute;
     right: 10%;
   }
-  .colu{
+  .colu {
     display: none;
   }
-  .colus{
+  .colus {
     display: flex;
     justify-content: center;
   }
-  .card{
+  .card {
     margin-left: 25px;
   }
-  .uni{
+  .uni {
     margin: 0px;
-    padding-left: 0px;
   }
-  .barra{
+  .barra {
     display: flex;
     justify-content: center;
+  }
+  .carritoDesplegable {
+    width: 380px;
+    right: 5px;
+    top: 62px;
   }
 }
 
-@media (min-width: 768px) and (max-width: 989px){
-  .colu{
+@media (min-width: 768px) and (max-width: 989px) {
+  .colu {
     padding: 0px;
   }
-  .card{
+  .card {
     margin-left: 0px;
   }
-  .card-img-top{
+  .card-img-top {
     height: 150px;
   }
-  .menu{
+  .menu {
     position: relative;
     width: 100%;
   }
-  .carrito{
+  .carrito {
     width: 35px;
     position: absolute;
     right: 10%;
   }
-  .barra{
+  .barra {
     display: flex;
     justify-content: center;
   }
-  .colu{
+  .colu {
     display: none;
   }
-  .colus{
+  .colus {
     width: 35%;
     font-size: 80%;
     display: flex;
@@ -196,30 +217,29 @@ input{
   }
 }
 
-@media(min-width: 990px){
-  .menu{
+@media (min-width: 990px) {
+  .menu {
     position: relative;
     width: 100%;
   }
-  .carrito{
+  .carrito {
     width: 35px;
     position: absolute;
     right: 10%;
   }
-  .barra{
+  .barra {
     display: flex;
     justify-content: center;
   }
-  .colu{
+  .colu {
     display: none;
   }
-  .colus{
+  .colus {
     width: 25%;
     display: flex;
     justify-content: center;
   }
-  .card{
+  .card {
     width: 30%;
   }
-  
 }
