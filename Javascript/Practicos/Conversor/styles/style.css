@@ -1,0 +1,40 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background-color: blueviolet;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.container{
+  background-color: rgb(126, 69, 180);
+  display: grid;
+  place-items: center;
+  margin-top: 50px;
+}
+
+.inpu{
+  height: 200px;
+  padding-top: 80px;
+}
+
+.inpu input{
+  background-color: white;
+  border: 0;
+  padding: 5px 30px;
+  text-align: center;
+}
+
+.selec{
+  justify-content: space-between;
+}
+
+.form-select{
+  height: 30px;
+  padding: 5px 30px;
+}
