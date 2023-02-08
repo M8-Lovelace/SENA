@@ -1,52 +1,13 @@
-<!-- ----------------------------------------------- -->
-<!-- ------------------ v-model -------------------- -->
-<!-- Es un puente bidireccional, es reactivo por ambos 
-lados -->
-<template>
-  <div>
-    <input type="text" v-model="name"><br><br>
-    <button @click="change()">Cambiar</button>
-    <h1>{{ name }}</h1>
-  </div>
-</template>
+<!-------------------- DIRECTIVAS --------------------->
 
-<script>
-// Importar librerias
-import { ref } from "vue";
-// Exportar el componente
-export default {
-  // Funcion setup que retorna un objeto con las variables
-  // y funciones
-  setup() {
-    // Variables publicas
-    let name = ref("");
-
-    // Funciones
-    function change(){
-      // El componente se actualiza automaticamente de la 
-      // variable name
-      name.value = "Hola mundo";
-    }
-    
-    // Retornar las variables y funciones que se van a usar 
-    // en el template
-    return {
-      name,
-      change
-    }
-  }
-};
-</script>
-
-<!-- ----------------------------------------------- -->
-<!-- ------------------- v-on ---------------------- -->
+<!-- <----------------- PAR O INPAR ------------------->
 <!-- <template>
-  <div>
-    <h1>{{ counter }}</h1>
-    // Directivas 
-    <button @click="sumar()">counter</button>
-    <button @click="increment()">increment</button>
-  </div>
+<div>
+  <h1>{{ rta }}</h1>
+  <input type="number" v-model="n" placeholder="Ingrese un número"><br><br>
+  <button @click="verificar()">Verificar</button>
+  <button @click="limpiar()" id="limpiar">Limpiar</button>
+</div>
 </template>
 
 <script>
@@ -54,30 +15,94 @@ export default {
 import { ref } from "vue";
 // Exportar el componente
 export default {
-  // Funcion setup que retorna un objeto con las variables
-  // y funciones
   setup() {
     // Variables publicas
-    let counter = ref(0);
-    let n = 1;
+    let n = ref("");
+    let rta = ref("");
 
     // Funciones
-    let sumar = () => {
-      counter.value+=n;
-      if (counter.value > 100) {
-        counter.value = 0;
+    let verificar = () => {
+      if (n.value == "") {
+        rta.value = `Ingrese un número`;
+      } else if(n.value == 0){
+        rta.value = `El número ${n.value} es neutro`;
+      } else if(n.value % 2 == 0) {
+        rta.value = `El número ${n.value} es par`;
+      } else if(n.value % 2 != 0){
+        rta.value = `El número ${n.value} es inpar`;
       }
     };
 
-    let increment = () => {
-      n += 10;
-    };
+    let limpiar = () => {
+      n.value = "";
+      rta.value = "";
+    }
 
     // Retornar las variables y funciones que se van a usar
     // en el template
-    return {counter, sumar, increment};
+    return { 
+      n, rta, verificar, limpiar
+    };
   },
-};
+}
+
+</script> -->
+
+<!----------------------------------------------------->
+<!---------------- Negativo o Positivo ---------------->
+
+<!-- <template>
+  <div>
+    <h1 v-bind:style="color">{{ rta }}</h1>
+    <input type="number" v-model="n" placeholder="Ingrese un número"><br><br>
+    <button @click="verificar()">Verificar</button>
+    <button @click="limpiar()" id="limpiar">Limpiar</button>
+  </div>
+</template>
+
+<script>
+// Importar librerias
+import { ref } from "vue";
+// Exportar el componente
+export default {
+  setup() {
+    // Variables publicas
+    let n = ref("");
+    let rta = ref("");
+    let color = ref("color: black");
+
+    // Funciones
+    let verificar = () => {
+      if (n.value < 0) {
+        rta.value = `El número ${n.value} es negativo`;
+        color.value = "color: red";
+      } else if(n.value > 0){
+        rta.value = `El número ${n.value} es positivo`;
+        color.value = "color: green";
+      } else if (n.value == 0) {
+        rta.value = `El número 0 es neutro`;
+        color.value = "color: blue";
+      }
+    };
+
+    let limpiar = () => {
+      n.value = "";
+      rta.value = "";
+      color.value = "color: black";
+    }
+
+    // Retornar las variables y funciones que se van a usar
+    // en el template
+    return { 
+      n, rta, verificar, limpiar, color
+    };
+  },
+}
+
 </script>
 
-<style></style> -->
+<style>
+  button{
+    margin: 5px;
+  }
+</style> -->
