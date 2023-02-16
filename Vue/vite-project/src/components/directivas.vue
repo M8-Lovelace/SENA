@@ -80,7 +80,7 @@ export default {
 <style></style> -->
 
 <!----------------------------------------------------->
-<!-------------------- v-model 1 ---------------------->
+<!--------------------- v-model ----------------------->
 <!-- Es un puente bidireccional, es reactivo por ambos 
 lados -->
 <!-- <template>
@@ -124,7 +124,6 @@ export default {
 <!-- <template>
   <div>
     <h1>{{ counter }}</h1>
-    Directivas
     <button @click="sumar()">counter</button>
     <button @click="increment()">increment</button>
   </div>
