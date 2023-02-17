@@ -4,10 +4,10 @@
 <!---------------------- v-for ------------------------>
 <template>
   <div>
-    <table class="table table-dark table-striped">
+    <table class="table table-dark table-striped mt-3">
       <thead>
         <tr>
-          <th scope="col">nombre</th>
+          <th scope="col">nombreProducto</th>
           <th scope="col">Precio</th>
           <th scope="col">Costo</th>
           <th scope="col">Cantidad</th>
@@ -22,7 +22,7 @@
           <td>{{ p.precio }}</td>
           <td>{{ p.costo }}</td>
           <td>
-            <span v-if="p.cantidad < 10" style="color: red">{{
+            <span v-if="p.cantidadProducto < 10" style="color: red">{{
               p.cantidad
             }}</span>
             <span v-else-if="p.cantidad > 50" style="color: blue">{{
@@ -36,44 +36,135 @@
             <span v-else style="color: green">Activo</span>
           </td>
           <td>
-            <button type="button" class="me-2" @click="posicion(i)" data-toggle="modal" data-target="#exampleModalLong">✍</button>
-            <button @click="estado(i)">
+            <button
+              type="button"
+              class="me-2 p-1"
+              @click="editarProducto(p, i)"
+              data-toggle="modal"
+              data-target="#exampleModalLong"
+            >
+              ✍
+            </button>
+            <button @click="reemplazarEstados(i)" class="me-2 p-1">
               <span v-if="p.estado === 0">🟢</span>
               <span v-else>🔴</span>
+            </button>
+            <button>
+              <span @click="eliminarProducto(i)" class="p-1">🗑</span>
             </button>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="w-100 div-boton">
+      <button
+        type="button"
+        @click="limpiarCampos(1)"
+        data-toggle="modal"
+        data-target="#exampleModalLong"
+        class="m-auto px-5 py-2 boton"
+      >
+        Agregar
+      </button>
+    </div>
+
+    <div
+      class="modal fade"
+      id="exampleModalLong"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLongTitle2"
+      aria-hidden="true"
+    >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">MODIFICAR PRODUCTO</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <h5 class="modal-title" id="exampleModalLongTitle2">
+              <b>{{ titulo }}</b>
+            </h5>
           </div>
           <div class="modal-body text-center">
-            <label class="me-2" >Nombre: </label><br>
-            <input type="text" v-model="nam" ><br><br>
-            <label class="me-2">Precio: </label><br>
-            <input type="number" v-model="numb"><br><br>
-            <label class="me-2">Costo: </label><br>
-            <input type="number" v-model="cost"><br><br>
-            <label class="me-2">Cantidad: </label><br>
-            <input type="number" v-model="cantid"><br><br>
-            <label class="me-2">Proveedor: </label><br>
-            <input type="number" v-model="proveedo"><br><br>
-            <label class="me-2">Estado: </label><br>
-            <input type="number" v-model="esta"><br><br>
+            <label class="me-2"><b>Nombre:</b> </label><br />
+            <input
+              type="text"
+              v-model="nombreProducto"
+              :disabled="desabilitarInput == 1"
+              :style="estiloInput"
+              class="p-1 ps-3"
+            /><br /><br />
+            <label class="me-2"><b>Precio:</b> </label><br />
+            <input
+              type="number"
+              v-model="precioProducto"
+              :disabled="desabilitarInput == 1"
+              :style="estiloInput"
+              class="p-1 ps-3"
+            /><br /><br />
+            <label class="me-2"><b>Costo: </b></label><br />
+            <input
+              type="number"
+              v-model="costoProducto"
+              :disabled="desabilitarInput == 1"
+              :style="estiloInput"
+              class="p-1 ps-3"
+            /><br /><br />
+            <label class="me-2"><b>Cantidad:</b> </label><br />
+            <input
+              type="number"
+              v-model="cantidadProducto"
+              :disabled="desabilitarInput == 1"
+              :style="estiloInput"
+              class="p-1 ps-3"
+            /><br /><br />
+            <label class="me-2"><b>Proveedor:</b> </label><br />
+            <input
+              type="text"
+              v-model="proveedorProducto"
+              :disabled="desabilitarInput == 1"
+              :style="estiloInput"
+              class="p-1 ps-3"
+            /><br /><br />
+            <label class="me-2"><b>Estado:</b> </label><br />
+            <select
+              v-model="estadoProducto"
+              class="form-select form-select-sm w-50 m-auto p-2"
+              aria-label=".form-select-sm example"
+              :disabled="desabilitarInput == 1"
+              :style="estiloInput"
+            >
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary" @click="guardarCambios(o)">Guardar Cambios</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="comprobarDatos(index)"
+              :disabled="desabilitarInput == 1"
+            >
+              {{ boton }}
+            </button>
+          </div>
+
+          <div class="m-2">
+            <div
+              v-if="alerta == 1"
+              :style="estiloAlerta"
+              class="alert px-4"
+              role="alert"
+            >
+              <strong>Atención!</strong> {{ mensaje }}
+            </div>
           </div>
         </div>
       </div>
@@ -144,408 +235,171 @@ export default {
       },
     ]);
 
-    let nam = ref();
-    let numb = ref();
-    let cost = ref();
-    let cantid= ref();
-    let proveedo = ref();
-    let esta = ref();
+    let nombreProducto = ref();
+    let precioProducto = ref();
+    let costoProducto = ref();
+    let cantidadProducto = ref();
+    let proveedorProducto = ref();
+    let estadoProducto = ref();
 
-    function estado(i) {
-      if (productos.value[i].estado === 1) {
-        productos.value[i].estado = 0;
-      } else {
+    let index = ref();
+    let desabilitarInput = ref();
+    let alerta = ref();
+    let titulo = ref("Registrar Producto");
+    let boton = ref();
+    let mensaje = ref();
+    let estiloAlerta = ref();
+    let estiloInput = ref();
+
+    function reemplazarEstados(i) {
+      if (productos.value[i].estado === 0) {
         productos.value[i].estado = 1;
+      } else {
+        productos.value[i].estado = 0;
       }
     }
 
-    let o = ref();
-    function posicion(i) {
-      o.value = i;
+    function registrar() {
+      titulo.value = "Registrar Producto";
+      boton.value = "Registrar";
+      estiloInput.value = "background-color: #e0e0e0;";
+      productos.value.push({
+        nombre: nombreProducto.value,
+        precio: precioProducto.value,
+        costo: costoProducto.value,
+        cantidad: cantidadProducto.value,
+        proveedor: proveedorProducto.value,
+        estado: estadoProducto.value,
+      });
+      desabilitarInput.value = 1;
+      alerta.value = 1;
+      mensaje.value = "Producto registrado con éxito";
+      estiloAlerta.value =
+        "background-color: #4caf50; color: white; font-weight: bold";
+      setInterval(() => {
+        alerta.value = 0;
+      }, 3000);
+    }
+
+    function editarProducto(p, i) {
+      titulo.value = "Editar Producto";
+      boton.value = "Guardar Cambios";
+      alerta.value = 0;
+      desabilitarInput.value = 0;
+      index.value = i;
+      nombreProducto.value = p.nombre;
+      precioProducto.value = p.precio;
+      costoProducto.value = p.costo;
+      cantidadProducto.value = p.cantidad;
+      proveedorProducto.value = p.proveedor;
+      estadoProducto.value = p.estado;
+      if (estadoProducto.value == 1) {
+        estadoProducto.value = "Activo";
+      } else {
+        estadoProducto.value = "Inactivo";
+      }
+    }
+
+    function comprobarDatos(i) {
+      if (
+        nombreProducto.value === "" ||
+        precioProducto.value === "" ||
+        costoProducto.value === "" ||
+        cantidadProducto.value === "" ||
+        proveedorProducto.value === "" ||
+        estadoProducto.value === ""
+      ) {
+        alerta.value = 1;
+        mensaje.value = "Todos los campos son obligatorios";
+        estiloAlerta.value =
+          "background-color: red; color: white; font-weight: bold; font-size: 14px";
+        setInterval(() => {
+          alerta.value = 0;
+        }, 200);
+      } else if (costoProducto.value >= precioProducto.value) {
+        alerta.value = 1;
+        mensaje.value = "El costo no puede ser mayor o igual al precio";
+        estiloAlerta.value =
+          "background-color: red; color: white; font-weight: bold; font-size: 14px";
+        setInterval(() => {
+          alerta.value = 0;
+        }, 200);
+      } else {
+        console.log("Todo bien", boton.value);
+        if (boton.value == "Guardar Cambios") {
+          guardarCambios(i);
+        } else {
+          registrar();
+        }
+      }
     }
 
     function guardarCambios(i) {
-      productos.value[i].estado = esta.value;
-      productos.value[i].nombre = nam.value;
-      productos.value[i].precio = numb.value;
-      productos.value[i].costo = cost.value;
-      productos.value[i].cantidad = cantid.value;
-      productos.value[i].proveedor = proveedo.value;
+      productos.value[i].nombre = nombreProducto.value;
+      productos.value[i].precio = precioProducto.value;
+      productos.value[i].costo = costoProducto.value;
+      productos.value[i].cantidad = cantidadProducto.value;
+      productos.value[i].proveedor = proveedorProducto.value;
+      productos.value[i].estado = estadoProducto.value;
+      desabilitarInput.value = 1;
+      alerta.value = 1;
+      mensaje.value = "Producto editado con exito";
+      estiloInput.value = "background-color: #e0e0e0;";
+      estiloAlerta.value =
+        "background-color: green; color: white; font-weight: bold; font-size: 14px";
+      setInterval(() => {
+        alerta.value = 0;
+      }, 3000);
+      setInterval(() => {
+        limpiarCampos();
+      }, 3000);
+    }
 
-      esta.value = "";
-      nam.value = "";
-      numb.value = "";
-      cost.value = "";
-      cantid.value = "";
-      proveedo.value = "";
+    function eliminarProducto(i) {
+      productos.value.splice(i, 1);
+    }
 
+    function limpiarCampos() {
+      boton.value = "Registrar";
+      estiloInput.value = "background-color: white;";
+      if (boton.value == "Guardar Cambios") {
+        desabilitarInput.value = 0;
+        boton.value = "Registrar";
+        alerta.value = 0;
+      }
+      estadoProducto.value = "";
+      nombreProducto.value = "";
+      precioProducto.value = "";
+      costoProducto.value = "";
+      cantidadProducto.value = "";
+      proveedorProducto.value = "";
     }
 
     return {
       productos,
-      estado,
+
+      reemplazarEstados,
+      comprobarDatos,
+      desabilitarInput,
       guardarCambios,
-      posicion,
-      o,
-      nam,
-      numb,
-      cost,
-      cantid,
-      proveedo,
-      esta
+      editarProducto,
+      limpiarCampos,
+      eliminarProducto,
+
+      nombreProducto,
+      precioProducto,
+      costoProducto,
+      cantidadProducto,
+      proveedorProducto,
+      estadoProducto,
+      index,
+      alerta,
+      titulo,
+      boton,
+      mensaje,
+      estiloAlerta,
+      estiloInput,
     };
-  },
-};
-</script>
-
-<!-- <template>
-  <div>
-    <ul>
-      <li v-for="(leng, n) in lenguajes" :keys="leng">{{ leng }}</li>
-    </ul>
-    <button @click="agregar()">Agregar</button>
-  </div>
-</template>
-
-<script>
-import { ref } from "vue";
-export default {
-  setup(){
-    let lenguajes = ref(["JavaScript", "Python", "Java", "C++", "C#"]);
-
-    function agregar(){
-      lenguajes.value.push("PHP");
-    }
-
-    return {
-      lenguajes,
-      agregar
-    }
   }
 }
 </script>
-<style>
-  
-</style> -->
-
-<!----------------------------------------------------->
-<!-- Una compañía de seguros para autos ofrece dos tipos
-de póliza: cobertura amplia (A) y daños a terceros (B). -->
-
-<!-- Para el plan A, la cuota base es de $500.00, y para
-el B, de $250.00. -->
-
-<!-- Ambos planes se les carga 10% del costo si la persona
-que conduce bebe alcohol, 5% si utiliza lentes, 5% si padece 
-alguna enfermedad, y si tiene más de 40 años, se le carga 20%, 
-de lo contrario sólo 10%. -->
-
-<!-- <template>
-  <div class="w-50 m-auto p-5">
-    <h1 class="ps-5">Seguros</h1>
-    <h5>Seleccione una opción:</h5>
-    <select v-model="selected">
-      <option disabled value="">Seleccione un elemento</option>
-      <option>Cobertura amplia (A)</option>
-      <option>Daños a terceros (B)</option>
-    </select>
-    <br><br>
-    <h5>Seleccione:</h5>
-    <input class="m-1" type="checkbox" id="edad" value="edad" v-model="checked"/>
-    <label for="edad">Mayor a 40 años</label><br>
-    <input class="m-1" type="checkbox" id="alcohol" value="alcohol" v-model="checked" />
-    <label for="alcohol">Bebe alcohol</label><br>
-    <input class="m-1" type="checkbox" id="lentes" value="lentes" v-model="checked" />
-    <label for="lentes">Usa lentes</label><br>
-    <input class="m-1" type="checkbox" id="enfermedad" value="enfermedad" v-model="checked" />
-    <label for="enfermedad">Padece alguna enfermedad</label>
-    <br><br>
-    <button @click="verificar()">Calcular</button><br><br>
-    <h1>{{ rta }}</h1>
-  </div>
-</template>
-<script>
-// Importar librerias
-import { ref } from "vue";
-export default {
-  setup(){
-    let checked = ref([]);
-    let rta = ref();
-    let selected = ref("");
-
-    function verificar(){
-      let suma = 0;
-      let porcentaje = 0;
-      let total = 0;
-      if (selected.value == "Cobertura amplia (A)") {
-        suma = 500;
-      } else if (selected.value == "Daños a terceros (B)") {
-        suma = 250;
-      }
-      if (checked.value.includes("edad")) {
-        porcentaje += 20;
-      } else {
-        porcentaje += 10;
-      }
-      if (checked.value.includes("alcohol")) {
-        porcentaje += 10;
-      }
-      if (checked.value.includes("lentes")) {
-        porcentaje += 5;
-      }
-      if (checked.value.includes("enfermedad")) {
-        porcentaje += 5;
-      }
-      total = suma + (suma * porcentaje / 100);
-      rta.value = `El total a pagar es de: $${total}`;
-    }
-
-    return {
-      rta,
-      verificar,
-      checked,
-      selected
-    }
-  }
-}
-</script>
-<style>
-  
-</style> -->
-
-<!----------------------------------------------------->
-<!-- Escriba un programa que solicite la edad de una persona
-y determine si es menor o mayor de edad, deberá mostrar un mensaje. -->
-<!-- <template>
-  <div class="m-5">
-    <h1>{{ rta }}</h1>
-    <input type="number" v-model="n" placeholder="Ingrese su edad"/> <br><br>
-    <button @click="verificar()">Verificar</button>
-  </div>
-</template>
-<script>
-// Importar librerias
-import { ref } from "vue";
-export default {
-  setup() {
-    let n = ref();
-    let rta = ref();
-
-    function verificar() {
-      if (n.value >= 18) {
-        rta.value = "Es mayor de edad";
-      } else if (n.value >= 0 && n.value < 18)  {
-        rta.value = "Es menor de edad";
-      } else {
-        rta.value = "No es una edad válida";
-      }
-    }
-
-    return {
-      n,
-      rta,
-      verificar
-    };
-  },
-};
-</script>
-<style scoped></style> -->
-
-<!-- <-------------- Radio operaciones ---------------->
-<!-- <template>
-  <div>
-    <div>
-      <input type="radio" id="suma" value="suma" v-model="picked" @change="changeSimbol()"/>
-      <label for="suma">Sumar</label>
-      <br />
-      <input type="radio" id="resta" value="resta" v-model="picked" @change="changeSimbol()"/>
-      <label for="resta">Restar</label>
-      <br />
-      <input
-        type="radio"
-        id="multiplicar"
-        value="multiplicar"
-        v-model="picked"
-        @change="changeSimbol()"
-      />
-      <label for="multiplicar">Multiplicar</label>
-      <br />
-      <input type="radio" id="dividir" value="dividir" v-model="picked" @change="changeSimbol()"/>
-      <label for="dividir">Dividir</label>
-      <br />
-      <br />
-      <input
-        type="number"
-        v-model="n1"
-        placeholder="Ingrese un número"
-      /><br /><br />
-      <span>{{ simbolo }}</span><br><br>
-      <input
-        type="number"
-        v-model="n2"
-        placeholder="Ingrese otro número"
-      /><br /><br />
-      <button @click="verificar()">Verificar</button><br><br>
-      <span>El resultado es: {{ rta }}</span>
-    </div>
-  </div>
-</template>
-
-<script>
-// Importar librerias
-import { ref } from "vue";
-export default {
-  setup() {
-    let picked = ref("");
-    let n1 = ref();
-    let n2 = ref();
-    let rta = ref();
-    let simbolo = ref();
-
-    function changeSimbol() {
-      if (picked.value == "suma") {
-        simbolo.value = "+";
-      } else if (picked.value == "resta") {
-        simbolo.value = "-";
-      } else if (picked.value == "multiplicar") {
-        simbolo.value = "*";
-      } else if (picked.value == "dividir") {
-        simbolo.value = "/";
-      }
-    }
-
-    function verificar() {
-      if (picked.value == "suma") {
-        rta.value = n1.value + n2.value;
-      } else if (picked.value == "resta") {
-        rta.value = n1.value - n2.value;
-      } else if (picked.value == "multiplicar") {
-        rta.value = n1.value * n2.value;
-      } else if (picked.value == "dividir") {
-        rta.value = n1.value / n2.value;
-      } else {
-        rta.value = "No se ha seleccionado una operación";
-      }
-      console.log(rta.value);
-    }
-
-    return {
-      rta,
-      n1,
-      n2,
-      picked,
-      simbolo,
-      verificar,
-      changeSimbol
-    };
-  },
-};
-</script>
-<style scoped></style> -->
-
-<!-- <----------------- Par o inpar ------------------->
-<!-- <template>
-<div>
-  <h1>{{ rta }}</h1>
-  <input type="number" v-model="n" placeholder="Ingrese un número"><br><br>
-  <button @click="verificar()">Verificar</button>
-  <button @click="limpiar()" id="limpiar">Limpiar</button>
-</div>
-</template>
-
-<script>
-// Importar librerias
-import { ref } from "vue";
-// Exportar el componente
-export default {
-  setup() {
-    // Variables publicas
-    let n = ref("");
-    let rta = ref("");
-
-    // Funciones
-    let verificar = () => {
-      if (n.value == "") {
-        rta.value = `Ingrese un número`;
-      } else if(n.value == 0){
-        rta.value = `El número ${n.value} es neutro`;
-      } else if(n.value % 2 == 0) {
-        rta.value = `El número ${n.value} es par`;
-      } else if(n.value % 2 != 0){
-        rta.value = `El número ${n.value} es inpar`;
-      }
-    };
-
-    let limpiar = () => {
-      n.value = "";
-      rta.value = "";
-    }
-
-    // Retornar las variables y funciones que se van a usar
-    // en el template
-    return { 
-      n, rta, verificar, limpiar
-    };
-  },
-}
-
-</script> -->
-
-<!----------------------------------------------------->
-<!---------------- Negativo o Positivo ---------------->
-
-<!-- <template>
-  <div>
-    <h1 v-bind:style="color">{{ rta }}</h1>
-    <input type="number" v-model="n" placeholder="Ingrese un número"><br><br>
-    <button @click="verificar()">Verificar</button>
-    <button @click="limpiar()" id="limpiar">Limpiar</button>
-  </div>
-</template>
-
-<script>
-// Importar librerias
-import { ref } from "vue";
-// Exportar el componente
-export default {
-  setup() {
-    // Variables publicas
-    let n = ref("");
-    let rta = ref("");
-    let color = ref("color: black");
-
-    // Funciones
-    let verificar = () => {
-      if (n.value < 0) {
-        rta.value = `El número ${n.value} es negativo`;
-        color.value = "color: red";
-      } else if(n.value > 0){
-        rta.value = `El número ${n.value} es positivo`;
-        color.value = "color: green";
-      } else if (n.value == 0) {
-        rta.value = `El número 0 es neutro`;
-        color.value = "color: blue";
-      }
-    };
-
-    let limpiar = () => {
-      n.value = "";
-      rta.value = "";
-      color.value = "color: black";
-    }
-
-    // Retornar las variables y funciones que se van a usar
-    // en el template
-    return { 
-      n, rta, verificar, limpiar, color
-    };
-  },
-}
-
-</script>
-
-<style>
-  button{
-    margin: 5px;
-  }
-</style> -->
