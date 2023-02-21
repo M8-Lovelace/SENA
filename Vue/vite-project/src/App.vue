@@ -36,13 +36,8 @@
             <span v-else style="color: green">Activo</span>
           </td>
           <td>
-            <button
-              type="button"
-              class="me-2 p-1"
-              @click="editarProducto(p, i)"
-              data-toggle="modal"
-              data-target="#exampleModalLong"
-            >
+            <button type="button" class="me-2 p-1" @click="editarProducto(p, i)" data-toggle="modal"
+              data-target="#exampleModalLong">
               ✍
             </button>
             <button @click="reemplazarEstados(i)" class="me-2 p-1">
@@ -58,25 +53,14 @@
     </table>
 
     <div class="w-100 div-boton">
-      <button
-        type="button"
-        @click="limpiarCampos(1)"
-        data-toggle="modal"
-        data-target="#exampleModalLong"
-        class="m-auto px-5 py-2 boton"
-      >
+      <button type="button" @click="limpiarCampos(1)" data-toggle="modal" data-target="#exampleModalLong"
+        class="m-auto px-5 py-2 boton">
         Agregar
       </button>
     </div>
 
-    <div
-      class="modal fade"
-      id="exampleModalLong"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLongTitle2"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle2"
+      aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -86,83 +70,40 @@
           </div>
           <div class="modal-body text-center">
             <label class="me-2"><b>Nombre:</b> </label><br />
-            <input
-              type="text"
-              v-model="nombreProducto"
-              :disabled="desabilitarInput == 1"
-              :style="estiloInput"
-              class="p-1 ps-3"
-            /><br /><br />
+            <input type="text" v-model="nombreProducto" :disabled="desabilitarInput == 1" :style="estiloInput"
+              class="p-1 ps-3" /><br /><br />
             <label class="me-2"><b>Precio:</b> </label><br />
-            <input
-              type="number"
-              v-model="precioProducto"
-              :disabled="desabilitarInput == 1"
-              :style="estiloInput"
-              class="p-1 ps-3"
-            /><br /><br />
+            <input type="number" v-model="precioProducto" :disabled="desabilitarInput == 1" :style="estiloInput"
+              class="p-1 ps-3" /><br /><br />
             <label class="me-2"><b>Costo: </b></label><br />
-            <input
-              type="number"
-              v-model="costoProducto"
-              :disabled="desabilitarInput == 1"
-              :style="estiloInput"
-              class="p-1 ps-3"
-            /><br /><br />
+            <input type="number" v-model="costoProducto" :disabled="desabilitarInput == 1" :style="estiloInput"
+              class="p-1 ps-3" /><br /><br />
             <label class="me-2"><b>Cantidad:</b> </label><br />
-            <input
-              type="number"
-              v-model="cantidadProducto"
-              :disabled="desabilitarInput == 1"
-              :style="estiloInput"
-              class="p-1 ps-3"
-            /><br /><br />
+            <input type="number" v-model="cantidadProducto" :disabled="desabilitarInput == 1" :style="estiloInput"
+              class="p-1 ps-3" /><br /><br />
             <label class="me-2"><b>Proveedor:</b> </label><br />
-            <input
-              type="text"
-              v-model="proveedorProducto"
-              :disabled="desabilitarInput == 1"
-              :style="estiloInput"
-              class="p-1 ps-3"
-            /><br /><br />
+            <input type="text" v-model="proveedorProducto" :disabled="desabilitarInput == 1" :style="estiloInput"
+              class="p-1 ps-3" /><br /><br />
             <label class="me-2"><b>Estado:</b> </label><br />
-            <select
-              v-model="estadoProducto"
-              class="form-select form-select-sm w-50 m-auto p-2"
-              aria-label=".form-select-sm example"
-              :disabled="desabilitarInput == 1"
-              :style="estiloInput"
-            >
+            <select v-model="estadoProducto" class="form-select form-select-sm w-50 m-auto p-2"
+              aria-label=".form-select-sm example" :disabled="desabilitarInput == 1" :style="estiloInput">
               <option value="Activo">Activo</option>
               <option value="Inactivo">Inactivo</option>
             </select>
           </div>
 
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
               Cerrar
             </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="comprobarDatos(index)"
-              :disabled="desabilitarInput == 1"
-            >
+            <button type="button" class="btn btn-primary" @click="comprobarFormulario(index)"
+              :disabled="desabilitarInput == 1">
               {{ boton }}
             </button>
           </div>
 
           <div class="m-2">
-            <div
-              v-if="alerta == 1"
-              :style="estiloAlerta"
-              class="alert px-4"
-              role="alert"
-            >
+            <div v-if="alerta == 1" :style="estiloAlerta" class="alert px-4" role="alert">
               <strong>Atención!</strong> {{ mensaje }}
             </div>
           </div>
@@ -260,9 +201,6 @@ export default {
     }
 
     function registrar() {
-      titulo.value = "Registrar Producto";
-      boton.value = "Registrar";
-      estiloInput.value = "background-color: #e0e0e0;";
       productos.value.push({
         nombre: nombreProducto.value,
         precio: precioProducto.value,
@@ -272,8 +210,10 @@ export default {
         estado: estadoProducto.value,
       });
       desabilitarInput.value = 1;
+
       alerta.value = 1;
       mensaje.value = "Producto registrado con éxito";
+      estiloInput.value = "background-color: #e0e0e0;";
       estiloAlerta.value =
         "background-color: #4caf50; color: white; font-weight: bold";
       setInterval(() => {
@@ -282,6 +222,7 @@ export default {
     }
 
     function editarProducto(p, i) {
+      estiloInput.value = "background-color: white;";
       titulo.value = "Editar Producto";
       boton.value = "Guardar Cambios";
       alerta.value = 0;
@@ -300,7 +241,18 @@ export default {
       }
     }
 
-    function comprobarDatos(i) {
+    function comprobarFormulario(i) {
+      estiloInput.value = "background-color: white;";
+      if (boton.value == "Registrar") {
+        desabilitarInput.value = false;
+        titulo.value = "Registrar Producto";
+        boton.value = "Registrar";
+      }
+      verificarDatos(i);
+    }
+
+    function verificarDatos(i) {
+      estiloInput.value = "background-color: white;";
       if (
         nombreProducto.value === "" ||
         precioProducto.value === "" ||
@@ -315,7 +267,7 @@ export default {
           "background-color: red; color: white; font-weight: bold; font-size: 14px";
         setInterval(() => {
           alerta.value = 0;
-        }, 200);
+        }, 2000);
       } else if (costoProducto.value >= precioProducto.value) {
         alerta.value = 1;
         mensaje.value = "El costo no puede ser mayor o igual al precio";
@@ -323,14 +275,11 @@ export default {
           "background-color: red; color: white; font-weight: bold; font-size: 14px";
         setInterval(() => {
           alerta.value = 0;
-        }, 200);
+        }, 2000);
+      } else if (boton.value == "Guardar Cambios") {
+        guardarCambios(i);
       } else {
-        console.log("Todo bien", boton.value);
-        if (boton.value == "Guardar Cambios") {
-          guardarCambios(i);
-        } else {
-          registrar();
-        }
+        registrar();
       }
     }
 
@@ -350,17 +299,18 @@ export default {
       setInterval(() => {
         alerta.value = 0;
       }, 3000);
-      setInterval(() => {
-        limpiarCampos();
-      }, 3000);
     }
 
     function eliminarProducto(i) {
       productos.value.splice(i, 1);
     }
 
-    function limpiarCampos() {
-      boton.value = "Registrar";
+    function limpiarCampos(i) {
+      if (i == 1) {
+        titulo.value = "Registrar Producto";
+        boton.value = "Registrar";
+        desabilitarInput.value = 0;
+      }
       estiloInput.value = "background-color: white;";
       if (boton.value == "Guardar Cambios") {
         desabilitarInput.value = 0;
@@ -379,7 +329,7 @@ export default {
       productos,
 
       reemplazarEstados,
-      comprobarDatos,
+      comprobarFormulario,
       desabilitarInput,
       guardarCambios,
       editarProducto,
