@@ -3,7 +3,7 @@
 <template>
   <div>
     <h1 class="text-center pt-3 fw-bold">TABLA DE PRODUCTOS</h1>
-    <table class="table mt-3">
+    <table class="table table-striped table-dark mt-3">
       <thead>
         <tr>
           <th scope="col">Nombre</th>
@@ -49,6 +49,26 @@
           </td>
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+          <td><b></b></td>
+          <td>{{ totalPrecio }}</td>
+          <td>{{ totalCosto }}</td>
+          <td>{{ totalCantidad }}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+        <td><b>Total:</b></td>
+          <td>{{ suma1 }}</td>
+          <td>{{ suma2 }}</td>
+          <td></td>
+          <td></td>
+          <td>Ganancias:</td>
+          <td>{{ totalGanancias }}</td>
+        </tr>
+      </tfoot>
     </table>
 
     <div class="div-boton">
@@ -113,7 +133,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref , computed } from "vue";
 export default {
   setup() {
     let productos = ref([
@@ -375,6 +395,30 @@ export default {
       proveedorProducto.value = "";
     }
 
+    const totalPrecio = computed(()=>{
+      return productos.value.reduce((acumulador,current)=>acumulador+parseInt(current.precio),0)
+    })
+
+    const totalCosto = computed(()=>{
+      return productos.value.reduce((acumulador,current)=>acumulador+parseInt(current.costo),0)
+    })
+
+    const totalCantidad = computed(()=>{
+      return productos.value.reduce((acumulador,current)=>acumulador+parseInt(current.cantidad),0)
+    })
+
+    const suma1 = computed(()=>{
+      return totalPrecio.value * totalCantidad.value
+    })
+
+    const suma2 = computed(()=>{
+      return totalCosto.value * totalCantidad.value
+    })
+
+    const totalGanancias = computed(()=>{
+      return suma1.value - suma2.value
+    })
+
     return {
       productos,
 
@@ -385,6 +429,12 @@ export default {
       editarProducto,
       limpiarCampos,
       eliminarProducto,
+      totalPrecio,
+      totalCosto,
+      totalCantidad,
+      totalGanancias,
+      suma1,
+      suma2,
 
       nombreProducto,
       precioProducto,
