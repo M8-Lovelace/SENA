@@ -2,8 +2,8 @@
 
 <template>
   <div>
-    <h1 class="text-center pt-3">TABLA DE PRODUCTOS</h1>
-    <table class="table table-striped mt-3">
+    <h1 class="text-center pt-3 fw-bold">TABLA DE PRODUCTOS</h1>
+    <table class="table mt-3">
       <thead>
         <tr>
           <th scope="col">Nombre</th>
@@ -95,7 +95,7 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal">
               Cerrar
             </button>
-            <button type="button" class="btn btn-primary" @click="comprobarFormulario(index)"
+            <button type="button" class="btn btn-light enviar" @click="comprobarFormulario(index)"
               :disabled="desabilitarInput == 1">
               {{ boton }}
             </button>
