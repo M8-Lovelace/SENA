@@ -10,10 +10,10 @@
     </div>
     <div v-show="juego" class="w-100">
       <div class="row">
-        <div class="col-12 col-sm-12 col-xl-5 mt-5">
+        <div class="col-10 col-sm-9 col-xl-3 mt-5 m-auto p-5">
           <div class="d-flex justify-content-center">
             <div class="p-2">
-              <img v-bind:src="imagen" alt="ahorcado" width="500" height="500">
+              <img :src="imagen" alt="ahorcado" width="500" height="500">
             </div>
           </div>
           <div class="w-50 d-flex justify-content-center palabra text-light">
@@ -22,9 +22,9 @@
             </div>
           </div>
         </div>
-        <div class="col-5 tecladoContainer mt-5">
+        <div class="col-10 col-sm-9 col-xl-5 tecladoContainer mt-5">
           <div v-for="(abc, i) in letras" :key="abc">
-            <button :style="desabilitar" class="p-4 button" :disabled="boton" @click="letraSeleccionada(abc)">{{ abc
+            <button :style="desabilitar" class="p-2 button" :disabled="boton" @click="letraSeleccionada(abc)">{{ abc
             }}</button>
           </div>
         </div>
@@ -38,8 +38,8 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-12 d-flex justify-content-center mt-5">
-          <button class="text-light w-25 fs-3" @click="reiniciar()">REINICIAR</button>
+        <div class="col-12 d-flex justify-content-center mt-4">
+          <button class="reiniciar text-light w-25 fs-3" @click="reiniciar()">REINICIAR</button>
         </div>
       </div>
     </div>
@@ -61,7 +61,6 @@ export default {
     let mensaje = ref(false);
     let resultado = ref(false);
     let resultado2 = ref(false);
-    let acum = ref(0);
     let desabilitar = ref()
 
     let imagen = ref('https://st2.depositphotos.com/1041372/8626/v/600/depositphotos_86262436-stock-illustration-simple-doodle-of-a-hangmans.jpg')
@@ -87,7 +86,6 @@ export default {
       botones.value = false
       juego.value = true
       let numero = Math.floor(Math.random() * arrays.length);
-      console.log(numero);
       palabra.value = arrays[numero].split("");
       console.log(palabra.value);
       dibujarLineas(palabra.value.length);
@@ -122,7 +120,11 @@ export default {
         }
       }
 
-      
+      if (!lineas.value.includes("____")) {
+        mensaje.value = true
+        resultado.value = true;
+        desabilitar.value = 'background-color: gray'
+      }
 
       if (coincidencias.length === 0) {
         verificarIntentos()
@@ -133,17 +135,17 @@ export default {
       intentos.value = intentos.value + 1
 
       if (intentos.value == 1) {
-        imagen.value = 'src/assets/imagen1.jpg';
+        imagen.value = 'src/assets/imagen1.png';
       } else if (intentos.value == 2) {
-        imagen.value = 'src/assets/imagen2.jpg';
+        imagen.value = 'src/assets/imagen2.png';
       } else if (intentos.value == 3) {
-        imagen.value = 'src/assets/imagen3.jpg';
+        imagen.value = 'src/assets/imagen3.png';
       } else if (intentos.value == 4) {
-        imagen.value = 'src/assets/imagen4.jpg';
+        imagen.value = 'src/assets/imagen4.png';
       } else if (intentos.value == 5) {
-        imagen.value = 'src/assets/imagen5.jpg';
+        imagen.value = 'src/assets/imagen5.png';
       } else if (intentos.value == 6) {
-        imagen.value = 'src/assets/imagen6.jpg';
+        imagen.value = 'src/assets/imagen6.png';
         boton.value = true;
         mensaje.value = true
         resultado2.value = true;
@@ -187,4 +189,48 @@ export default {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.tecladoContainer {
+  display: grid;
+  margin: 0 auto;
+  grid-template-columns:
+    repeat(5, minmax(100px, 1fr));
+  align-items: stretch;
+}
+
+.button {
+  border: 5px solid rgb(253, 253, 253);
+  width: 80%;
+  font-size: 30px;
+  font-weight: bold;
+  background-color: rgb(0, 0, 0);
+  color: white;
+}
+
+.button:hover {
+  background-color: rgb(253, 253, 253);
+  color: black;
+}
+
+.palabra {
+  max-width: 75%;
+  min-width: 100%;
+}
+
+.reiniciar:hover {
+  background-color: rgb(253, 253, 253);
+  color: black;
+}
+
+@media screen and (max-width: 1200px) {
+  .tecladoContainer{
+    row-gap: 10px;
+    padding: 0;
+  }
+
+  .reiniciar{
+    margin: 20px;
+  }
+}
+
+</style>
