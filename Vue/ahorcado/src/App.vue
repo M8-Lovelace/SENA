@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
     <Header />
     <Palabras />
   </div>
@@ -11,11 +11,16 @@ import Palabras from './components/Palabras.vue';
 export default {
   components: {
     Header,
-    Palabras,
+    Palabras
   },
 }
 </script>
 
 <style scoped>
+.main{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 </style>
