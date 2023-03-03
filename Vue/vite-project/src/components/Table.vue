@@ -2,8 +2,8 @@
 
 <template>
   <div>
-    <h1 class="text-center pt-3 fw-bold">TABLA DE PRODUCTOS</h1>
-    <table class="table table-striped table-dark mt-3">
+    <h1 class="text-center fw-bold">TABLA DE PRODUCTOS</h1>
+    <table class="table table-striped table-dark mt-2">
       <thead>
         <tr>
           <th scope="col">Nombre</th>
@@ -60,7 +60,7 @@
           <td></td>
         </tr>
         <tr>
-        <td><b>Total:</b></td>
+          <td><b>Total:</b></td>
           <td>{{ suma1 }}</td>
           <td>{{ suma2 }}</td>
           <td></td>
@@ -71,7 +71,7 @@
       </tfoot>
     </table>
 
-    <div class="div-boton">
+    <div class="div-boton mb-5">
       <button type="button" @click="limpiarCampos(1)" data-toggle="modal" data-target="#exampleModalLong"
         class="m-auto px-5 py-2 boton">
         Agregar
@@ -95,8 +95,8 @@
             <input type="number" v-model="precioProducto" :disabled="desabilitarInput == 1"
               :style="[estiloInput, estilo2]" class="p-1 ps-3" /><br /><br />
             <label class="me-2"><b>Costo: </b></label><br />
-            <input type="number" v-model="costoProducto" :disabled="desabilitarInput == 1"
-              :style="[estiloInput, estilo3]" class="p-1 ps-3" /><br /><br />
+            <input type="number" v-model="costoProducto" :disabled="desabilitarInput == 1" :style="[estiloInput, estilo3]"
+              class="p-1 ps-3" /><br /><br />
             <label class="me-2"><b>Cantidad:</b> </label><br />
             <input type="number" v-model="cantidadProducto" :disabled="desabilitarInput == 1"
               :style="[estiloInput, estilo4]" class="p-1 ps-3" /><br /><br />
@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import { ref , computed } from "vue";
+import { ref, computed } from "vue";
 export default {
   setup() {
     let productos = ref([
@@ -309,6 +309,36 @@ export default {
           estilo3.value = "border: 2px solid #ced4da;";
           estilo2.value = "border: 2px solid #ced4da;";
         }, 3000);
+      } else if (precioProducto.value > 0) {
+        alerta.value = 1;
+        estilo2.value = "border: 2px solid red;";
+        mensaje.value = "El precio no puede ser negativo";
+        alerta.value = 1;
+        estiloAlerta.value =
+          "background-color: red; color: white; font-weight: bold; font-size: 14px";
+        setInterval(() => {
+          alerta.value = 0;
+        }, 3000);
+      } else if (cantidadProducto.value > 0) {
+        alerta.value = 1;
+        estilo4.value = "border: 2px solid red;";
+        mensaje.value = "La cantidad no puede ser negativa";
+        alerta.value = 1;
+        estiloAlerta.value =
+          "background-color: red; color: white; font-weight: bold; font-size: 14px";
+        setInterval(() => {
+          alerta.value = 0;
+        }, 3000);
+      } else if (costoProducto.value > 0) {
+        alerta.value = 1;
+        estilo3.value = "border: 2px solid red;";
+        mensaje.value = "El costo no puede ser negativo";
+        alerta.value = 1;
+        estiloAlerta.value =
+          "background-color: red; color: white; font-weight: bold; font-size: 14px";
+        setInterval(() => {
+          alerta.value = 0;
+        }, 3000);
       } else if (boton.value == "Guardar Cambios") {
         guardarCambios(i);
       } else {
@@ -395,27 +425,27 @@ export default {
       proveedorProducto.value = "";
     }
 
-    const totalPrecio = computed(()=>{
-      return productos.value.reduce((acumulador,current)=>acumulador+parseInt(current.precio),0)
+    const totalPrecio = computed(() => {
+      return productos.value.reduce((acumulador, current) => acumulador + parseInt(current.precio), 0)
     })
 
-    const totalCosto = computed(()=>{
-      return productos.value.reduce((acumulador,current)=>acumulador+parseInt(current.costo),0)
+    const totalCosto = computed(() => {
+      return productos.value.reduce((acumulador, current) => acumulador + parseInt(current.costo), 0)
     })
 
-    const totalCantidad = computed(()=>{
-      return productos.value.reduce((acumulador,current)=>acumulador+parseInt(current.cantidad),0)
+    const totalCantidad = computed(() => {
+      return productos.value.reduce((acumulador, current) => acumulador + parseInt(current.cantidad), 0)
     })
 
-    const suma1 = computed(()=>{
+    const suma1 = computed(() => {
       return totalPrecio.value * totalCantidad.value
     })
 
-    const suma2 = computed(()=>{
+    const suma2 = computed(() => {
       return totalCosto.value * totalCantidad.value
     })
 
-    const totalGanancias = computed(()=>{
+    const totalGanancias = computed(() => {
       return suma1.value - suma2.value
     })
 
@@ -459,3 +489,59 @@ export default {
   }
 }
 </script>
+
+<style>
+.table {
+  border: 3px solid rgb(0, 0, 0);
+  margin: auto;
+  text-align: center;
+  color: #ffffff;
+  max-width: 1000px;
+}
+
+.botones {
+  padding: 10px;
+  border-radius: 40%;
+  border: 2px solid rgb(0, 0, 0);
+}
+
+.botones:hover {
+  background-color: rgb(0, 0, 0);
+  border-radius: 40%;
+  color: white;
+}
+
+input {
+  width: 50%;
+  border: 1px solid rgb(222, 222, 222);
+  border-radius: 3px;
+}
+
+.div-boton {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+}
+
+.boton {
+  border: 3px solid rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.boton:hover {
+  background-color: rgb(0, 0, 0);
+  color: white;
+}
+
+.enviar {
+  border: 2px solid black;
+}
+
+.enviar:hover {
+  background-color: rgb(0, 0, 0);
+  color: white;
+}
+</style>
