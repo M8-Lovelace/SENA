@@ -4,19 +4,21 @@ import express from 'express';
 import { Configuration, OpenAIApi } from 'openai';
 import {v4 as uuidv4} from 'uuid';
 
-const PORT = process.env.PORT || 8080
-
 // Cargamos las variables de entorno
 dotenv.config();
+
+const PORT = process.env.PORT || 8080
 
 // Configuramos el servidor
 const app = express();
 
-app.use(express.static("public"));
+// Configuramos el servidor para que pueda servir archivos estáticos
+// app.use(express.static("public"));
+
+// Configuramos el servidor para que pueda recibir JSON
 app.use(express.json());
 
-let myuuid = uuidv4();
-let consultas = {}
+let queries = {}
 
 // Configuramos la API de OpenAI
 const configuration = new Configuration({
@@ -26,56 +28,55 @@ const configuration = new Configuration({
 // Creamos la instancia de la API
 const openai = new OpenAIApi(configuration);
 
-// Función para generar texto con OpenAI API
-async function runCompletion(texto) {
+// Funtion to run the completion
+async function runCompletion(prompt) {
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
-    messages: [{role: "user", content: texto}],
+    messages: [{role: "user", content: prompt}],
   });
   return completion.data.choices[0].message.content;
-}
+};
 
-// Agregar una nueva consulta
-app.post('/consultas/:usuario',async (req, res) => {
-  const { usuario } = req.params;
-  const { texto } = req.body;
-  const rta= await runCompletion(texto);
+// Add a new query
+app.post('/queries/:user',async (req, res) => {
+  const { user } = req.params;
+  const { prompt } = req.body;
+  const response = await runCompletion(prompt);
   const uuid = uuidv4();
 
-  consultas[uuid] = {  usuario, texto, rta};
+  queries[uuid] = { user, prompt, response};
 
-  res.send({ consultas });
+  res.send({ queries });
 });
 
-// Listar todas las consultas
-app.get('/consultas', (req, res) => {
-  const listaConsultas = Object.values(consultas);
-  res.send(listaConsultas);
+// List all queries
+app.get('/queries', (req, res) => {
+  res.send(Object.values(queries));
 });
 
-app.get('/consultas/contiene', (req, res) => {
-  const palabra = req.query.palabra;
-  const consultasContiene = Object.values(consultas)
-    .filter(c => c.texto.includes(palabra));
-  res.send(consultasContiene);
+app.get('/queries/content', (req, res) => {
+  const word = req.query.word;
+  const filterQueriesByWord = Object.values(queries)
+    .filter(c => c.prompt.includes(word));
+  res.send(filterQueriesByWord);
 });
 
-// Listar consultas de un usuario
-app.get('/consultas/usuario/', (req, res) => {
-  const usuario = req.query.usuario;
-  const consultasUsuario = Object.values(consultas)
-    .filter(c => c.usuario === usuario);
-  res.send(consultasUsuario);
+// List all queries from a user
+app.get('/queries/user', (req, res) => {
+  const user = req.query.user;
+  const filterQueriesByUser = Object.values(queries)
+    .filter(c => c.user === user);
+  res.send(filterQueriesByUser);
 });
 
-// Eliminar una consulta
-app.delete('/consultas/:uuid', (req, res) => {
+// Delete a query
+app.delete('/queries/:uuid', (req, res) => {
   const { uuid } = req.params;
-  delete consultas[uuid];
-  res.send({ consultas });
+  delete queries[uuid];
+  res.send({ queries });
 });
 
-// Mensaje de bienvenida al servidor, indica que está activo
+// Start the server
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${process.env.PORT}!`);
+  console.log(`Running server on port ${PORT}!`);
 })
