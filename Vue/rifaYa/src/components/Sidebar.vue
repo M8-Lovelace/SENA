@@ -1,75 +1,90 @@
 <template>
-    <div>
-        <q-list v-for="(ticket, index) in tickets" class="iconsList">
-            <q-item clickable v-ripple class="items">
-                <q-item-section avatar class="q-pa-none item">
-                    <router-link to="">
-                        <h5>Talonario {{ ticket.id }}</h5>
-                        <hr>
-                    </router-link>
-                </q-item-section>
-            </q-item>
-        </q-list>
-    </div>
+  <div>
+    <q-list>
+      <q-item clickable v-ripple class="items">
+        <q-item-section avatar class="q-pa-none item">
+          <RouterLink to="./">
+            <h5>Home</h5>
+            <hr />
+          </RouterLink>
+        </q-item-section>
+      </q-item>
+      <template v-for="(ticket, index) in tickets" class="iconsList">
+        <q-item
+          clickable
+          @click="setActiveId(tickets[index]['id'])"
+          v-ripple
+          class="items"
+        >
+          <q-item-section avatar class="q-pa-none item">
+            <a>
+              <h5>Talonario {{ ticket.id }}</h5>
+              <hr />
+            </a>
+          </q-item-section>
+        </q-item>
+      </template>
+    </q-list>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed } from "vue";
+import { useStorage } from "@/stores/localStorage";
+import { useRouter } from "vue-router";
 
-const route = useRoute()
-let tickets = ref([])
-let isData = ref(false)
+// Instancias
+const router = useRouter();
+const storage = useStorage();
 
-// iterar arrelgo de objetos localstorage
-onMounted(() => {
-    getCurrentItem()
-})
+// Variables
+let tickets = computed(() => storage.getStorage);
 
-function getCurrentItem() {
-    tickets.value = JSON.parse(localStorage.getItem("myTickets")) ?? []
-    if (tickets.value) {
-        tickets.value.length > 0 ? isData.value = true : isData.value = false
-    }
+// Funciones
+function setActiveId(index) {
+  storage.setActiveId(index);
+  router.push({
+    name: "tickets",
+    query: { myTicket: index },
+  });
 }
-
 </script>
 
 <style scoped>
 i {
-    font-size: 1.6rem;
-    color: white;
-    /* -webkit-text-stroke: 1px; */
-    font-weight: bold;
+  font-size: 1.6rem;
+  color: white;
+  /* -webkit-text-stroke: 1px; */
+  font-weight: bold;
 }
 
 .iconsList {
-    margin-top: 15px
+  margin-top: 15px;
 }
 
 .items {
-    padding: 12px;
-    margin-top: 30px;
+  padding: 12px;
+  margin-top: 30px;
 }
 
-.item{
-    height: 20px;
-}
-
-a{
-    padding: 10px;
-}
-
-.item h5{
-    margin: 0;
-    color: white;
-}
-
-hr{
-    color: white;
+.item {
+  height: 20px;
 }
 
 a {
-    text-decoration: none
+  padding: 10px;
+}
+
+.item h5 {
+  margin: 0;
+  color: white;
+}
+
+hr {
+  color: white;
+}
+
+a {
+  text-decoration: none;
 }
 </style>

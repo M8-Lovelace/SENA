@@ -43,6 +43,9 @@
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStorage } from "@/stores/localStorage";
+
+const storage = useStorage();
 
 const $q = useQuasar()
 const router = useRouter()
@@ -56,17 +59,17 @@ let date = ref("2023-03-24")
 let price = ref(10000)
 
 const tickets = [{
-        label: 'Boletas del 0-09(10 Boletas)',
-        value: 9
-    },
-    {
-        label: 'Boletas del 00-99(100)',
-        value: 99
-    },
-    {
-        label: 'Boletas del 1-43(43 Boletas)',
-        value: 43
-    }
+    label: 'Boletas del 0-09(10 Boletas)',
+    value: 9
+},
+{
+    label: 'Boletas del 00-99(100)',
+    value: 99
+},
+{
+    label: 'Boletas del 1-43(43 Boletas)',
+    value: 43
+}
 ]
 
 const lotteries = [
@@ -164,16 +167,8 @@ function onSubmit() {
             persistent: true
         }).onOk(() => {
             console.log('>>>> OK')
-            // Obtener el arreglo de objetos guardado en el localStorage
-            const myTickets = JSON.parse(localStorage.getItem("myTickets")) ?? [];
-            // let myTickets = [];
-
-            // if (ticketsJSON !== null) {
-            //     myTickets = JSON.parse(ticketsJSON);
-            // }
-
             const newTicket = {
-                id: (myTickets.length ?? 0) + 1,
+                id: (storage.data.length ?? 0) + 1,
                 ticket: ticket.value,
                 thing: thing.value,
                 item: item.value,
@@ -183,19 +178,13 @@ function onSubmit() {
                 price: price.value,
             }
 
-            myTickets.push(newTicket);
+            // Añadir el nuevo ticket al estado de la aplicación
+            storage.addStorage(newTicket);
 
             router.push({
-                name: 'tickets' ,
+                name: 'tickets',
                 query: { myTicket: newTicket.id }
             })
-
-            // Convertir el arreglo de objetos a una cadena JSON
-            const updatedTicketsJSON = JSON.stringify(myTickets);
-
-            // Guardar la cadena JSON actualizada en el localStorage
-            localStorage.setItem("myTickets", updatedTicketsJSON);
-            //     query: { myTicket } })
         }).onCancel(() => {
             console.log('>>>> Cancel')
         })
