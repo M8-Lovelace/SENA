@@ -1,6 +1,6 @@
 <template>
     <div class="row q-mt-xl">
-        <div class="col-12 column q-my-lg q-py-lg">
+        <div class="col-12 column q-my-xs q-py-xs">
             <img src="../assets/rifaYa.png" class="image">
         </div>
         <div class="col-12 column q-my-xl">

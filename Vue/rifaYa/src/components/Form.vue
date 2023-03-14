@@ -18,7 +18,7 @@
                 <q-select v-model="lottery" :options="lotteries" label="Escoge una opción" lazy-rules
                     :rules="[val => val && val.length > 0 || 'Por favor seleccione una loteria']" />
 
-                <q-input class="medio" v-if="lottery == 'Otro Medio'" type="text" v-model="forExample"
+                <q-input class="anotherWay" v-if="lottery == 'Otro Medio'" type="text" v-model="forExample"
                     placeholder="Ejem. Loteria nacional/Instagram Live" lazy-rules
                     :rules="[val => val && val.length > 0 || 'Por favor ingrese un medio']" />
 
@@ -30,8 +30,8 @@
                 <q-input type="number" v-model="price" label="Precio de cada boleta" lazy-rules
                     :rules="[val => val && val.length > 0 || 'Por favor ingrese un precio']" />
 
-                <div>
-                    <q-btn label="Confirm" color="orange" @click="onSubmit()" />
+                <div class="q-mb-xl">
+                    <q-btn label="Confirm" class="button" @click="onSubmit()" />
                     <q-btn label="cancelar" to="./" @click="onReset()" color="orange" flat class="q-ml-sm" />
                 </div>
             </q-form>
@@ -47,18 +47,26 @@ import { useRouter } from 'vue-router'
 const $q = useQuasar()
 const router = useRouter()
 
-let ticket = ref(null)
-let thing = ref(null)
-let item = ref(null)
-let lottery = ref(null)
+let ticket = ref("Boletas del 00-99(100 Boletas)")
+let thing = ref("vaca")
+let item = ref("Tecnología")
+let lottery = ref("Lotería de Tolima - Lunes")
 let forExample = ref(null)
-let date = ref(null)
-let price = ref(null)
+let date = ref("2023-03-24")
+let price = ref(10000)
 
-const tickets = [
-    'Boletas del 0-09(10 Boletas)',
-    'Boletas del 00-99(100 Boletas)',
-    'Boletas del 1-43(43 Boletas)'
+const tickets = [{
+        label: 'Boletas del 0-09(10 Boletas)',
+        value: 9
+    },
+    {
+        label: 'Boletas del 00-99(100)',
+        value: 99
+    },
+    {
+        label: 'Boletas del 1-43(43 Boletas)',
+        value: 43
+    }
 ]
 
 const lotteries = [
@@ -156,9 +164,38 @@ function onSubmit() {
             persistent: true
         }).onOk(() => {
             console.log('>>>> OK')
+            // Obtener el arreglo de objetos guardado en el localStorage
+            const myTickets = JSON.parse(localStorage.getItem("myTickets")) ?? [];
+            // let myTickets = [];
+
+            // if (ticketsJSON !== null) {
+            //     myTickets = JSON.parse(ticketsJSON);
+            // }
+
+            const newTicket = {
+                id: (myTickets.length ?? 0) + 1,
+                ticket: ticket.value,
+                thing: thing.value,
+                item: item.value,
+                lottery: lottery.value,
+                forExample: forExample.value,
+                date: date.value,
+                price: price.value,
+            }
+
+            myTickets.push(newTicket);
+
             router.push({
-                name: 'tickets' , 
-                query: { ticket: ticket.value, thing: thing.value, item: item.value, lottery: lottery.value, forExample: forExample.value, date: date.value, price: price.value } })
+                name: 'tickets' ,
+                query: { myTicket: newTicket.id }
+            })
+
+            // Convertir el arreglo de objetos a una cadena JSON
+            const updatedTicketsJSON = JSON.stringify(myTickets);
+
+            // Guardar la cadena JSON actualizada en el localStorage
+            localStorage.setItem("myTickets", updatedTicketsJSON);
+            //     query: { myTicket } })
         }).onCancel(() => {
             console.log('>>>> Cancel')
         })
@@ -191,8 +228,13 @@ function onReset() {
     min-width: 350px;
 }
 
-.medio {
+.anotherWay {
     width: 80%;
     margin: 0 auto;
+}
+
+.button {
+    background-color: #F48825;
+    color: white;
 }
 </style>

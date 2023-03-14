@@ -1,46 +1,75 @@
 <template>
     <div>
-        <q-list class="iconsList">
-            <q-item clickable v-ripple class="item">
-                <q-item-section avatar>
-                    <router-link to="/" >
-                        <i class="icon icon-home"></i>
+        <q-list v-for="(ticket, index) in tickets" class="iconsList">
+            <q-item clickable v-ripple class="items">
+                <q-item-section avatar class="q-pa-none item">
+                    <router-link to="">
+                        <h5>Talonario {{ ticket.id }}</h5>
+                        <hr>
                     </router-link>
                 </q-item-section>
             </q-item>
-            <!-- <q-item clickable v-ripple class="item">
-                <q-item-section avatar>
-                    <router-link to="/login">
-                        <i class="icon icon-login"></i>
-                    </router-link>
-                </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple class="item">
-                <q-item-section avatar>
-                    <router-link to="/about">
-                        <i class="icon icon-about"></i>
-                    </router-link>
-                </q-item-section>
-            </q-item> -->
         </q-list>
     </div>
 </template>
 
-<style scoped lang="sass">
-i
-    font-size: 1.6rem
-    color: white
-    // -webkit-text-stroke: 1px
-    font-weight: bold
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
-.iconsList
+const route = useRoute()
+let tickets = ref([])
+let isData = ref(false)
+
+// iterar arrelgo de objetos localstorage
+onMounted(() => {
+    getCurrentItem()
+})
+
+function getCurrentItem() {
+    tickets.value = JSON.parse(localStorage.getItem("myTickets")) ?? []
+    if (tickets.value) {
+        tickets.value.length > 0 ? isData.value = true : isData.value = false
+    }
+}
+
+</script>
+
+<style scoped>
+i {
+    font-size: 1.6rem;
+    color: white;
+    /* -webkit-text-stroke: 1px; */
+    font-weight: bold;
+}
+
+.iconsList {
     margin-top: 15px
+}
 
-.item
-    padding-left: 25px
-    padding-top: 15px
-    padding-bottom: 15px
+.items {
+    padding: 12px;
+    margin-top: 30px;
+}
 
-a
+.item{
+    height: 20px;
+}
+
+a{
+    padding: 10px;
+}
+
+.item h5{
+    margin: 0;
+    color: white;
+}
+
+hr{
+    color: white;
+}
+
+a {
     text-decoration: none
+}
 </style>

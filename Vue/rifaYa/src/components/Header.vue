@@ -8,7 +8,7 @@
           round
           dense
           icon="menu"
-          class="q-mr-sm"
+          class="q-mr-sm menu"
         />
         <div v-show="showMenu" class="child">
           <Sidebar></Sidebar>
@@ -47,9 +47,10 @@ const toggleMenu = () => {
   position: absolute;
   top: 42px;
   left: -12px;
-  background-color: #1976D2;
-  width: 80px;
+  background-color: #F48825;
+  width: 170px;
   height: calc(100vh - 50px);
   z-index: 1;
 }
+
 </style>
