@@ -44,6 +44,7 @@ import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStorage } from "@/stores/localStorage";
+import { generate } from '@vue/compiler-core';
 
 const storage = useStorage();
 
@@ -179,6 +180,7 @@ function onSubmit() {
                 forExample: forExample.value,
                 date: date.value,
                 price: price.value,
+                numbers: generateNumbers(ticket.value.value)
             }
 
             // Añadir el nuevo ticket al estado de la aplicación
@@ -192,6 +194,24 @@ function onSubmit() {
             console.log('>>>> Cancel')
         })
     }
+}
+
+function generateNumbers(max) {
+    let numbers = []
+    let spaceTicket = {}
+    for (let i = 0; i <= max; i++) {
+        spaceTicket = {
+            number: i,
+            owner: '',
+            comments: 'No registrado',
+            celphone: '',
+            state: 0, // 0: Disponible, 1: adquirida por pagar, 2: Adquirida y pagada
+            methodPayment: 0, // 0: No se asingó, 1: Efectivo, 2: Transferencia, 3: PSE
+            date: '',
+        }
+        numbers.push(spaceTicket)
+    }
+    return numbers
 }
 
 function onReset() {

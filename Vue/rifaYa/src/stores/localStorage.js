@@ -23,5 +23,9 @@ export const useStorage = defineStore("storage", {
     setActiveId(value) {
       this.activeId = value;
     },
+    modifyData(id, data) {
+      this.data[id] = data;
+      localStorage.setItem("myTickets", JSON.stringify(this.data));
+    }
   },
 });

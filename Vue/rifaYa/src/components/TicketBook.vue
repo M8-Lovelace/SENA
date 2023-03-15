@@ -52,14 +52,56 @@
               <img class="q-mr-sm" src="../assets/edit.png" alt="edit" width="30">
               <span>Genera archivo datos</span>
             </q-btn>
-            <q-btn @click="canelTicket(currentItem[0].id)" class="q-my-sm btn" push label="Cancelar Sorteo" />
+            <q-btn @click="cancelTicket(currentItem[0].id)" class="q-my-sm btn" push label="Cancelar Sorteo" />
           </div>
         </div>
       </div>
       <div class="col-10 col-md-7 numbers q-mt-xl q-pt-lg">
-        <div v-for="(item, index) in currentItem[0].ticket.value">
-          <q-btn class="number" :disable="disable" @click="saveTicket(index + 1)">{{ index + 1 }}</q-btn>
+        <div v-for="(item, index) in currentItem[0].numbers">
+          <q-btn class="number" :disable="disable" @click="open(index, item)">{{ index }}</q-btn>
         </div>
+        <q-dialog v-model="dialog">
+          <q-card style="width: 350px">
+            <q-linear-progress :value="1" color="teal" />
+            <q-card-section v-if="itemValue.state == 0" class="row items-center no-wrap">
+              <div class="col column items-center">
+                <h4 class="text-teal text-bold">Boleta {{ itemValue.number }}</h4>
+                <span class="q-mt-sm"><span class="text-teal text-bold">Estado:</span> {{ getStateInText(itemValue.state)
+                }}</span>
+                <hr class="q-my-md full-width">
+                <q-btn class="q-px-md text-bold" color="teal" @click="showBuyTicket(itemValue)" label="Adquirir Boleta" />
+              </div>
+            </q-card-section>
+            <q-card-section v-if="itemValue.state == 1" class="row items-center no-wrap">
+              <div class="col column items-center">
+                <h4 class="text-teal text-bold">Boleta {{ itemValue.number }}</h4>
+                <span class="q-mt-sm"><span class="text-teal text-bold">Estado:</span> {{ getStateInText(itemValue.state)
+                }}</span>
+                <hr class="q-my-md full-width">
+                <q-btn class="q-px-md text-bold full-width" color="teal" @click="" label="Ver datos del participante" /><br>
+                <q-btn class="q-px-md text-bold full-width" color="teal" @click="" label="Liberar boleta" /><br>
+                <q-btn class="q-px-md text-bold full-width" color="teal" @click="" label="Marcar como pagada" />
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+        <q-dialog v-model="buyTicket">
+          <q-card style="width: 350px">
+            <q-linear-progress :value="1" color="teal" />
+            <q-card-section v-if="itemValue.state == 0" class="row items-center no-wrap">
+              <div class="col column items-center">
+                <h5 class="text-teal text-bold">Diligenciar la información</h5>
+                <q-input type="text" class="q-my-md full-width" v-model="dataTicket.name" label="Nombre" lazy-rules
+                  :rules="[val => val && val.length > 0 || 'Por favor ingrese un nombre']" />
+                <q-input type="text" class="q-my-md full-width" v-model="dataTicket.comments"
+                  label="Observaciones (Opcional)" />
+                <q-input type="number" class="q-my-md full-width q-mb-lg" v-model="dataTicket.celphone" label="Celular"
+                  lazy-rules :rules="[val => val && val.length > 0 || 'Por favor ingrese un telefono']" />
+                <q-btn class="q-px-lg text-bold" color="teal" @click="onSubmit()" label="Adquirir Boleta" />
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
       </div>
     </div>
   </template>
@@ -69,16 +111,21 @@
 </template>
 
 <script setup>
+import { useQuasar } from "quasar";
 import { onMounted, computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useStorage } from "@/stores/localStorage";
 
 const route = useRoute();
 const storage = useStorage();
+const $q = useQuasar()
 
+let itemValue = ref()
 let isData = ref(false);
 let disable = ref(false)
-let totalTickets = ref(0);
+const dialog = ref(false)
+const buyTicket = ref(false)
+const dataTicket = ref({})
 
 let currentItem = ref(null);
 let currentId = computed(() => storage.getActiveId);
@@ -92,19 +139,70 @@ watch(currentId, () => {
   getCurrentItem();
 });
 
-function canelTicket(ticketId) {
-  console.log("cancelar");
-  // borra el ticket
+function open(index, item) {
+  dialog.value = true
+  console.log(index);
+  itemValue.value = item
 }
 
-function saveTicket(ticket) {
-  console.log(ticket);
-  // guardar el ticket vendido
+function showBuyTicket(item) {
+  buyTicket.value = true
+  dialog.value = false
 }
 
-function editTicket() {
-  // editar el ticket
+function getStateInText(state) {
+  const states = {
+    0: 'No adquirida ⚪',
+    1: 'Adquirida sin pagar 🟡',
+    2: 'Adquirida y pagada 🟢'
+  }
+  return states[state] || 'No adquirida ⚪'
 }
+
+function isInputsValidate() {
+  if (dataTicket.value.name && dataTicket.value.celphone) {
+    return false
+  } else {
+    return true
+  }
+}
+
+function onSubmit() {
+  if (isInputsValidate()) {
+    $q.dialog({
+      message: 'Faltan campos por diligenciar',
+      timeout: 2000,
+      color: 'teal',
+      timeout: 2000,
+      persistent: true,
+    })
+  } else {
+    $q.dialog({
+      title: 'Confirm',
+      message: '¿Está seguro que desea crear el talonario?',
+      cancel: true,
+      persistent: true
+    }).onOk(() => {
+      console.log('>>>> OK')
+      itemValue.value.state = 1
+      itemValue.value.owner = dataTicket.value.name
+      itemValue.value.celphone = dataTicket.value.celphone
+      itemValue.value.comments = dataTicket.value.comments || ''
+      itemValue.value.date = new Date()
+
+      currentItem.value[0].numbers[itemValue.value.number] = itemValue.value
+      storage.modifyData(currentItem.value[0])
+
+      buyTicket.value = false
+      dataTicket.value = {}
+    }
+    ).onCancel(() => {
+      console.log('>>>> Cancel')
+    });
+  }
+}
+
+
 
 function getCurrentItem() {
   if (tickets.value) {
