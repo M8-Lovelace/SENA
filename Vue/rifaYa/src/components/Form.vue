@@ -32,7 +32,7 @@
 
                 <div class="q-mb-xl">
                     <q-btn label="Confirm" class="button" @click="onSubmit()" />
-                    <q-btn label="cancelar" to="./" @click="onReset()" color="orange" flat class="q-ml-sm" />
+                    <q-btn label="cancelar" to="./" @click="onReset()" flat class="q-ml-sm" />
                 </div>
             </q-form>
         </div>
@@ -50,7 +50,10 @@ const storage = useStorage();
 const $q = useQuasar()
 const router = useRouter()
 
-let ticket = ref("Boletas del 00-99(100 Boletas)")
+let ticket = ref({
+    label: 'Boletas del 1-43(43 Boletas)',
+    value: 43
+})
 let thing = ref("vaca")
 let item = ref("Tecnología")
 let lottery = ref("Lotería de Tolima - Lunes")
@@ -209,7 +212,7 @@ function onReset() {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: #F48825;
+    color: #3AAFA9;
 }
 
 .form {
@@ -223,7 +226,7 @@ function onReset() {
 }
 
 .button {
-    background-color: #F48825;
+    background-color: #3AAFA9;
     color: white;
 }
 </style>

@@ -31,7 +31,7 @@ let text = ref('')
 }
 
 .button {
-    background-color: #F48825;
+    background-color: #3AAFA9;
     color: white;
     width: 90%;
     max-width: 270px;

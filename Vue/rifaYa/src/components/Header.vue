@@ -1,15 +1,8 @@
 <template>
   <q-header elevated class="header">
-    <q-toolbar >
+    <q-toolbar>
       <div class="father">
-        <q-btn
-          @click="toggleMenu()"
-          flat
-          round
-          dense
-          icon="menu"
-          class="q-mr-sm menu"
-        />
+        <q-btn @click="toggleMenu()" flat round dense icon="menu" class="q-mr-sm menu" />
         <div v-show="showMenu" class="child">
           <Sidebar></Sidebar>
         </div>
@@ -34,23 +27,22 @@ const toggleMenu = () => {
 </script>
 
 <style scoped>
-.header{
-  background-color: #F48825;
+.header {
+  background-color: #2B7A78;
   color: white;
 }
 
-.father{
+.father {
   position: relative;
 }
 
-.child{
+.child {
   position: absolute;
   top: 42px;
   left: -12px;
-  background-color: #F48825;
+  background-color: #3AAFA9;
   width: 170px;
   height: calc(100vh - 50px);
   z-index: 1;
 }
-
 </style>

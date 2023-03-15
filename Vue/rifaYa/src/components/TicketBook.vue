@@ -1,43 +1,64 @@
 <template>
   <template v-if="isData">
-    <div class="q-pt-sm">
-      <div class="q-pa-md">
-        <div class="row ant">
-          <div class="col-6 infoTickets">
-            <span class="q-py-xs">
+    <div class="row q-pt-sm">
+      <div class="col-12 col-md-5 q-pa-md first">
+        <div class="ant row">
+          <div class="col-12 col-sm-6 col-md-11 infoTickets">
+            <span class="q-py-xs infoOne">
               <img src="../assets/trofeo.png" width="30" />
-              <span class="q-ml-sm">
-                {{ currentItem[0].thing }}
-              </span>
+              <div>
+                <span class="q-ml-sm q-mb-lg text">
+                  {{ currentItem[0].thing }}
+                </span>
+              </div>
             </span>
-            <span class="q-py-xs">
-              <i class="icon icon-more"></i>
-              <span class="q-ml-sm">
-                {{ currentItem[0].price }}
-              </span>
+            <span class="q-py-xs infoOne">
+              <img class="q-ml-xs" src="../assets/dollar.png" width="20" />
+              <div>
+                <span class="q-ml-sm q-mb-lg text">
+                  {{ currentItem[0].price }}
+                </span>
+              </div>
             </span>
-            <span class="q-py-xs">
-              <i class="icon icon-more"></i>
-              <span class="q-ml-sm">
-                {{ currentItem[0].lottery }}
-              </span>
+            <span class="q-py-xs infoOne">
+              <img class="q-ml-xs" src="../assets/monument.png" width="25" height="30" />
+              <div>
+                <span class="q-ml-sm q-mb-lg text">
+                  {{ currentItem[0].lottery }}
+                </span>
+              </div>
             </span>
-            <span class="q-py-xs">
-              <i class="icon icon-more"></i>
-              <span class="q-ml-sm">
-                {{ currentItem[0].date }}
-              </span>
+            <span class="q-py-xs infoOne">
+              <img src="../assets/calendar.png" width="30" />
+              <div>
+                <span class="q-ml-sm q-mb-lg text">
+                  {{ currentItem[0].date }}
+                </span>
+              </div>
             </span>
             <div class="row justify-end">
-              <button>
+              <q-btn class="q-my-sm edit" @click="editTicket()">
                 <span>Editar</span>
                 <i class="icon icon-more"></i>
-              </button>
+              </q-btn>
             </div>
           </div>
-          <div class="col-6">
-            <h1>Laura Susano</h1>
+          <div class="col-sm-5 col-md-11 options">
+            <q-btn class="q-my-sm btn">
+              <img class="q-mr-sm" src="../assets/filter.png" alt="filter" width="30">
+              <span>PersonalizaR</span>
+            </q-btn>
+            <q-btn class="q-my-sm btn">
+              <img class="q-mr-sm" src="../assets/edit.png" alt="edit" width="30">
+              <span>Genera archivo datos</span>
+            </q-btn>
+            <q-btn @click="canelTicket(currentItem[0].id)" class="q-my-sm btn" push label="Cancelar Sorteo" />
           </div>
+        </div>
+      </div>
+      <div class="col-10 col-md-7 numbers q-mt-xl q-pt-lg">
+        <div v-for="(item, index) in currentItem[0].ticket.value">
+          <q-btn class="number" :disable="disable" @click="saveTicket(index + 1)">{{ index + 1 }}</q-btn>
         </div>
       </div>
     </div>
@@ -56,6 +77,8 @@ const route = useRoute();
 const storage = useStorage();
 
 let isData = ref(false);
+let disable = ref(false)
+let totalTickets = ref(0);
 
 let currentItem = ref(null);
 let currentId = computed(() => storage.getActiveId);
@@ -68,6 +91,20 @@ onMounted(() => {
 watch(currentId, () => {
   getCurrentItem();
 });
+
+function canelTicket(ticketId) {
+  console.log("cancelar");
+  // borra el ticket
+}
+
+function saveTicket(ticket) {
+  console.log(ticket);
+  // guardar el ticket vendido
+}
+
+function editTicket() {
+  // editar el ticket
+}
 
 function getCurrentItem() {
   if (tickets.value) {
@@ -82,9 +119,86 @@ function getCurrentItem() {
 </script>
 
 <style scoped>
-.infoTickets {
-  background-color: #f48825;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 90%;
+}
+
+.first {
+  margin: 0 auto;
+}
+
+.infoOne {
+  display: flex;
+}
+
+.edit:hover {
+  background-color: #2B7A78;
   color: white;
+  font-weight: bolder;
+}
+
+.numbers {
+  margin: 0 auto;
+  max-width: 60%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  grid-gap: 10px;
+  margin-bottom: 35px;
+  background-color: #DEF2F1;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.number {
+  display: grid;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  background-color: white;
+}
+
+.number:hover {
+  background-color: #2B7A78;
+  color: white;
+  border: 1px white solid;
+  font-weight: bold;
+}
+
+.options {
+  margin-top: 20px;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  background-color: #DEF2F1;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.options button {
+  width: 100%;
+  height: 55px;
+  border-radius: 40px;
+  padding: 10px;
+  background-color: #2B7A78;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.options button:hover {
+  background-color: #3AAFA9;
+}
+
+.infoTickets {
+  min-width: 250px;
+  background-color: #DEF2F1;
+  color: #2B7A78;
   padding: 10px;
   border-radius: 10px;
   display: flex;
@@ -92,7 +206,80 @@ function getCurrentItem() {
   padding: 20px;
 }
 
-.infoTickets span {
+.infoTickets .text {
   font-size: 20px;
+}
+
+@media (min-width: 600px) and (max-width: 1023px) {
+  .options button {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .first {
+    margin: 0;
+  }
+
+  .options {
+    margin: 0;
+    margin-left: 20px;
+    padding: 10px;
+  }
+
+  .numbers {
+    margin: 0 auto;
+    gap: 15px;
+    margin-bottom: 40px;
+  }
+
+  .number {
+    padding: 15px;
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .infoTickets {
+    padding-top: 30px;
+    padding-left: 40px;
+  }
+
+  .first {
+    padding-top: 70px;
+  }
+
+  .options button {
+    height: 70px;
+    font-size: 14px;
+    max-width: 300px;
+  }
+
+  .btn {
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+
+  .numbers {
+    margin: 0 auto;
+    max-width: 50%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    grid-gap: 15px;
+    margin-bottom: 50px;
+    margin-top: 40px;
+    padding: 40px;
+  }
+
+  .number {
+    display: grid;
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    box-shadow:
+      inset 0 -2em 3em rgba(255, 254, 254, 0.1),
+      0 0 0 1px rgb(255, 255, 255),
+      0.3em 0.1em 0.6em rgba(0, 0, 0, 0.3);
+  }
 }
 </style>

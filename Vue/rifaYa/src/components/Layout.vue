@@ -1,11 +1,6 @@
 <template>
   <div>
-    <q-layout
-      view="lHh lpr lFf"
-      container
-      style="min-height: 100vh"
-      class="shadow-2 rounded-borders"
-    >
+    <q-layout view="lHh lpr lFf" container style="min-height: 100vh; margin: 0 auto;" class="shadow-2 rounded-borders">
       <Header></Header>
       <div class="q-pa-xl">
         <router-view></router-view>
@@ -18,3 +13,5 @@
 import Header from "./Header.vue";
 import Footer from "./Footer.vue";
 </script>
+
+<style scoped></style>

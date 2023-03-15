@@ -1,21 +1,16 @@
 <template>
   <div>
     <q-list>
-      <q-item clickable v-ripple class="items">
+      <q-item clickable v-ripple class="items home">
         <q-item-section avatar class="q-pa-none item">
           <RouterLink to="./">
             <h5>Home</h5>
-            <hr />
+            <hr class="full-width">
           </RouterLink>
         </q-item-section>
       </q-item>
       <template v-for="(ticket, index) in tickets" class="iconsList">
-        <q-item
-          clickable
-          @click="setActiveId(tickets[index]['id'])"
-          v-ripple
-          class="items"
-        >
+        <q-item clickable @click="setActiveId(tickets[index]['id'])" v-ripple class="items">
           <q-item-section avatar class="q-pa-none item">
             <a>
               <h5>Talonario {{ ticket.id }}</h5>
@@ -51,6 +46,12 @@ function setActiveId(index) {
 </script>
 
 <style scoped>
+.items {
+  padding: 12px;
+  margin-top: 30px;
+  width: 100%;
+}
+
 i {
   font-size: 1.6rem;
   color: white;
@@ -62,17 +63,13 @@ i {
   margin-top: 15px;
 }
 
-.items {
-  padding: 12px;
-  margin-top: 30px;
-}
-
 .item {
   height: 20px;
 }
 
 a {
   padding: 10px;
+  text-decoration: none;
 }
 
 .item h5 {
@@ -82,9 +79,5 @@ a {
 
 hr {
   color: white;
-}
-
-a {
-  text-decoration: none;
 }
 </style>
