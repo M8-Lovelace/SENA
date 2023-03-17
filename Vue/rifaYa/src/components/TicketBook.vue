@@ -37,7 +37,7 @@
               </div>
             </span>
             <div class="row justify-end">
-              <q-btn class="q-my-sm edit" @click="editTicket()">
+              <q-btn class="q-my-sm edit" @click="">
                 <span>Editar</span>
                 <i class="icon icon-more"></i>
               </q-btn>
@@ -46,7 +46,7 @@
           <div class="col-sm-5 col-md-11 options">
             <q-btn class="q-my-sm btn">
               <img class="q-mr-sm" src="../assets/filter.png" alt="filter" width="30">
-              <span>PersonalizaR</span>
+              <span>Personalizar</span>
             </q-btn>
             <q-btn class="q-my-sm btn">
               <img class="q-mr-sm" src="../assets/edit.png" alt="edit" width="30">
@@ -58,7 +58,9 @@
       </div>
       <div class="col-10 col-md-7 numbers q-mt-xl q-pt-lg">
         <div v-for="(item, index) in currentItem[0].numbers">
-          <q-btn class="number" :disable="disable" @click="open(index, item)">{{ index }}</q-btn>
+          <q-btn class="number" :disable="disable"
+            :class="{ 'stateOne': item.state == 0, 'stateTwo': item.state == 1, 'stateThree': item.state == 2 }"
+            @click="open(index, item)">{{ index }}</q-btn>
         </div>
         <q-dialog v-model="dialog">
           <q-card style="width: 350px">
@@ -78,9 +80,15 @@
                 <span class="q-mt-sm"><span class="text-teal text-bold">Estado:</span> {{ getStateInText(itemValue.state)
                 }}</span>
                 <hr class="q-my-md full-width">
-                <q-btn class="q-px-md text-bold full-width" color="teal" @click="" label="Ver datos del participante" /><br>
-                <q-btn class="q-px-md text-bold full-width" color="teal" @click="" label="Liberar boleta" /><br>
-                <q-btn class="q-px-md text-bold full-width" color="teal" @click="" label="Marcar como pagada" />
+                <q-btn class="q-px-md text-bold full-width" color="teal" @click="seeInformation()">
+                  <i class="icon icon-eye"></i><span class="q-pl-sm">Ver datos del participante</span>
+                </q-btn><br>
+                <q-btn class="q-px-md text-bold full-width" color="teal" @click="releaseTicket()">
+                  <i class="icon icon-loop"></i><span class="q-pl-sm">Liberar boleta</span>
+                </q-btn><br>
+                <q-btn class="q-px-md text-bold full-width" color="teal" @click="">
+                  <i class="icon icon-checked"></i><span class="q-pl-sm">Marcar como pagada</span>
+                </q-btn>
               </div>
             </q-card-section>
           </q-card>
@@ -88,7 +96,7 @@
         <q-dialog v-model="buyTicket">
           <q-card style="width: 350px">
             <q-linear-progress :value="1" color="teal" />
-            <q-card-section v-if="itemValue.state == 0" class="row items-center no-wrap">
+            <q-card-section v-if="itemValue.state == 0" class=" row items-center no-wrap">
               <div class="col column items-center">
                 <h5 class="text-teal text-bold">Diligenciar la información</h5>
                 <q-input type="text" class="q-my-md full-width" v-model="dataTicket.name" label="Nombre" lazy-rules
@@ -100,6 +108,36 @@
                 <q-btn class="q-px-lg text-bold" color="teal" @click="onSubmit()" label="Adquirir Boleta" />
               </div>
             </q-card-section>
+          </q-card>
+        </q-dialog>
+        <q-dialog v-model="infoTicket">
+          <q-card class="column items-center" style="width: 350px">
+            <q-linear-progress :value="1" color="teal" />
+            <h5 class="text-teal text-center text-bold q-pt-md">Información de la boleta</h5>
+            <q-card-section class="row no-wrap">
+              <div class="col column">
+                <span class="q-mt-sm"><span class="text-teal text-bold">Boleta número:</span></span>
+                <span class="q-mt-sm"><span class="text-teal text-bold">Nombre:</span></span>
+                <span class="q-mt-sm"><span class="text-teal text-bold">Observaciones:</span></span>
+                <span class="q-mt-sm"><span class="text-teal text-bold">Teléfono:</span></span>
+                <span class="q-mt-sm"><span class="text-teal text-bold">Adquirido el:</span></span>
+                <span class="q-mt-sm"><span class="text-teal text-bold">Estado:</span></span>
+                <span class="q-mt-sm"><span class="text-teal text-bold">Metodo de pago:</span></span>
+              </div>
+              <div class="col column ellipsis">
+                <span class="q-mt-sm">{{ itemValue.number
+                }}</span>
+                <span class="q-mt-sm">{{ itemValue.owner }}</span>
+                <span class="q-mt-sm">{{ itemValue.comments
+                }}</span>
+                <span class="q-mt-sm">{{ itemValue.celphone }}</span>
+                <span class="q-mt-sm">{{ itemValue.date }}</span>
+                <span class="q-mt-sm">{{ getStateInText(itemValue.state)
+                }}</span>
+                <span class="q-mt-sm">{{ getMethodInText(itemValue.methodPayment) }}</span>
+              </div>
+            </q-card-section>
+            <q-btn class="text-bold q-mb-md" color="teal" @click="back()" label="Volver" />
           </q-card>
         </q-dialog>
       </div>
@@ -125,6 +163,7 @@ let isData = ref(false);
 let disable = ref(false)
 const dialog = ref(false)
 const buyTicket = ref(false)
+const infoTicket = ref(false)
 const dataTicket = ref({})
 
 let currentItem = ref(null);
@@ -145,6 +184,11 @@ function open(index, item) {
   itemValue.value = item
 }
 
+function back() {
+  dialog.value = true
+  infoTicket.value = false
+}
+
 function showBuyTicket(item) {
   buyTicket.value = true
   dialog.value = false
@@ -159,12 +203,38 @@ function getStateInText(state) {
   return states[state] || 'No adquirida ⚪'
 }
 
+function getMethodInText(method) {
+  const methods = {
+    0: 'Efectivo',
+    1: 'Transferencia',
+    2: 'Paypal'
+  }
+  return methods[method] || 'No se asignó.'
+}
+
+function releaseTicket() {
+  itemValue.value.state = 0
+  itemValue.value.owner = ''
+  itemValue.value.celphone = ''
+  itemValue.value.comments = 'NO REGISTRADO'
+  itemValue.value.date = ''
+  itemValue.value.methodPayment = 0
+  currentItem.value[0].numbers[itemValue.value.number] = itemValue.value
+  console.log(currentItem.value[0].numbers[itemValue.value.number]);
+  storage.modifyData(currentItem.value[0])
+  dialog.value = false
+}
+
 function isInputsValidate() {
   if (dataTicket.value.name && dataTicket.value.celphone) {
     return false
   } else {
     return true
   }
+}
+
+function seeInformation() {
+  infoTicket.value = true
 }
 
 function onSubmit() {
@@ -187,8 +257,8 @@ function onSubmit() {
       itemValue.value.state = 1
       itemValue.value.owner = dataTicket.value.name
       itemValue.value.celphone = dataTicket.value.celphone
-      itemValue.value.comments = dataTicket.value.comments || ''
-      itemValue.value.date = new Date()
+      itemValue.value.comments = dataTicket.value.comments || 'NO REGISTRADO'
+      itemValue.value.date = generateDate()
 
       currentItem.value[0].numbers[itemValue.value.number] = itemValue.value
       storage.modifyData(currentItem.value[0])
@@ -202,7 +272,16 @@ function onSubmit() {
   }
 }
 
-
+function generateDate() {
+  const date = new Date()
+  const day = date.getDate()
+  const month = ((date.getMonth()) + 1).toString().padStart(2, '0')
+  const year = date.getFullYear()
+  const hour = date.getHours()
+  const minutes = date.getMinutes()
+  const seconds = date.getSeconds()
+  return `${day}/${month}/${year} ${hour}:${minutes}:${seconds}`
+}
 
 function getCurrentItem() {
   if (tickets.value) {
@@ -221,6 +300,18 @@ function getCurrentItem() {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.stateOne {
+  background-color: #DEF2F1;
+}
+
+.stateTwo {
+  background-color: #ebb44f !important;
+}
+
+.stateThree {
+  background-color: #dd3232;
 }
 
 .container {
