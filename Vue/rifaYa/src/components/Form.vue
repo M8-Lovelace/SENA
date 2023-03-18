@@ -3,8 +3,7 @@
         <div class="q-mt-md q-pt-xl">
             <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md form">
                 <label class="q-mb-md">¿Cuantas boletas tendrá el talonario?</label>
-                <q-select v-model="ticket" :options="tickets" label="Escoge una opción" lazy-rules
-                    :rules="[val => val && val.length > 0 || 'Por favor ingrese una cantidad']" />
+                <q-select v-model="ticket" :options="tickets" label="Escoge una opción" />
                 <label class="q-my-lg">¿Qué articulo/servicio relacionas tu talonario?</label>
 
                 <q-input type="text" v-model="thing" label="Describe lo que quieres premiar" lazy-rules
@@ -44,7 +43,6 @@ import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStorage } from "@/stores/localStorage";
-import { generate } from '@vue/compiler-core';
 
 const storage = useStorage();
 
@@ -121,8 +119,7 @@ const lotteries = [
     'Samán de la Suerte',
     'Sinuano Día',
     'Sinuano Noche',
-    'Win 4',
-    'Otro Medio'
+    'Win 4'
 ]
 
 const items = [
@@ -206,7 +203,7 @@ function generateNumbers(max) {
             comments: 'No registrado',
             celphone: '',
             state: 0, // 0: Disponible, 1: adquirida por pagar, 2: Adquirida y pagada
-            methodPayment: 0, // 0: No se asingó, 1: Efectivo, 2: Transferencia, 3: PSE
+            methodPayment: 0, // 0: No se asingó, 1: Efectivo, 2: Consignación, 3: Efecty, 4: Daviplata, 5: Paypal, 6: Otro medio
             date: '',
         }
         numbers.push(spaceTicket)
