@@ -583,7 +583,8 @@ function revertGenerateDate(date) {
   margin: 0 auto;
   max-width: 60%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  /* grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); */
+  grid-template-columns: repeat(5, 1fr);
   grid-gap: 10px;
   margin-bottom: 35px;
   background-color: #DEF2F1;
@@ -594,8 +595,8 @@ function revertGenerateDate(date) {
 .number {
   display: grid;
   border-radius: 50%;
-  height: 50px;
-  width: 50px;
+  height: 15px;
+  width: 10px;
   background-color: white;
 }
 
@@ -700,7 +701,7 @@ function revertGenerateDate(date) {
     margin: 0 auto;
     max-width: 50%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    grid-template-columns: repeat(10, 1fr);
     grid-gap: 15px;
     margin-bottom: 50px;
     margin-top: 40px;
