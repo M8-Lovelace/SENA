@@ -1,91 +1,41 @@
 <template>
   <div class="form-container">
-    <div class="form ">
+    <div class="form">
       <div class="q-mt-xs">
         <q-form @submit="onSubmit" @reset="onReset" class="form">
           <label class="q-mb-md">¿Cuantas boletas tendrá el talonario?</label>
-          <q-select
-            v-model="ticket"
-            :options="tickets"
-            label="Escoge una opción"
-          />
-          <label class="q-my-lg"
-            >¿Qué articulo/servicio relacionas tu talonario?</label
-          >
-          <q-input
-            type="text"
-            v-model="thing"
-            label="Describe lo que quieres premiar"
-            lazy-rules
-            :rules="[
-              (val) =>
-                (val && val.length > 0) || 'Por favor ingrese una descripción',
-            ]"
-          />
+          <q-select v-model="ticket" :options="tickets" label="Escoge una opción" />
+          <label class="q-my-lg">¿Qué articulo/servicio relacionas tu talonario?</label>
+          <q-input type="text" v-model="thing" label="Describe lo que quieres premiar" lazy-rules :rules="[
+            (val) =>
+              (val && val.length > 0) || 'Por favor ingrese una descripción',
+          ]" />
           <label class="q-mb-md">Escoge el tipo de artículo</label>
-          <q-select
-            v-model="item"
-            :options="items"
-            label="Escoge una opción"
-            lazy-rules
-            :rules="[
-              (val) =>
-                (val && val.length > 0) || 'Por favor seleccione un tipo',
-            ]"
-          />
-          <label class="q-mb-md"
-            >¿Con que loteria se establece el ganador?</label
-          >
-          <q-select
-            v-model="lottery"
-            :options="lotteries"
-            label="Escoge una opción"
-            lazy-rules
-            :rules="[
-              (val) =>
-                (val && val.length > 0) || 'Por favor seleccione una loteria',
-            ]"
-          />
-          <q-input
-            class="anotherWay"
-            v-if="lottery == 'Otro Medio'"
-            type="text"
-            v-model="forExample"
-            placeholder="Ejem. Loteria nacional/Instagram Live"
-            lazy-rules
-            :rules="[
+          <q-select v-model="item" :options="items" label="Escoge una opción" lazy-rules :rules="[
+            (val) =>
+              (val && val.length > 0) || 'Por favor seleccione un tipo',
+          ]" />
+          <label class="q-mb-md">¿Con que loteria se establece el ganador?</label>
+          <q-select v-model="lottery" :options="lotteries" label="Escoge una opción" lazy-rules :rules="[
+            (val) =>
+              (val && val.length > 0) || 'Por favor seleccione una loteria',
+          ]" />
+          <q-input class="anotherWay" v-if="lottery == 'Otro Medio'" type="text" v-model="forExample"
+            placeholder="Ejem. Loteria nacional/Instagram Live" lazy-rules :rules="[
               (val) => (val && val.length > 0) || 'Por favor ingrese un medio',
-            ]"
-          />
+            ]" />
           <label class="q-my-lg">¿Cuando jugarás tu concurso/sorteo?</label>
-          <q-input
-            type="date"
-            v-model="date"
-            lazy-rules
-            :rules="[
-              (val) => (val && val.length > 0) || 'Por favor ingrese un fecha',
-              dateBiggerThanToday,
-            ]"
-          />
+          <q-input type="date" v-model="date" lazy-rules :rules="[
+            (val) => (val && val.length > 0) || 'Por favor ingrese un fecha',
+            dateBiggerThanToday,
+          ]" />
           <label class="q-my-lg">¿Cuánto cuesta cada boleta?</label>
-          <q-input
-            type="number"
-            v-model="price"
-            label="Precio de cada boleta"
-            lazy-rules
-            :rules="[
-              (val) => (val && val.length > 0) || 'Por favor ingrese un precio',
-            ]"
-          />
+          <q-input type="number" v-model="price" label="Precio de cada boleta" lazy-rules :rules="[
+            (val) => (val && val.length > 0) || 'Por favor ingrese un precio',
+          ]" />
           <div class="q-mb-sm">
             <q-btn label="Confirm" class="button" @click="onSubmit()" />
-            <q-btn
-              label="cancelar"
-              to="./"
-              @click="onReset()"
-              flat
-              class="q-ml-sm"
-            />
+            <q-btn label="cancelar" to="./" @click="onReset()" flat class="q-ml-sm" />
           </div>
         </q-form>
       </div>
@@ -105,8 +55,8 @@ const $q = useQuasar();
 const router = useRouter();
 
 let ticket = ref({
-  label: "Boletas del 1-43(43 Boletas)",
-  value: 43,
+  label: "Boletas del 00-99(100 Boletas)",
+  value: 99,
 });
 let thing = ref("vaca");
 let item = ref("Tecnología");
@@ -245,6 +195,7 @@ function onSubmit() {
           date: date.value,
           price: price.value,
           numbers: generateNumbers(ticket.value.value),
+          state: 0, // 0: En curso, 1: Cancelado
         };
 
         // Añadir el nuevo ticket al estado de la aplicación

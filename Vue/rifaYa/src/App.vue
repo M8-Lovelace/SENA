@@ -10,7 +10,8 @@ import Layout from "./components/Layout.vue";
 @import "./assets/icomoon/style.css";
 
 /* Set border box for all elements, delete padding and margin */
-html, body {
+html,
+body {
   margin: 0 !important;
   padding: 0 !important;
   box-sizing: border-box;

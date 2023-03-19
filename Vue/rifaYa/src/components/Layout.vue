@@ -18,7 +18,7 @@ import Footer from "./Footer.vue";
 .router-view {
   width: 100vw;
   height: calc(100vh - 100px);
-  margin-top: 50px !important;
+  margin-top: 40px !important;
   overflow: hidden;
 }
 </style>

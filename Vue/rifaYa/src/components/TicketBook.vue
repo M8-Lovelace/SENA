@@ -2,7 +2,7 @@
   <div class="ticket-container">
     <div class="inner-container row">
       <template v-if="isData">
-        <div class="row full-width justify-center first-row">
+        <div class="row justify-center first-row">
           <div class="col-7 infoTickets">
             <span class="q-py-xs infoOne">
               <img src="../assets/trofeo.png" width="15" height="20" />
@@ -37,7 +37,7 @@
               </div>
             </span>
             <div class="row justify-end">
-              <q-btn class="q-my-sm q-pb-sm edit" @click="editTicket()">
+              <q-btn class="q-my-sm q-pb-sm edit" @click="editTicket()" :disabled="validatestateTwo()">
                 <img src="../assets/edit.png" alt="" width="15" />
                 <span class="q-pl-sm q-pt-xs">Editar</span>
               </q-btn>
@@ -86,25 +86,107 @@
             </q-dialog>
           </div>
           <div class="col-4 options">
-            <button class="btn row justify-center">
-                <!-- <img class="q-mr-sm" src="../assets/filter.png" alt="filter" width="15" /> -->
-                <span>Listar boletas</span>
+            <div class="btn row justify-center" :class="{
+              stateOneTicket: currentItem[0].state == 0,
+              stateTwoTicket: currentItem[0].state == 1,
+            }">
+              <span class="q-px-lg text-bold">{{ generateState(currentItem[0].state) }}</span>
+            </div>
+            <button class="btn row justify-center" @click="listTicket()">
+              <span>Listar boletas</span>
             </button>
-            <button class="btn row justify-center">
-              <!-- <img class="q-mr-sm" src="../assets/edit.png" alt="edit" width="15" /> -->
-              <span>Genera archivo datos</span>
+            <button class="btn row justify-center" @click="listInfoTicket()">
+              <span>Información del talonario</span>
             </button>
-            <button @click="cancelTicket()" class="btn">Cancelar Sorteo</button>  
+            <button :disabled="validatestateTwo()" @click="cancelTicket()" class="btn">Cancelar Sorteo</button>
           </div>
+          <q-dialog v-model="listTickets">
+            <q-card style="width: 400px">
+              <q-linear-progress :value="1" color="teal" />
+              <q-card-section class="no-wrap">
+                <div class="col">
+                  <h5 class="text-teal text-bold text-center">
+                    Listar boletas
+                  </h5>
+                  <br />
+                  <span class="text-teal text-bold">Talonario número {{ currentItem[0].id }}</span><br /><br />
+                  <div class="list">
+                    <div
+                      v-for="(item, index) in currentItem[0].numbers.filter(num => num.state === 1 || num.state === 2)">
+                      <div class="row bg q-my-xs">
+                        <div class="col-4 q-pl-xs row">
+                          <div class="q-pt-sm q-mt-xs">
+                            <span class="q-pa-xs list-ticket" :class="{
+                              stateTwo: item.state == 1,
+                              stateThree: item.state == 2,
+                            }">{{ item.number }}</span>
+                          </div>
+                          <div class="q-py-xs q-pl-sm item-list">
+                            <span class="n">{{ item.owner }}</span><br>
+                            <span class="n">{{ item.celphone }}</span>
+                          </div>
+                        </div>
+                        <div class="col-8 q-pt-xs row justify-end">
+                          <span class="q-pt-sm">{{ getStateInTextTwo(item.state) }}</span>
+                          <q-btn class="q-ml-lg bt q-mr-xs" color="teal"
+                            @click="seeInformationDetail(item)">Detalles</q-btn>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row justify-center q-mt-sm">
+                    <q-btn class="q-px-md text-bold" color="teal" @click="closeList()" label="Close" />
+                  </div>
+                </div>
+              </q-card-section>
+            </q-card>
+          </q-dialog>
+          <q-dialog v-model="viewInfoTicket">
+            <q-card class="q-pa-md" style="width: 350px">
+              <q-linear-progress :value="1" color="teal" />
+              <h5 class="text-teal text-center text-bold q-pt-md">
+                Información del talonario
+              </h5>
+              <q-card-section class="row no-wrap">
+                <div class="col column">
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Talonario número:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Premio:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Tipo artículo:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Precio:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Fecha:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Loteria:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Estado:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Boletas disponibles:</span></span>
+                </div>
+                <div class="col column ellipsis">
+                  {{ }}
+                  <span class="q-mt-sm">{{ currentItem[0].id }}</span>
+                  <span class="q-mt-sm">{{ currentItem[0].thing }}</span>
+                  <span class="q-mt-sm">{{ currentItem[0].item }}</span>
+                  <span class="q-mt-sm">{{ currentItem[0].price }}</span>
+                  <span class="q-mt-sm">{{ currentItem[0].date }}</span>
+                  <span class="q-mt-sm">{{ currentItem[0].lottery }}</span>
+                  <span class="q-mt-sm">{{ generateState(currentItem[0].state) }}</span>
+                  <span class="q-mt-sm">{{ currentItem[0].numbers.filter(num => num.state === 0).length }}</span>
+                </div>
+              </q-card-section>
+              <div class="column items-center">
+                <q-btn class="text-bold q-mb-md" color="teal" v-show="backButton" @click="backTicketList()"
+                  label="Volver" />
+              </div>
+            </q-card>
+          </q-dialog>
         </div>
-        <div class="row q-mt-sm full-width second-row">
-          <div class="col-12 col-md-7 numbers full-width">
-            <div v-for="(item, index) in currentItem[0].numbers">
-              <button class="number" :disable="disable" :class="{
+        <div class="row q-mt-sm second-row">
+          <div class="col-12 numbers full-width">
+            <div class="column items-center" v-for="(item, index) in currentItem[0].numbers">
+              <button class="number" :class="{
                 stateOne: item.state == 0,
                 stateTwo: item.state == 1,
                 stateThree: item.state == 2,
-              }" @click="open(index, item)">{{ index }}</button>
+              }" @click="open(index, item)">
+                {{ index }}
+              </button>
             </div>
             <q-dialog v-model="dialog">
               <q-card style="width: 350px">
@@ -114,11 +196,17 @@
                     <h4 class="text-teal text-bold">
                       Boleta {{ itemValue.number }}
                     </h4>
-                    <span class="q-mt-sm"><span class="text-teal text-bold">Estado:</span>
+                    <span class="q-mt-sm"><span class="text-teal text-bold space">Estado:</span>
                       {{ getStateInText(itemValue.state) }}</span>
                     <hr class="q-my-md full-width" />
-                    <q-btn class="q-px-md text-bold" color="teal" @click="showBuyTicket(itemValue)"
-                      label="Adquirir Boleta" />
+                    <q-btn class="q-px-md text-bold full-width" v-show="validatestate()" color="teal"
+                      @click="showBuyTicket(itemValue)">
+                      <img class="q-mr-xs" src="../assets/dollar.png" width="15">
+                      <span>Adquirir Boleta</span>
+                    </q-btn>
+                    <q-btn class="q-px-md full-width space" color="teal" @click="closeDialog()">
+                      <span class="text-bold">Close</span>
+                    </q-btn>
                   </div>
                 </q-card-section>
                 <q-card-section v-if="itemValue.state == 1" class="row items-center no-wrap">
@@ -129,12 +217,19 @@
                     <span class="q-mt-sm"><span class="text-teal text-bold">Estado:</span>
                       {{ getStateInText(itemValue.state) }}</span>
                     <hr class="q-my-md full-width" />
-                    <q-btn class="q-px-md text-bold full-width" color="teal" @click="seeInformation()">
-                      <i class="icon icon-eye"></i><span class="q-pl-sm">Ver datos del participante</span> </q-btn><br />
-                    <q-btn class="q-px-md text-bold full-width" color="teal" @click="releaseTicket()">
-                      <i class="icon icon-loop"></i><span class="q-pl-sm">Liberar boleta</span> </q-btn><br />
-                    <q-btn class="q-px-md text-bold full-width" color="teal" @click="checkPaid()">
+                    <q-btn class="q-px-md text-bold full-width space" color="teal" @click="seeInformation()">
+                      <i class="icon icon-eye"></i><span class="q-pl-sm">Ver datos del participante</span> 
+                    </q-btn>
+                    <q-btn class="q-px-md text-bold full-width space" color="teal" v-show="validatestate()"
+                      @click="releaseTicket()">
+                      <i class="icon icon-loop"></i><span class="q-pl-sm">Liberar boleta</span> 
+                    </q-btn>
+                    <q-btn class="q-px-md text-bold full-width space" color="teal" v-show="validatestate()"
+                      @click="checkPaid()">
                       <i class="icon icon-checked"></i><span class="q-pl-sm">Marcar como pagada</span>
+                    </q-btn>
+                    <q-btn @click="closeDialog()" class="q-px-md full-width space" color="teal">
+                      <span class="text-bold">Close</span>
                     </q-btn>
                   </div>
                 </q-card-section>
@@ -148,6 +243,9 @@
                     <hr class="q-my-md full-width" />
                     <q-btn class="q-px-md text-bold full-width" color="teal" @click="seeInformation()">
                       <i class="icon icon-eye"></i><span class="q-pl-sm">Ver datos del participante</span>
+                    </q-btn>
+                    <q-btn @click="closeDialog()" class="q-px-md full-width space" color="teal">
+                      <span class="text-bold">Close</span>
                     </q-btn>
                   </div>
                 </q-card-section>
@@ -214,7 +312,9 @@
                   </div>
                 </q-card-section>
                 <div class="column items-center">
-                  <q-btn class="text-bold q-mb-md" color="teal" @click="back()" label="Volver" />
+                  <q-btn class="text-bold q-mb-md" color="teal" v-show="backButton" @click="back()" label="Volver" />
+                  <q-btn class="text-bold q-mb-md" color="teal" v-show="backButtonTwo" @click="backTicket()"
+                    label="Volver" />
                 </div>
               </q-card>
             </q-dialog>
@@ -264,19 +364,23 @@ const storage = useStorage();
 const $q = useQuasar();
 
 let itemValue = ref();
-let isData = ref(false);
-let disable = ref(false);
 let method = ref();
 let anotherWay = ref();
 let lottery = ref();
 let thing = ref();
 let dates = ref();
+const isData = ref(false);
+const viewButtons = ref(true);
 const dialog = ref(false);
 const buyTicket = ref(false);
 const infoTicket = ref(false);
 const dataTicket = ref({});
 const checkPaidModal = ref(false);
 const editTicketModal = ref(false);
+const listTickets = ref(false);
+const backButton = ref(true);
+const backButtonTwo = ref(false);
+const viewInfoTicket = ref(false);
 
 let currentItem = ref(null);
 let currentId = computed(() => storage.getActiveId);
@@ -367,8 +471,13 @@ watch(currentId, () => {
 
 function open(index, item) {
   dialog.value = true;
-  console.log(index);
+  (index);
   itemValue.value = item;
+}
+
+function listInfoTicket() {
+  console.log("listInfoTicket");
+  viewInfoTicket.value = true;
 }
 
 function back() {
@@ -382,8 +491,71 @@ function backMethod() {
   method.value = "";
 }
 
+function closeDialog() {
+  dialog.value = false;
+}
+
 function closeEdit() {
   editTicketModal.value = false;
+}
+
+function closeList() {
+  listTickets.value = false;
+}
+
+function backTicket() {
+  infoTicket.value = false;
+  listTickets.value = true;
+}
+
+function backTicketList() {
+  viewInfoTicket.value = false;
+}
+
+function seeInformationDetail(item) {
+  listTickets.value = false;
+  itemValue.value = item;
+  infoTicket.value = true;
+  backButtonTwo.value = true;
+  backButton.value = false;
+}
+
+function cancelTicket() {
+  $q.dialog({
+    title: "Cancelar boleto",
+    message: "¿Está seguro que desea cancelar este boleto?",
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    ("ok");
+    dialog.value = false;
+    viewButtons.value = false;
+    currentItem.value[0].state = 1;
+    storage.modifyData(currentItem.value[0]);
+    validatestate();
+    validatestateTwo();
+  });
+}
+
+function listTicket() {
+  listTickets.value = true;
+  (currentItem.value[0].numbers.filter(num => num.state === 1 || num.state === 2));
+}
+
+function validatestate() {
+  if (currentItem.value[0].state === 0) {
+    return true
+  } else if (currentItem.value[0].state === 1) {
+    return false;
+  }
+}
+
+function validatestateTwo() {
+  if (currentItem.value[0].state === 0) {
+    return false
+  } else if (currentItem.value[0].state === 1) {
+    return true;
+  }
 }
 
 function showBuyTicket(item) {
@@ -394,7 +566,7 @@ function showBuyTicket(item) {
 function checkPaid() {
   checkPaidModal.value = true;
   dialog.value = false;
-  console.log(method.value);
+  (method.value);
 }
 
 function getStateInText(state) {
@@ -404,6 +576,14 @@ function getStateInText(state) {
     2: "Adquirida y pagada 🟢",
   };
   return states[state] || "No adquirida ⚪";
+}
+
+function getStateInTextTwo(state) {
+  const states = {
+    1: "En deuda",
+    2: "Pagada",
+  };
+  return states[state] || "No adquirida";
 }
 
 function getMethodInText(method) {
@@ -427,7 +607,7 @@ function releaseTicket() {
   itemValue.value.date = "";
   itemValue.value.methodPayment = 0;
   currentItem.value[0].numbers[itemValue.value.number] = itemValue.value;
-  console.log(currentItem.value[0].numbers[itemValue.value.number]);
+  (currentItem.value[0].numbers[itemValue.value.number]);
   storage.modifyData(currentItem.value[0]);
   dialog.value = false;
 }
@@ -442,6 +622,8 @@ function isInputsValidate() {
 
 function seeInformation() {
   infoTicket.value = true;
+  backButton.value = true;
+  backButtonTwo.value = false;
 }
 
 function saveEdit() {
@@ -457,6 +639,14 @@ function isSelectValidate() {
     return true;
   } else {
     return false;
+  }
+}
+
+function generateState(ticket) {
+  if (ticket == 0) {
+    return "En curso";
+  } else if (ticket == 1) {
+    return "Cancelada";
   }
 }
 
@@ -477,7 +667,7 @@ function confirmPayment() {
       persistent: true,
     })
       .onOk(() => {
-        console.log(">>>> OK");
+        (">>>> OK");
         itemValue.value.state = 2;
         itemValue.value.methodPayment = method.value.value;
 
@@ -489,10 +679,10 @@ function confirmPayment() {
         method.value = "";
       })
       .onCancel(() => {
-        console.log(">>>> CANCEL");
+        (">>>> CANCEL");
       })
       .onDismiss(() => {
-        console.log("I am triggered on both OK and Cancel");
+        ("I am triggered on both OK and Cancel");
       });
   }
 }
@@ -514,7 +704,7 @@ function onSubmit() {
       persistent: true,
     })
       .onOk(() => {
-        console.log(">>>> OK");
+        (">>>> OK");
         itemValue.value.state = 1;
         itemValue.value.owner = dataTicket.value.name;
         itemValue.value.celphone = dataTicket.value.celphone;
@@ -528,7 +718,7 @@ function onSubmit() {
         dataTicket.value = {};
       })
       .onCancel(() => {
-        console.log(">>>> Cancel");
+        (">>>> Cancel");
       });
   }
 }
@@ -583,10 +773,56 @@ function revertGenerateDate(date) {
   box-sizing: border-box;
 }
 
+.list-ticket {
+  border-radius: 50%;
+}
+
+.list {
+  width: 100%;
+  height: 200px;
+  overflow: scroll;
+}
+
+.list::-webkit-scrollbar {
+  display: none;
+}
+
+.bg {
+  background-color: #def2f1;
+  border-radius: 10px;
+  height: 50px;
+}
+
+.item-list {
+  max-width: 60px;
+  overflow: hidden;
+}
+
+.space{
+  margin-top: 10px;
+}
+
 .ticket-container {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.stateOneTicket {
+  background-color: #8dd6d6;
+  border-radius: 20px;
+  color: #2b7a78;
+}
+
+.stateTwoTicket {
+  background-color: #3e3e428f;
+  border-radius: 20px;
+  color: white;
+}
+
+.stateOneTicket span,
+.stateTwoTicket span {
+  font-size: 10px;
 }
 
 .inner-container {
@@ -595,12 +831,13 @@ function revertGenerateDate(date) {
 }
 
 .second-row {
-  width: 95%;
+  width: 100%;
   height: 60%;
   overflow: scroll;
 }
 
-.second-row::-webkit-scrollbar, .numbers::-webkit-scrollbar {
+.second-row::-webkit-scrollbar,
+.numbers::-webkit-scrollbar {
   display: none;
 }
 
@@ -616,14 +853,21 @@ function revertGenerateDate(date) {
   color: #2b7a78;
 }
 
-.first-row{
+.first-row {
   min-height: 25%;
+  width: 100%;
 }
 
 .stateTwo {
   background-color: #9edbd9 !important;
   color: white;
   font-weight: bold;
+}
+
+.bt {
+  width: 40%;
+  height: 20px;
+  border-radius: 8px;
 }
 
 .stateThree {
@@ -681,6 +925,7 @@ function revertGenerateDate(date) {
   margin-top: 4px;
   font-size: 12px;
   background-color: white;
+  border: #bfdddc 1px solid;
 }
 
 .number:hover {
@@ -689,7 +934,6 @@ function revertGenerateDate(date) {
   border: 1px white solid;
   font-weight: bold;
   cursor: pointer;
-
 }
 
 .options {
@@ -735,74 +979,117 @@ function revertGenerateDate(date) {
   font-size: 10px;
 }
 
-/* @media (min-width: 600px) and (max-width: 1023px) {
-  .options button {
-    max-width: 100%;
-    padding: 0;
-  }
-
-  .first {
-    margin: 0;
-  }
-
-  .options {
-    margin: 0;
-    margin-left: 20px;
-    padding: 10px;
-  }
-
-  .numbers {
-    margin: 0 auto;
-    gap: 15px;
-    margin-bottom: 40px;
-  }
-
+@media (min-width: 600px) and (max-width: 1023px) {
   .number {
-    padding: 15px;
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .infoTickets .text {
+    font-size: 13px;
+  }
+
+  .options button {
+    width: 80% !important;
+  }
+
+  .stateOneTicket span,
+  .stateTwoTicket span {
+    font-size: 13px;
+  }
+
+  .options button {
+    font-size: 12px;
+  }
+
+  .edit {
+    font-size: 11px;
   }
 }
 
-@media (min-width: 1024px) {
-  .infoTickets {
-    padding-top: 30px;
-    padding-left: 40px;
+@media (min-width: 1024px) and (max-width: 1439.99px) {
+  .number {
+    width: 50px;
+    height: 50px;
   }
 
-  .first {
-    padding-top: 70px;
+  .edit span {
+    font-size: 11px;
   }
 
   .options button {
-    height: 70px;
-    font-size: 14px;
-    max-width: 300px;
+    width: 80% !important;
   }
 
-  .btn {
-    margin: 0 auto;
-    margin-top: 10px;
+  .stateOneTicket span,
+  .stateTwoTicket span {
+    font-size: 13px;
   }
 
-  .numbers {
-    margin: 0 auto;
-    max-width: 50%;
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-gap: 15px;
-    margin-bottom: 50px;
-    margin-top: 40px;
-    padding: 40px;
+  .first-row {
+    max-width: 75% !important;
+    margin: auto;
   }
 
+  .infoTickets .text {
+    font-size: 15px;
+  }
+
+  .options button {
+    font-size: 15px;
+  }
+
+  .edit {
+    font-size: 15px;
+  }
+
+  .second-row {
+    margin-top: 10px !important;
+    margin: auto;
+    width: 75%;
+  }
+}
+
+@media (min-width: 1440px) {
   .number {
-    display: grid;
-    border-radius: 50%;
-    height: 60px;
     width: 60px;
-    box-shadow: inset 0 -2em 3em rgba(255, 254, 254, 0.1),
-      0 0 0 1px rgb(255, 255, 255), 0.3em 0.1em 0.6em rgba(0, 0, 0, 0.3);
+    height: 60px;
   }
-} */
+
+  .options button {
+    width: 80% !important;
+  }
+
+  .stateOneTicket span,
+  .stateTwoTicket span {
+    font-size: 13px;
+  }
+
+  .first-row {
+    max-width: 75% !important;
+    margin: auto;
+  }
+
+  .edit span {
+    font-size: 11px;
+  }
+
+  .infoTickets .text {
+    font-size: 15px;
+  }
+
+  .options button {
+    font-size: 15px;
+  }
+
+  .edit {
+    font-size: 15px;
+  }
+
+  .second-row {
+    margin-top: 10px !important;
+    margin: auto;
+    width: 75%;
+  }
+}
 </style>
