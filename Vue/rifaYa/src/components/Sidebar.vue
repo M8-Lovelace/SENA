@@ -5,12 +5,17 @@
         <q-item-section avatar class="q-pa-none item">
           <RouterLink to="./">
             <h5>Home</h5>
-            <hr class="full-width">
+            <hr class="full-width" />
           </RouterLink>
         </q-item-section>
       </q-item>
       <template v-for="(ticket, index) in tickets" class="iconsList">
-        <q-item clickable @click="setActiveId(tickets[index]['id'])" v-ripple class="items">
+        <q-item
+          clickable
+          @click="setActiveId(tickets[index]['id'])"
+          v-ripple
+          class="items"
+        >
           <q-item-section avatar class="q-pa-none item">
             <a>
               <h5>Talonario {{ ticket.id }}</h5>
@@ -47,8 +52,7 @@ function setActiveId(index) {
 
 <style scoped>
 .items {
-  padding: 12px;
-  margin-top: 30px;
+  margin-top: 20px;
   width: 100%;
 }
 
@@ -75,6 +79,7 @@ a {
 .item h5 {
   margin: 0;
   color: white;
+  font-size: 1.2rem;
 }
 
 hr {

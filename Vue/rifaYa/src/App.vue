@@ -1,11 +1,20 @@
 <template>
-    <Layout></Layout>
+  <Layout></Layout>
 </template>
 <script setup>
 import Layout from "./components/Layout.vue";
 </script>
 
-<style lang="sass">
-@import './assets/icomoon/style.css'
+<style>
+/* Load icons as font */
+@import "./assets/icomoon/style.css";
 
+/* Set border box for all elements, delete padding and margin */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+}
 </style>

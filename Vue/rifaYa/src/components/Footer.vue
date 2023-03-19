@@ -10,6 +10,6 @@
 
 <style>
 .footer {
-  background-color: #2B7A78;
+  background-color: #2b7a78;
 }
 </style>

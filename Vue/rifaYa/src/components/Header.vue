@@ -2,16 +2,23 @@
   <q-header elevated class="header">
     <q-toolbar>
       <div class="father">
-        <q-btn @click="toggleMenu()" flat round dense icon="menu" class="q-mr-sm menu" />
+        <q-btn
+          @click="toggleMenu()"
+          flat
+          round
+          dense
+          icon="menu"
+          class="q-mr-sm menu"
+        />
         <div v-show="showMenu" class="child">
           <Sidebar></Sidebar>
         </div>
       </div>
-      <q-toolbar-title class="q-ml-lg text-bold">Talonario 1</q-toolbar-title>
-      <img src="../assets/coin.png" class="image q-mt-xs" width="60">
-      <q-btn flat round dense>
+      <q-toolbar-title class="q-ml-lg text-bold"></q-toolbar-title>
+      <img src="../assets/coin.png" class="image q-mt-xs" width="60" />
+      <!-- <q-btn flat round dense>
         <i class="icon icon-more"></i>
-      </q-btn>
+      </q-btn> -->
     </q-toolbar>
   </q-header>
 </template>
@@ -28,7 +35,7 @@ const toggleMenu = () => {
 
 <style scoped>
 .header {
-  background-color: #2B7A78;
+  background-color: #2b7a78;
   color: white;
 }
 
@@ -40,7 +47,7 @@ const toggleMenu = () => {
   position: absolute;
   top: 42px;
   left: -12px;
-  background-color: #3AAFA9;
+  background-color: #3aafa9;
   width: 170px;
   height: calc(100vh - 50px);
   z-index: 1;
