@@ -34,7 +34,7 @@
             (val) => (val && val.length > 0) || 'Por favor ingrese un precio',
           ]" />
           <div class="q-mb-sm">
-            <q-btn label="Confirm" class="button" @click="onSubmit()" />
+            <q-btn label="Crear" class="button" @click="onSubmit()" />
             <q-btn label="cancelar" to="./" @click="onReset()" flat class="q-ml-sm" />
           </div>
         </q-form>
@@ -178,7 +178,7 @@ function onSubmit() {
     });
   } else {
     $q.dialog({
-      title: "Confirm",
+      title: "Confirmar",
       message: "¿Está seguro que desea crear el talonario?",
       cancel: true,
       persistent: true,

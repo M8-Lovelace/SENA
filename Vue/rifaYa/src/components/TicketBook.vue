@@ -92,13 +92,13 @@
             }">
               <span class="q-px-lg text-bold">{{ generateState(currentItem[0].state) }}</span>
             </div>
-            <button class="btn row justify-center" @click="listTicket()">
+            <button class="btn row justify-center hover" @click="listTicket()">
               <span>Listar boletas</span>
             </button>
-            <button class="btn row justify-center" @click="listInfoTicket()">
+            <button class="btn row justify-center hover" @click="listInfoTicket()">
               <span>Información del talonario</span>
             </button>
-            <button @click="cancelTicket()" :disabled="validatestateTwo()" class="btn">Cancelar Sorteo</button>
+            <button @click="cancelTicket()" :disabled="validatestateTwo()" class="btn hover">Cancelar Sorteo</button>
           </div>
           <q-dialog v-model="listTickets">
             <q-card style="width: 400px">
@@ -522,8 +522,8 @@ function seeInformationDetail(item) {
 
 function cancelTicket() {
   $q.dialog({
-    title: "Cancelar boleto",
-    message: "¿Está seguro que desea cancelar este boleto?",
+    title: "Cancelar talonario",
+    message: "¿Está seguro que desea cancelar este talonario?",
     cancel: true,
     persistent: true,
   }).onOk(() => {
@@ -661,7 +661,7 @@ function confirmPayment() {
     });
   } else {
     $q.dialog({
-      title: "Confirm",
+      title: "Confirmar",
       message: "¿Deseas marcar como pagada la boleta?",
       cancel: true,
       persistent: true,
@@ -698,8 +698,8 @@ function onSubmit() {
     });
   } else {
     $q.dialog({
-      title: "Confirm",
-      message: "¿Está seguro que desea crear el talonario?",
+      title: "Confirmar",
+      message: "¿Está seguro que desea comprar esta boleta?",
       cancel: true,
       persistent: true,
     })
@@ -796,6 +796,10 @@ function revertGenerateDate(date) {
 .item-list {
   max-width: 60px;
   overflow: hidden;
+}
+
+.hover:hover{
+  cursor: pointer;
 }
 
 .space{

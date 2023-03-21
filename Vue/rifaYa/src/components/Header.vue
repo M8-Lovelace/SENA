@@ -16,9 +16,6 @@
       </div>
       <q-toolbar-title class="q-ml-lg text-bold"></q-toolbar-title>
       <img src="../assets/coin.png" class="image q-mt-xs" width="60" />
-      <!-- <q-btn flat round dense>
-        <i class="icon icon-more"></i>
-      </q-btn> -->
     </q-toolbar>
   </q-header>
 </template>
