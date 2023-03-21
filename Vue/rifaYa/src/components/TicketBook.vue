@@ -77,7 +77,7 @@
                       dateBiggerThanToday,
                     ]" />
                     <div class="row justify-center">
-                      <q-btn class="q-px-md text-bold q-mx-sm" color="teal" @click="closeEdit()" label="Close" />
+                      <q-btn class="q-px-md text-bold q-mx-sm" color="teal" @click="closeEdit()" label="Cerrar" />
                       <q-btn class="q-px-md text-bold q-mx-sm" color="teal" @click="saveEdit()" label="Guardar" />
                     </div>
                   </div>
@@ -98,7 +98,7 @@
             <button class="btn row justify-center" @click="listInfoTicket()">
               <span>Información del talonario</span>
             </button>
-            <button :disabled="validatestateTwo()" @click="cancelTicket()" class="btn">Cancelar Sorteo</button>
+            <button @click="cancelTicket()" :disabled="validatestateTwo()" class="btn">Cancelar Sorteo</button>
           </div>
           <q-dialog v-model="listTickets">
             <q-card style="width: 400px">
@@ -135,7 +135,7 @@
                     </div>
                   </div>
                   <div class="row justify-center q-mt-sm">
-                    <q-btn class="q-px-md text-bold" color="teal" @click="closeList()" label="Close" />
+                    <q-btn class="q-px-md text-bold" color="teal" @click="closeList()" label="Cerrar" />
                   </div>
                 </div>
               </q-card-section>
@@ -171,7 +171,7 @@
                 </div>
               </q-card-section>
               <div class="column items-center">
-                <q-btn class="text-bold q-mb-md" color="teal" v-show="backButton" @click="backTicketList()"
+                <q-btn class="text-bold q-mb-md" color="teal" @click="backTicketList()"
                   label="Volver" />
               </div>
             </q-card>
@@ -205,7 +205,7 @@
                       <span>Adquirir Boleta</span>
                     </q-btn>
                     <q-btn class="q-px-md full-width space" color="teal" @click="closeDialog()">
-                      <span class="text-bold">Close</span>
+                      <span class="text-bold">Cerrar</span>
                     </q-btn>
                   </div>
                 </q-card-section>
@@ -229,7 +229,7 @@
                       <i class="icon icon-checked"></i><span class="q-pl-sm">Marcar como pagada</span>
                     </q-btn>
                     <q-btn @click="closeDialog()" class="q-px-md full-width space" color="teal">
-                      <span class="text-bold">Close</span>
+                      <span class="text-bold">Cerrar</span>
                     </q-btn>
                   </div>
                 </q-card-section>
@@ -245,7 +245,7 @@
                       <i class="icon icon-eye"></i><span class="q-pl-sm">Ver datos del participante</span>
                     </q-btn>
                     <q-btn @click="closeDialog()" class="q-px-md full-width space" color="teal">
-                      <span class="text-bold">Close</span>
+                      <span class="text-bold">Cerrar</span>
                     </q-btn>
                   </div>
                 </q-card-section>
@@ -347,7 +347,7 @@
         </div>
       </template>
       <template v-else>
-        <h1>No hay información</h1>
+        <h3 class="q-ma-xl">No hay información</h3>
       </template>
     </div>
   </div>

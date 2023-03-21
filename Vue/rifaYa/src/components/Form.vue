@@ -58,11 +58,11 @@ let ticket = ref({
   label: "Boletas del 00-99(100 Boletas)",
   value: 99,
 });
-let thing = ref("vaca");
+let thing = ref("Portatil");
 let item = ref("Tecnología");
 let lottery = ref("Lotería de Tolima - Lunes");
 let forExample = ref(null);
-let date = ref("2023-03-24");
+let date = ref("2024-06-16");
 let price = ref(10000);
 
 const tickets = [
