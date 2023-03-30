@@ -18,6 +18,5 @@ body {
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
-  font-family: "Lato", sans-serif;
 }
 </style>
