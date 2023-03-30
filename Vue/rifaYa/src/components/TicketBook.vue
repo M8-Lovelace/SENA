@@ -1,7 +1,7 @@
 <template>
   <div class="ticket-container">
     <div class="inner-container row">
-      <template v-if="isData">
+      <template v-if="isData" class="cont">
         <div class="row justify-center first-row">
           <div class="col-7 infoTickets">
             <span class="q-py-xs infoOne">
@@ -90,7 +90,9 @@
               stateOneTicket: currentItem[0].state == 0,
               stateTwoTicket: currentItem[0].state == 1,
             }">
-              <span class="q-px-lg text-bold">{{ generateState(currentItem[0].state) }}</span>
+              <span class="q-px-lg text-bold">{{
+                generateState(currentItem[0].state)
+              }}</span>
             </div>
             <button class="btn row justify-center hover" @click="listTicket()">
               <span>Listar boletas</span>
@@ -98,7 +100,9 @@
             <button class="btn row justify-center hover" @click="listInfoTicket()">
               <span>Información del talonario</span>
             </button>
-            <button @click="cancelTicket()" :disabled="validatestateTwo()" class="btn hover">Cancelar Sorteo</button>
+            <button @click="cancelTicket()" :disabled="validatestateTwo()" class="btn hover">
+              Cancelar Sorteo
+            </button>
           </div>
           <q-dialog v-model="listTickets">
             <q-card style="width: 400px">
@@ -111,10 +115,11 @@
                   <br />
                   <span class="text-teal text-bold">Talonario número {{ currentItem[0].id }}</span><br /><br />
                   <div class="list">
-                    <div
-                      v-for="(item, index) in currentItem[0].numbers.filter(num => num.state === 1 || num.state === 2)">
+                    <div v-for="(item, index) in currentItem[0].numbers.filter(
+                      (num) => num.state === 1 || num.state === 2
+                    )">
                       <div class="row bg q-my-xs">
-                        <div class="col-4 q-pl-xs row">
+                        <div class="col-5 q-pl-xs row">
                           <div class="q-pt-sm q-mt-xs">
                             <span class="q-pa-xs list-ticket" :class="{
                               stateTwo: item.state == 1,
@@ -122,13 +127,15 @@
                             }">{{ item.number }}</span>
                           </div>
                           <div class="q-py-xs q-pl-sm item-list">
-                            <span class="n">{{ item.owner }}</span><br>
+                            <span class="n">{{ item.owner }}</span><br />
                             <span class="n">{{ item.celphone }}</span>
                           </div>
                         </div>
-                        <div class="col-8 q-pt-xs row justify-end">
-                          <span class="q-pt-sm">{{ getStateInTextTwo(item.state) }}</span>
-                          <q-btn class="q-ml-lg bt q-mr-xs" color="teal"
+                        <div class="col-7 q-pt-xs row justify-end">
+                          <span class="q-pt-sm">{{
+                            getStateInTextTwo(item.state)
+                          }}</span>
+                          <q-btn class="q-ml-lg bt q-mr-xs detail" color="teal"
                             @click="seeInformationDetail(item)">Detalles</q-btn>
                         </div>
                       </div>
@@ -142,7 +149,7 @@
             </q-card>
           </q-dialog>
           <q-dialog v-model="viewInfoTicket">
-            <q-card class="q-pa-md" style="width: 350px">
+            <q-card style="width: 350px">
               <q-linear-progress :value="1" color="teal" />
               <h5 class="text-teal text-center text-bold q-pt-md">
                 Información del talonario
@@ -159,20 +166,24 @@
                   <span class="q-mt-sm"><span class="text-teal text-bold">Boletas disponibles:</span></span>
                 </div>
                 <div class="col column ellipsis">
-                  {{ }}
+                  {{}}
                   <span class="q-mt-sm">{{ currentItem[0].id }}</span>
                   <span class="q-mt-sm">{{ currentItem[0].thing }}</span>
                   <span class="q-mt-sm">{{ currentItem[0].item }}</span>
                   <span class="q-mt-sm">{{ currentItem[0].price }}</span>
                   <span class="q-mt-sm">{{ currentItem[0].date }}</span>
                   <span class="q-mt-sm">{{ currentItem[0].lottery }}</span>
-                  <span class="q-mt-sm">{{ generateState(currentItem[0].state) }}</span>
-                  <span class="q-mt-sm">{{ currentItem[0].numbers.filter(num => num.state === 0).length }}</span>
+                  <span class="q-mt-sm">{{
+                    generateState(currentItem[0].state)
+                  }}</span>
+                  <span class="q-mt-sm">{{
+                    currentItem[0].numbers.filter((num) => num.state === 0)
+                      .length
+                  }}</span>
                 </div>
               </q-card-section>
               <div class="column items-center">
-                <q-btn class="text-bold q-mb-md" color="teal" @click="backTicketList()"
-                  label="Volver" />
+                <q-btn class="text-bold q-mb-md" color="teal" @click="backTicketList()" label="Volver" />
               </div>
             </q-card>
           </q-dialog>
@@ -201,7 +212,7 @@
                     <hr class="q-my-md full-width" />
                     <q-btn class="q-px-md text-bold full-width" v-show="validatestate()" color="teal"
                       @click="showBuyTicket(itemValue)">
-                      <img class="q-mr-xs" src="../assets/dollar.png" width="15">
+                      <img class="q-mr-xs" src="../assets/dollar.png" width="15" />
                       <span>Adquirir Boleta</span>
                     </q-btn>
                     <q-btn class="q-px-md full-width space" color="teal" @click="closeDialog()">
@@ -218,11 +229,11 @@
                       {{ getStateInText(itemValue.state) }}</span>
                     <hr class="q-my-md full-width" />
                     <q-btn class="q-px-md text-bold full-width space" color="teal" @click="seeInformation()">
-                      <i class="icon icon-eye"></i><span class="q-pl-sm">Ver datos del participante</span> 
+                      <i class="icon icon-eye"></i><span class="q-pl-sm">Ver datos del participante</span>
                     </q-btn>
                     <q-btn class="q-px-md text-bold full-width space" color="teal" v-show="validatestate()"
                       @click="releaseTicket()">
-                      <i class="icon icon-loop"></i><span class="q-pl-sm">Liberar boleta</span> 
+                      <i class="icon icon-loop"></i><span class="q-pl-sm">Liberar boleta</span>
                     </q-btn>
                     <q-btn class="q-px-md text-bold full-width space" color="teal" v-show="validatestate()"
                       @click="checkPaid()">
@@ -345,6 +356,63 @@
             </q-dialog>
           </div>
         </div>
+        <q-btn class="share" no-caps push @click="showShare()">
+          <q-icon name="share" />
+        </q-btn>
+        <q-btn class="rules" no-caps push @click="showRules()">
+          <q-icon name="help" />
+        </q-btn>
+        <q-dialog v-model="rulesDialog">
+          <q-card class="column items-center" style="width: 360px">
+            <q-linear-progress :value="1" color="teal" />
+            <div class="text-center q-px-xl q-pt-md">
+              <h6 class="title">REGLAS</h6>
+              <div class="full-width" style="font-size: 12px">
+                <div class="row q-my-md rule">
+                  <div class="col-1">
+                    <span class="number-one">12</span>
+                  </div>
+                  <div class="col-11 text-left q-pl-xl">
+                    <span class="text-bold">BOLETA BLANCA</span><br />
+                    <span>La boleta está disponible</span>
+                  </div>
+                </div>
+                <div class="row q-my-md rule">
+                  <div class="col-1">
+                    <span class="number-two">02</span>
+                  </div>
+                  <div class="col-9 text-left q-pl-xl">
+                    <span class="text-bold">BOLETA CELESTE</span><br />
+                    <span>La boleta pertenece a un participante</span>
+                  </div>
+                </div>
+                <div class="row q-my-md rule">
+                  <div class="col-1">
+                    <span class="number-three">14</span>
+                  </div>
+                  <div class="col-9 text-left q-pl-xl">
+                    <span class="text-bold">BOLETA AGUAMARINA</span><br />
+                    <span>La boleta ya ha sido pagada</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <q-btn class="q-px-md text-bold q-mx-sm q-mb-md" color="teal" @click="closeRules()" label="Cerrar" />
+          </q-card>
+        </q-dialog>
+
+        <q-dialog v-model="chart">
+          <q-card class="column items-center" style="width: 400px">
+            <q-linear-progress :value="1" color="teal" />
+            <div class="text-center q-px-xl q-pt-md">
+              <h6 class="title">BOLETAS VENDIDAS</h6>
+              <div style="font-size: 12px">
+                <Doughnut class="q-mb-md" id="doughnut-chart" :options="chartOptions" :data="chartData"></Doughnut>
+              </div>
+            </div>
+            <q-btn class="q-px-md text-bold q-mx-sm q-mb-md" color="teal" @click="closeChart()" label="Cerrar" />
+          </q-card>
+        </q-dialog>
       </template>
       <template v-else>
         <h3 class="q-ma-xl">No hay información</h3>
@@ -358,6 +426,33 @@ import { useQuasar } from "quasar";
 import { onMounted, computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useStorage } from "@/stores/localStorage";
+import { Doughnut } from "vue-chartjs";
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  ArcElement,
+} from "chart.js";
+const colors = [
+  "rgb(69,177,223)",
+  "rgb(99,201,122)",
+  "rgb(203,82,82)",
+  "rgb(229,224,88)",
+];
+
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  ArcElement
+);
 
 const route = useRoute();
 const storage = useStorage();
@@ -381,6 +476,8 @@ const listTickets = ref(false);
 const backButton = ref(true);
 const backButtonTwo = ref(false);
 const viewInfoTicket = ref(false);
+const rulesDialog = ref(false);
+const chart = ref(false);
 
 let currentItem = ref(null);
 let currentId = computed(() => storage.getActiveId);
@@ -469,9 +566,25 @@ watch(currentId, () => {
   getCurrentItem();
 });
 
+let chartData = computed(() => {
+  return {
+    labels: ["Vendidas", "Disponibles"],
+    datasets: [
+      {
+        data: [(currentItem.value[0].numbers.filter((num) => num.state === 2).length + currentItem.value[0].numbers.filter((num) => num.state === 1).length), currentItem.value[0].numbers.filter((num) => num.state === 0).length],
+        backgroundColor: colors,
+      },
+    ]
+  }
+});
+
+let chartOptions = ref({
+  responsive: true,
+});
+
 function open(index, item) {
   dialog.value = true;
-  (index);
+  index;
   itemValue.value = item;
 }
 
@@ -539,12 +652,14 @@ function cancelTicket() {
 
 function listTicket() {
   listTickets.value = true;
-  (currentItem.value[0].numbers.filter(num => num.state === 1 || num.state === 2));
+  currentItem.value[0].numbers.filter(
+    (num) => num.state === 1 || num.state === 2
+  );
 }
 
 function validatestate() {
   if (currentItem.value[0].state === 0) {
-    return true
+    return true;
   } else if (currentItem.value[0].state === 1) {
     return false;
   }
@@ -552,7 +667,7 @@ function validatestate() {
 
 function validatestateTwo() {
   if (currentItem.value[0].state === 0) {
-    return false
+    return false;
   } else if (currentItem.value[0].state === 1) {
     return true;
   }
@@ -566,7 +681,7 @@ function showBuyTicket(item) {
 function checkPaid() {
   checkPaidModal.value = true;
   dialog.value = false;
-  (method.value);
+  method.value;
 }
 
 function getStateInText(state) {
@@ -600,16 +715,30 @@ function getMethodInText(method) {
 }
 
 function releaseTicket() {
-  itemValue.value.state = 0;
-  itemValue.value.owner = "";
-  itemValue.value.celphone = "";
-  itemValue.value.comments = "NO REGISTRADO";
-  itemValue.value.date = "";
-  itemValue.value.methodPayment = 0;
-  currentItem.value[0].numbers[itemValue.value.number] = itemValue.value;
-  (currentItem.value[0].numbers[itemValue.value.number]);
-  storage.modifyData(currentItem.value[0]);
-  dialog.value = false;
+  const ok = true;
+  if (ok) {
+    $q.dialog({
+      title: "Confirmar",
+      message: "¿Está seguro que desea liberar la boleta?",
+      cancel: true,
+      persistent: true,
+    })
+      .onOk(() => {
+        itemValue.value.state = 0;
+        itemValue.value.owner = "";
+        itemValue.value.celphone = "";
+        itemValue.value.comments = "NO REGISTRADO";
+        itemValue.value.date = "";
+        itemValue.value.methodPayment = 0;
+        currentItem.value[0].numbers[itemValue.value.number] = itemValue.value;
+        currentItem.value[0].numbers[itemValue.value.number];
+        storage.modifyData(currentItem.value[0]);
+        dialog.value = false;
+      })
+      .onCancel(() => {
+        (">>>> CANCEL");
+      });
+  }
 }
 
 function isInputsValidate() {
@@ -753,6 +882,10 @@ function dateBiggerThanToday(val) {
   );
 }
 
+function closeChart() {
+  chart.value = false;
+}
+
 function editTicket() {
   editTicketModal.value = true;
   lottery.value = currentItem.value[0].lottery;
@@ -763,6 +896,56 @@ function editTicket() {
 function revertGenerateDate(date) {
   const dateArray = date.split("-");
   return `${dateArray[0]}-${dateArray[1]}-${dateArray[2]}`;
+}
+
+function showShare(grid) {
+  $q.bottomSheet({
+    message: "Opciones",
+    grid,
+    actions: [
+      {
+        label: "Grafica",
+        icon: "photo_camera",
+        color: "primary",
+        id: "upload",
+      },
+      {
+        label: "Compartir",
+        icon: "share",
+        id: "share",
+      }
+    ],
+  })
+    .onOk((action) => {
+      console.log("action", action.id);
+      if (action.id == "share") {
+        shareTicket();
+      } else {
+        showChart();
+      }
+    })
+    .onCancel(() => { })
+    .onDismiss(() => { });
+}
+
+function showRules() {
+  rulesDialog.value = true;
+}
+
+function closeRules() {
+  rulesDialog.value = false;
+}
+
+function showChart() {
+  chart.value = true;
+}
+
+function shareTicket() {
+  $q.dialog({
+    title: "Compartir",
+    message: `<div class='text-center'><span>¡Click y accede a tu talonario vitual!</span><br><br><a href='https://fantastic-starlight-72c889.netlify.app' target='_blank' class='rifaya' style='text-decoration: none; color: #2b7a78; font-weight: bold'>www.rifaya.com</a></div>`,
+    html: true,
+  });
 }
 </script>
 
@@ -787,6 +970,58 @@ function revertGenerateDate(date) {
   display: none;
 }
 
+.detail {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.rule {
+  background-color: #def2f1;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.number-one {
+  background-color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: #bfdddc 1px solid;
+  margin-left: 7px;
+  font-weight: bold;
+}
+
+.number-two {
+  background-color: #9edbd9;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: #bfdddc 1px solid;
+  margin-left: 7px;
+  color: white;
+  font-weight: bold;
+}
+
+.number-three {
+  background-color: #2b7a78;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: #bfdddc 1px solid;
+  color: white;
+  margin-left: 7px;
+  font-weight: bold;
+}
+
 .bg {
   background-color: #def2f1;
   border-radius: 10px;
@@ -794,15 +1029,15 @@ function revertGenerateDate(date) {
 }
 
 .item-list {
-  max-width: 60px;
+  max-width: 80px;
   overflow: hidden;
 }
 
-.hover:hover{
+.hover:hover {
   cursor: pointer;
 }
 
-.space{
+.space {
   margin-top: 10px;
 }
 
@@ -810,6 +1045,11 @@ function revertGenerateDate(date) {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.title {
+  color: #2b7a78;
+  font-weight: bold;
 }
 
 .stateOneTicket {
@@ -822,6 +1062,28 @@ function revertGenerateDate(date) {
   background-color: #3e3e428f;
   border-radius: 20px;
   color: white;
+}
+
+.cont {
+  position: relative;
+}
+
+.share {
+  position: absolute;
+  bottom: 0px;
+  right: 20px;
+  background-color: #8dd6d6;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.rules {
+  position: absolute;
+  bottom: 0px;
+  left: 20px;
+  background-color: #8dd6d6;
+  border-radius: 50%;
+  padding: 10px;
 }
 
 .stateOneTicket span,
@@ -989,12 +1251,24 @@ function revertGenerateDate(date) {
     height: 40px;
   }
 
+  .item-list {
+    max-width: 100px;
+  }
+
   .infoTickets .text {
     font-size: 13px;
   }
 
   .options button {
     width: 80% !important;
+  }
+
+  .share {
+    padding: 15px;
+  }
+
+  .rules {
+    padding: 15px;
   }
 
   .stateOneTicket span,
@@ -1017,8 +1291,20 @@ function revertGenerateDate(date) {
     height: 50px;
   }
 
+  .item-list {
+    max-width: 100px;
+  }
+
   .edit span {
     font-size: 11px;
+  }
+
+  .share {
+    padding: 20px;
+  }
+
+  .rules {
+    padding: 20px;
   }
 
   .options button {
@@ -1062,6 +1348,14 @@ function revertGenerateDate(date) {
 
   .options button {
     width: 80% !important;
+  }
+
+  .share {
+    padding: 25px;
+  }
+
+  .rules {
+    padding: 25px;
   }
 
   .stateOneTicket span,

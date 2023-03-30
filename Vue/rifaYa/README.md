@@ -1,7 +1,18 @@
-# Vue 3 + Vite
+# RifaYa
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+RifaYa es un proyecto de Vue 3 + Vite para crear y administrar rifas. Este paquete utiliza Vue.js y Quasar Framework para crear una interfaz de usuario interactiva y atractiva.
 
-## Recommended IDE Setup
+- [Enlace para ver el proyecto](https://fantastic-starlight-72c889.netlify.app/)
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Instalación
+
+Una pequeña introducción sobre la instalación.
+
+1. Clone the repository: `git clone https://github.com:M8-Lovelace/RifaYa.git`
+2. Go to the folder: `cd rifaYa`
+3. Install dependencies: `npm install`
+4. Run the project: `npm run dev`
+
+## Créditos
+
+Este proyecto ha sido creado por Laura Susano.

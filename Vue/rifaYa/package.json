@@ -1,5 +1,5 @@
 {
-  "name": "rifaYa",
+  "name": "rifaya",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,9 +12,11 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.15.11",
+    "chart.js": "^4.2.1",
     "pinia": "^2.0.33",
     "quasar": "^2.11.7",
     "vue": "^3.2.45",
+    "vue-chartjs": "^5.2.0",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
